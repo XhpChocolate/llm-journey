@@ -1,0 +1,97 @@
+week: 2
+phase: A
+phase_name: 打底（第1-2周）：Java 工程 + LLM 最小闭环
+theme: 接上大模型：从手写调用到 Spring AI
+goal: 手写和框架两条路都走过一遍，理解每层在替你做什么。
+acceptance: /chat 支持流式 + 超时重试 + 统一异常 + traceId + 单测，能演示。
+days:
+  - id: W02D01
+    day: 1
+    title: 手写一次大模型调用（不套框架）
+    minutes: 130
+    goal: 亲手发出第一个 chat/completions 请求。
+    tasks:
+      - 用 WebClient POST /chat/completions，打印完整响应
+      - 记录一次请求的耗时与 usage.total_tokens
+      - 写笔记：messages 里每个 role 的作用
+    deliverable: 一个能对话的 /chat 接口（手写版）
+    refs: [v-yupi-springai, r-deepseek-docs, r-deepseek-chat]
+    notes_prompt: 响应里除了 content 还有什么字段值得关注？
+
+  - id: W02D02
+    day: 2
+    title: 流式输出（SSE）
+    minutes: 140
+    goal: 理解流式为什么是聊天体验的必需品。
+    tasks:
+      - 开启 stream=true，用 curl 观察分块到达
+      - 后端用 SseEmitter 转发，处理客户端断开
+      - 记录首字延迟（TTFT）与总耗时
+    deliverable: 流式 /chat/stream 接口
+    refs: [v-sgg-springai-practice, r-deepseek-chat]
+    notes_prompt: 客户端断开了，后端还在生成，怎么办？
+
+  - id: W02D03
+    day: 3
+    title: 换成 Spring AI，对照差异
+    minutes: 150
+    goal: 用 ChatClient 重写同一功能，说清框架替你做了什么。
+    tasks:
+      - 加 Spring AI 依赖，配置 model/api-key
+      - 用 ChatClient 实现 /chat 与流式版本
+      - 写对比表：手写 vs 框架，各 3 条优劣
+    deliverable: 框架版 /chat + 对比笔记
+    refs: [v-sgg-springai-practice, r-sai-root, r-sai-chatclient, r-sai-chatmodel]
+    notes_prompt: 如果框架出问题，我能退回手写版吗？
+
+  - id: W02D04
+    day: 4
+    title: Prompt 基础与 A/B 实验
+    minutes: 120
+    goal: 不靠玄学，用对照实验改 Prompt。
+    tasks:
+      - 写 system + user 分工明确的 Prompt
+      - 做 5 组对照：加/不加 few-shot、temperature 0 vs 0.8
+      - 记录每组输出差异（存成表格）
+    deliverable: 一份 Prompt 对照实验记录
+    refs: [v-ng-prompt, r-anthropic-prompt, r-prompting-guide]
+    notes_prompt: 哪些差异是随机性，哪些是 Prompt 造成的？
+
+  - id: W02D05
+    day: 5
+    title: 结构化输出
+    minutes: 130
+    goal: 让模型输出能直接被 Java 代码消费。
+    tasks:
+      - 用 BeanOutputConverter 把输出映射成 record
+      - 故意让模型返回非法 JSON，看框架怎么报错
+      - 加一层校验与失败兜底（重试一次 / 返回默认）
+    deliverable: 一个稳定的结构化输出接口
+    refs: [v-sgg-springai, r-sai-structured]
+    notes_prompt: 解析失败时，日志里能看出模型原本输出了什么吗？
+
+  - id: W02D06
+    day: 6
+    title: Function Calling 到底怎么运转
+    minutes: 150
+    goal: 能画出一次工具调用的完整往返。
+    tasks:
+      - 先手写：发 tools 定义 → 收到 tool_calls → 执行 → 回填结果
+      - 再用 @Tool 注解实现同样能力
+      - 写图：一次工具调用经过了几次模型请求
+    deliverable: 手写 + 注解两版工具调用
+    refs: [v-tooluse-principle, v-fc-vs-mcp, r-openai-fc, r-sai-tools]
+    notes_prompt: 模型会不会自己执行工具？谁在为安全负责？
+
+  - id: W02D07
+    day: 7
+    title: 里程碑 M1 验收
+    minutes: 140
+    goal: 交付一个「小而完整」的对话服务。
+    tasks:
+      - 补齐超时、重试（指数退避）、统一异常
+      - 自测清单逐项打勾（流式/失败/日志/单测）
+      - 写 M1 总结：做到什么、欠什么、下周改什么
+    deliverable: M1 可演示服务 + 自测清单
+    refs: [r-resilience4j]
+    notes_prompt: 如果现在让我给同事演示，我敢吗？不敢的是哪部分？

@@ -1,0 +1,98 @@
+week: 1
+phase: A
+phase_name: 打底（第1-2周）：Java 工程 + LLM 最小闭环
+theme: 环境就位与第一个可运行服务
+goal: 工具链跑通，能独立写出并调试一个 Spring Boot REST 接口。
+acceptance: 能用一句话说出「我的终点作品是什么」，仓库有 5 次以上提交。
+days:
+  - id: W01D01
+    day: 1
+    title: 环境盘点与终点定义
+    minutes: 120
+    goal: 工具链全部可用，并给自己写下一个可验收的终点。
+    tasks:
+      - 装 JDK 21 + Maven，验证 java -version / mvn -v
+      - 建 Git 仓库 llm-journey，初始化 README
+      - 用三句话写终点作品（做什么/给谁用/怎么算成功）
+      - 写死每天固定学习时段（写进日历，不靠意志力）
+    deliverable: 仓库首次提交 + 一页《终点定义》
+    refs: [v-token, r-maven]
+    notes_prompt: 我现在最不确定的是什么？把它变成第一个疑点。
+
+  - id: W01D02
+    day: 2
+    title: 第一个 Spring Boot 服务
+    minutes: 120
+    goal: 能从空白生成工程并跑通一个接口。
+    tasks:
+      - 用 start.spring.io 生成工程（Web + Validation）
+      - 写 GET /hello 返回 JSON，改端口并验证
+      - 观察启动日志，找到内嵌 Tomcat 端口那一行
+    deliverable: 可运行的 /hello 接口 + 提交
+    refs: [v-springboot3-sgg, r-start-spring, r-spring-boot-docs, r-baeldung-start]
+    notes_prompt: 启动日志里哪些行以后排错会用到？
+
+  - id: W01D03
+    day: 3
+    title: 配置与密钥管理
+    minutes: 120
+    goal: 配置不写死在代码里，密钥不进 Git。
+    tasks:
+      - application.yml 配置自定义项，用 @ConfigurationProperties 绑定
+      - 拆 dev/prod 两个 profile 并切换验证
+      - 用环境变量注入密钥，把 application-local.yml 加进 .gitignore
+    deliverable: 一份可切换环境的配置 + 提交
+    refs: [v-springboot-autoconfig, r-spring-config-props, r-spring-props]
+    notes_prompt: 配置优先级顺序我能复述出来吗？
+
+  - id: W01D04
+    day: 4
+    title: 用 WebClient 调外部 HTTP 接口
+    minutes: 120
+    goal: 能可靠地调用第三方 API，并处理失败。
+    tasks:
+      - 用 WebClient 调一个公开 API，打印响应
+      - 设置连接/读超时，构造 404 和超时两种失败场景
+      - 把失败转换成带错误码的统一响应
+    deliverable: 一个调外部 API 且不惧失败的接口
+    refs: [v-springboot3-sgg, r-webclient]
+    notes_prompt: 超时设多少合理？依据是什么？
+
+  - id: W01D05
+    day: 5
+    title: JSON 与 DTO 设计
+    minutes: 100
+    goal: 请求/响应对象用 record 表达，序列化行为可控。
+    tasks:
+      - 用 record 定义请求与响应 DTO
+      - 处理字段缺失、类型不符两种反序列化失败
+      - 了解全局 ObjectMapper 配置（命名策略、忽略未知字段）
+    deliverable: 3 个 DTO + 1 个失败用例验证
+    refs: [r-jackson]
+    notes_prompt: 为什么 DTO 不要直接复用数据库实体？
+
+  - id: W01D06
+    day: 6
+    title: 统一异常与可追踪日志
+    minutes: 130
+    goal: 任何异常都能返回统一结构，且能靠 traceId 定位。
+    tasks:
+      - 写 @ControllerAdvice 统一错误响应（code/message/traceId）
+      - 用 SLF4J 打结构化日志，关键路径加 info
+      - 写一个 Filter 生成 traceId 放进 MDC，响应头回传
+    deliverable: 统一错误体 + traceId 贯穿的日志
+    refs: [v-springboot3-sgg, r-baeldung-exception]
+    notes_prompt: 线上报错时，我需要哪三行日志才能定位？
+
+  - id: W01D07
+    day: 7
+    title: 周复盘 + 单测入门
+    minutes: 120
+    goal: 会用 JUnit 5 + Mockito 给已有代码补测试。
+    tasks:
+      - 给 D4 的接口写 3 个单测（正常/超时/异常）
+      - 用 Mockito mock 外部依赖
+      - 周复盘：完成率、卡点、下周要砍掉什么
+    deliverable: 3 个通过的测试 + 周复盘笔记
+    refs: [r-junit, r-mockito, r-baeldung-testing]
+    notes_prompt: 哪件事我以为会很快、实际最慢？

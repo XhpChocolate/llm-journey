@@ -1,0 +1,97 @@
+week: 7
+phase: C
+phase_name: Agent（第6-8周）：从「能调工具」到「可靠地完成任务」
+theme: 记忆、规划与可靠性
+goal: Agent 能记住该记的、拆得开复杂任务、失败时能定位。
+acceptance: 一次失败请求，只看日志就能说出失败在哪一步。
+days:
+  - id: W07D01
+    day: 1
+    title: 记忆分层
+    minutes: 140
+    goal: 分清会话记忆、长期记忆、用户画像，别混成一坨。
+    tasks:
+      - 用 ChatMemory 实现会话记忆，对比窗口大小影响
+      - 设计一个「用户偏好」的持久化存储（少量字段）
+      - 写笔记：哪些信息该记住、哪些必须忘
+    deliverable: 会话记忆 + 用户偏好存储
+    refs: [v-sgg-springai, r-sai-memory]
+    notes_prompt: 记错了比不记更糟，哪些内容不该进记忆？
+
+  - id: W07D02
+    day: 2
+    title: 规划：ReAct vs Plan-and-Execute
+    minutes: 140
+    goal: 知道两种范式的取舍，而不是背名词。
+    tasks:
+      - 实现一个 ReAct 循环（思考-行动-观察，最多 N 步）
+      - 实现一版先出计划再执行（计划可修改）
+      - 用同一个多步任务对比两者步数与成功率
+    deliverable: 两版规划实现 + 对比数据
+    refs: [r-agents-zh, v-agent-principles, r-anthropic-agents]
+    notes_prompt: 计划一旦生成就不会变，会带来什么问题？
+
+  - id: W07D03
+    day: 3
+    title: 工具权限与参数校验
+    minutes: 140
+    goal: 把「模型能做什么」关进笼子。
+    tasks:
+      - 给工具加入参校验（类型/范围/必填）与白名单
+      - 危险动作（退款、删除）要求二次确认
+      - 用 3 个越权/畸形参数攻击自己的 Agent
+    deliverable: 带权限控制与校验的 Agent
+    refs: [v-llm-security, r-owasp-llm]
+    notes_prompt: 模型被诱导调用退款工具，我在哪一层能拦？
+
+  - id: W07D04
+    day: 4
+    title: 用 Trace 定位失败
+    minutes: 140
+    goal: 从「它答错了」进化到「第 3 步检索错了」。
+    tasks:
+      - 为每次请求记录：输入、每步 span、工具入参与返回、耗时
+      - 人为制造一次失败（让工具抛错），只用日志定位
+      - 把定位过程写成 SOP（三步排查法）
+    deliverable: 可回放的调用记录 + 排查 SOP
+    refs: [v-prompt-agent-mcp-10min, r-otel-genai]
+    notes_prompt: 现在的日志能还原模型的每一次决策吗？
+
+  - id: W07D05
+    day: 5
+    title: 幻觉控制三件套
+    minutes: 130
+    goal: 让 Agent 在不知道的时候说不知道。
+    tasks:
+      - 工具优先：需要事实时先查再用
+      - 引用溯源：答案带来源
+      - 拒答阈值：低置信度直接说「查不到」
+    deliverable: 三件套落地 + 5 条验证
+    refs: [v-rag-workflow, r-sai-rag]
+    notes_prompt: 用户不喜欢听「不知道」，怎么表达更好？
+
+  - id: W07D06
+    day: 6
+    title: 成本与延迟控制
+    minutes: 130
+    goal: 知道每次对话花了多少钱，以及怎么降。
+    tasks:
+      - 统计每次请求的 token、成本、耗时并落库
+      - 试一次模型路由：简单问题走小模型，难问题走大模型
+      - 试缓存：相同问题命中率有多少
+    deliverable: 成本统计 + 路由实验
+    refs: [v-kvcache-promptcache, r-deepseek-docs]
+    notes_prompt: 成本降一半，质量会掉多少？能接受吗？
+
+  - id: W07D07
+    day: 7
+    title: 周复盘 + 缓冲
+    minutes: 100
+    goal: 收口。
+    tasks:
+      - 更新疑点清单，清掉已解决项
+      - 写「可靠性自评表」（超时/重试/权限/日志/成本 各打 1-5 分）
+      - 标出最弱的一项，下周优先补
+    deliverable: 可靠性自评表
+    refs: []
+    notes_prompt: 哪一项分数低得让我意外？

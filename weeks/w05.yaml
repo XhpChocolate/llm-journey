@@ -1,0 +1,97 @@
+week: 5
+phase: B
+phase_name: RAG（第3-5周）：让模型「知道」你的知识
+theme: RAG 评测：没有度量就没有优化
+goal: 建起一套能判断「改完是变好还是变坏」的评测。
+acceptance: 一条命令跑出评测报告，能对比两次改动。
+days:
+  - id: W05D01
+    day: 1
+    title: 评测指标
+    minutes: 130
+    goal: 知道每个指标在衡量什么，避免只看「感觉」。
+    tasks:
+      - 读 Ragas 指标说明，写下 4 个指标的定义
+      - 区分「检索指标」与「生成指标」
+      - 挑出本项目最该看的 3 个指标并说明理由
+    deliverable: 指标定义卡
+    refs: [r-ragas-zh, v-rag-eval-interview, r-ragas]
+    notes_prompt: 忠实度高但答案没用，算好吗？
+
+  - id: W05D02
+    day: 2
+    title: 建 20 条评测集
+    minutes: 140
+    goal: 评测集是资产，值得认真造。
+    tasks:
+      - 写 20 条：问题 + 标准答案要点 + 出处
+      - 覆盖三类：事实查找、多跳推理、应当拒答
+      - 存成 YAML/JSON，纳入 Git
+    deliverable: eval/dataset.yaml（20 条）
+    refs: [r-ragas]
+    notes_prompt: 我的问题是不是都太「好问」了？真实用户会怎么问？
+
+  - id: W05D03
+    day: 3
+    title: 跑通评测脚本
+    minutes: 150
+    goal: 一键得到分数，而不是人工看 20 条。
+    tasks:
+      - 写批量脚本：读评测集 → 调接口 → 收集答案
+      - 用 LLM 打分或规则匹配算分，输出 CSV
+      - 把单次结果存档（带时间戳与配置）
+    deliverable: scripts/eval.py + 第一份报告
+    refs: [r-ragas-zh, v-ragas, r-ragas]
+    notes_prompt: LLM 当裁判会不会偏袒自己？
+
+  - id: W05D04
+    day: 4
+    title: 调一轮，用数据说话
+    minutes: 150
+    goal: 体验一次「改动 → 度量 → 结论」的闭环。
+    tasks:
+      - 只改一个变量：topK 3→8，或切片 500→300
+      - 跑评测，对比两份报告
+      - 写结论：提升了多少、代价是什么
+    deliverable: 两组配置对比报告
+    refs: [v-ragas, r-ragas]
+    notes_prompt: 如果分数没变，说明什么？
+
+  - id: W05D05
+    day: 5
+    title: Agentic RAG
+    minutes: 130
+    goal: 知道固定流水线的天花板在哪。
+    tasks:
+      - 读 Agent 设计模式，理解「让模型决定检索时机」
+      - 实现一版：模型先判断要不要检索，再决定检索几次
+      - 对比固定 RAG 与 Agentic RAG 在 5 个问题上的表现
+    deliverable: Agentic RAG 原型
+    refs: [r-agents-zh, v-agent-principles, r-anthropic-agents]
+    notes_prompt: 多一次模型决策，代价是什么？
+
+  - id: W05D06
+    day: 6
+    title: 里程碑 M2：作品化
+    minutes: 160
+    goal: 把 RAG 变成一个别人也能跑起来的项目。
+    tasks:
+      - 整理成独立模块：上传 → 解析 → 入库 → 问答
+      - README 写清架构、启动方式、评测结果
+      - 录一段 3 分钟演示（手机录也行）
+    deliverable: M2 作品 + README + 演示
+    refs: [v-turing-rag-project]
+    notes_prompt: 别人照着 README 能跑起来吗？（找个同事试）
+
+  - id: W05D07
+    day: 7
+    title: 周复盘 + 缓冲
+    minutes: 100
+    goal: 收口，为 Agent 阶段腾出精力。
+    tasks:
+      - 归档评测报告与配置快照
+      - 列出 RAG 阶段仍未解决的 3 个问题（允许不解决）
+      - 预习下周：Agent 与 RAG 的边界在哪
+    deliverable: 阶段小结
+    refs: []
+    notes_prompt: 如果只保留一个 RAG 上的改进，我保留哪个？

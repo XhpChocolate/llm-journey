@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f1f10"/>
+  <rect x="0" y="0" width="1200" height="6" fill="#c6f19d"/>
+  <text x="80" y="230" fill="#ffffff" font-family="Helvetica, Arial, sans-serif" font-size="76" letter-spacing="-2">学习台</text>
+  <text x="80" y="310" fill="#9aa39a" font-family="Helvetica, Arial, sans-serif" font-size="34">14 周大模型应用开发 · 98 天计划与打卡</text>
+  <text x="80" y="520" fill="#c6f19d" font-family="Menlo, monospace" font-size="26">98 DAYS · 14 WEEKS · 95 RESOURCES</text>
+</svg>

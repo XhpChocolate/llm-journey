@@ -1,0 +1,97 @@
+week: 12
+phase: E
+phase_name: MCP 与作品（第11-12周）：接进真实系统，做出可展示成果
+theme: 作品打磨与表达
+goal: 把 11 周的东西收成一个能讲、能跑、能被追问的项目。
+acceptance: 3 分钟讲清项目，20 个追问里至少答上 15 个。
+days:
+  - id: W12D01
+    day: 1
+    title: 架构图与 README
+    minutes: 150
+    goal: 让人 60 秒看懂你做了什么、为什么这么做。
+    tasks:
+      - 画一张架构图（组件/数据流/外部依赖）
+      - README 写：背景、方案、关键取舍、指标结果、限制
+      - 补「为什么不选另一个方案」一节
+    deliverable: 架构图 + 完整 README
+    refs: [v-hm-rag-agent-project]
+    notes_prompt: 图里哪一块最不好解释？那就是需要简化或补认知的地方。
+
+  - id: W12D02
+    day: 2
+    title: 代码整理与分层
+    minutes: 150
+    goal: 让代码配得上「可维护」三个字。
+    tasks:
+      - 分包：api / application / domain / infrastructure，明确依赖方向
+      - 配置全部外置，禁止魔法值
+      - 统一异常与返回结构，去掉调试残留
+    deliverable: 重构后的代码结构
+    refs: [r-spring-boot-docs]
+    notes_prompt: 新人加一个工具，需要改几个文件？
+
+  - id: W12D03
+    day: 3
+    title: 测试补齐
+    minutes: 150
+    goal: 关键路径有测试护栏，改代码不心慌。
+    tasks:
+      - 单测覆盖工具实现与参数校验
+      - 集成测试覆盖「检索→生成」主链路
+      - eval 全量回归一次，结果写进 README
+    deliverable: 测试通过 + 评测报告
+    refs: [r-ragas-zh, v-ragas, r-testcontainers]
+    notes_prompt: 哪一段代码我至今不敢改？为什么？
+
+  - id: W12D04
+    day: 4
+    title: 演示与录屏
+    minutes: 130
+    goal: 准备一段 3 分钟、能独立播放的演示。
+    tasks:
+      - 设计三条演示线：正常问答、失败兜底、越权被拦
+      - 录制 3 分钟演示（含架构一句话介绍）
+      - 视频配字幕或文字稿
+    deliverable: 演示视频 + 演示脚本
+    refs: []
+    notes_prompt: 演示里最打动人的是哪 10 秒？
+
+  - id: W12D05
+    day: 5
+    title: 简历项目描述
+    minutes: 120
+    goal: 把技术工作翻译成招聘方看得懂的价值。
+    tasks:
+      - 用 STAR 写一段项目描述（情境/任务/行动/结果）
+      - 量化 3 个指标（准确率、P95 延迟、单次成本）
+      - 列出 3 个技术难点及你的解法
+    deliverable: 简历项目段落（可直接粘贴）
+    refs: []
+    notes_prompt: 我的描述和「调 API 的 CRUD 工程师」有什么区别？
+
+  - id: W12D06
+    day: 6
+    title: 面试自测 20 问
+    minutes: 150
+    goal: 提前暴露知识空洞。
+    tasks:
+      - 写 20 个可能的追问（RAG/Agent/评测/安全/成本）
+      - 逐个口述回答并录音，标出卡壳的
+      - 针对卡壳的 5 个问题补资料并写出答案
+    deliverable: 20 问 + 修订后的答案
+    refs: [v-prompt-agent-mcp-10min]
+    notes_prompt: 哪个问题我答得最虚？
+
+  - id: W12D07
+    day: 7
+    title: 总复盘
+    minutes: 130
+    goal: 把 12 周变成可复用的经验，而不只是回忆。
+    tasks:
+      - 写总复盘：12 周实际投入时长、完成率、最大收获
+      - 列出「如果重来一次会怎么改」的 3 条
+      - 定下下一个 4 周目标
+    deliverable: 总复盘文档
+    refs: []
+    notes_prompt: 如果只能带走一个能力，我带走什么？

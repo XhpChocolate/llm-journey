@@ -1,0 +1,97 @@
+week: 10
+phase: D
+phase_name: 可观测与安全（第9-10周）：让系统「看得见、拦得住」
+theme: 安全与护栏
+goal: 知道 Agent 上生产前必须拦住什么，并真的拦住。
+acceptance: 一份自查表，20 项里能说清自己项目每项的状态。
+days:
+  - id: W10D01
+    day: 1
+    title: OWASP LLM Top 10 通读
+    minutes: 140
+    goal: 先建立风险地图，再谈具体防御。
+    tasks:
+      - 通读 10 类风险，每类写一句「在我项目里长什么样」
+      - 标出 3 类最相关的，其余标为暂不适用
+      - 建风险登记表（风险/影响/现状/措施）
+    deliverable: 风险登记表
+    refs: [r-owasp-llm-zh, v-llm-security, r-owasp-llm]
+    notes_prompt: 我的项目最可能死于哪一类？
+
+  - id: W10D02
+    day: 2
+    title: Prompt Injection 攻防
+    minutes: 150
+    goal: 亲手打一次自己的系统。
+    tasks:
+      - 直接注入：让模型忽略指令、泄露系统提示词
+      - 间接注入：在检索文档里埋一句恶意指令
+      - 记录 5 个攻击用例与系统实际表现
+    deliverable: 5 条攻击用例 + 现状记录
+    refs: [v-llm-security, r-prompt-injection]
+    notes_prompt: 为什么间接注入更难防？
+
+  - id: W10D03
+    day: 3
+    title: 输入输出护栏
+    minutes: 140
+    goal: 在模型前后各设一道检查。
+    tasks:
+      - 输入侧：长度限制、敏感内容、注入特征检测
+      - 输出侧：敏感信息过滤、格式校验、引用存在性校验
+      - 加一层「模型自审」作为兜底（成本换安全）
+    deliverable: 护栏实现 + 误杀率记录
+    refs: [r-owasp-llm-zh, r-owasp-llm]
+    notes_prompt: 护栏太严会误杀正常请求，阈值怎么定？
+
+  - id: W10D04
+    day: 4
+    title: 工具权限与审计
+    minutes: 130
+    goal: 最小权限 + 可追溯。
+    tasks:
+      - 按角色分配可用工具（最小权限）
+      - 危险操作走人工确认或审批流
+      - 记录审计日志：谁、何时、调了什么、参数、结果
+    deliverable: 权限矩阵 + 审计日志样例
+    refs: [v-fc-vs-mcp, r-owasp-llm]
+    notes_prompt: 出了事故，审计日志能还原全过程吗？
+
+  - id: W10D05
+    day: 5
+    title: 数据合规与密钥管理
+    minutes: 120
+    goal: 别把不该发出去的数据发出去。
+    tasks:
+      - 梳理「哪些数据绝对不能进 Prompt」
+      - 做日志与上下文的脱敏规则并验证
+      - 密钥用环境变量/密钥管理服务，检查 Git 历史无泄露
+    deliverable: 数据分级清单 + 脱敏验证
+    refs: [r-owasp-llm]
+    notes_prompt: 用户把身份证号贴进对话框，我怎么处理？
+
+  - id: W10D06
+    day: 6
+    title: 里程碑 M4：安全自查表
+    minutes: 140
+    goal: 把安全从「知道」变成「可检查」。
+    tasks:
+      - 写 20 项自查表（注入/权限/脱敏/日志/成本/依赖）
+      - 逐项标注：已做 / 部分 / 未做 / 不适用
+      - 未做的排优先级，挑 3 项本周补掉
+    deliverable: 安全自查表（20 项）
+    refs: [r-owasp-llm-zh, r-owasp-llm]
+    notes_prompt: 哪一项「未做」会让我半夜睡不着？
+
+  - id: W10D07
+    day: 7
+    title: 周复盘 + 缓冲
+    minutes: 100
+    goal: 收口。
+    tasks:
+      - 补完自查表里挑出的 3 项
+      - 更新疑点清单
+      - 预习 MCP：它和工具调用是什么关系
+    deliverable: 周复盘
+    refs: []
+    notes_prompt: 安全这块，我最大的认知变化是什么？

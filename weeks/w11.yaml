@@ -1,0 +1,97 @@
+week: 11
+phase: E
+phase_name: MCP 与作品（第11-12周）：接进真实系统，做出可展示成果
+theme: MCP：把现有 Java 服务变成 AI 可调用的工具
+goal: 理解并跑通 MCP 的 Server/Client 两端，把鉴权审计留在 Java 层。
+acceptance: 一个 AI 能通过 MCP 调用你封装的业务查询接口。
+days:
+  - id: W11D01
+    day: 1
+    title: MCP 架构与它要解决的问题
+    minutes: 130
+    goal: 先想清楚「为什么不是直接写 Function Calling」。
+    tasks:
+      - 读官网与规范，画出 host / client / server 三者关系
+      - 列出 MCP 的三种能力：tools / resources / prompts
+      - 写笔记：MCP 带来的复用与治理价值是什么
+    deliverable: 架构图 + 价值说明
+    refs: [r-mcp-spec-zh, v-mcp-ultimate, r-mcp-root, r-mcp-spec]
+    notes_prompt: 没有 MCP，我们有 N 个应用要接 M 个系统，会怎样？
+
+  - id: W11D02
+    day: 2
+    title: 用 Java SDK 写一个 MCP Server
+    minutes: 160
+    goal: 亲手把一段 Java 逻辑暴露成工具。
+    tasks:
+      - 引入 MCP Java SDK，起一个 stdio 或 SSE 模式的 Server
+      - 暴露一个 queryOrder 工具（复用第 6 周的数据）
+      - 用 Client 列出工具并调通一次
+    deliverable: 可运行的 MCP Server + 调用截图
+    refs: [r-mcp-tutorial-zh, v-sgg-mcp, r-mcp-java]
+    notes_prompt: Server 挂了，Client 会怎样？需要超时吗？
+
+  - id: W11D03
+    day: 3
+    title: 用 Spring AI 集成 MCP Server
+    minutes: 160
+    goal: 在熟悉的框架里做，而不是裸写。
+    tasks:
+      - 用 Spring AI 的 MCP Server 支持声明工具
+      - 配置传输方式与工具暴露范围
+      - 用 MCP Client（或 IDE 客户端）连接验证
+    deliverable: Spring AI 版 MCP Server
+    refs: [v-sgg-mcp, r-sai-mcp]
+    notes_prompt: 注解式声明和手写 schema，哪个更好维护？
+
+  - id: W11D04
+    day: 4
+    title: 让 Agent 作为 MCP Client
+    minutes: 150
+    goal: 打通「Agent → MCP → 业务系统」这条链。
+    tasks:
+      - 让第 8 周的 Agent 通过 MCP 发现并调用工具
+      - 验证工具描述来自 Server 而非硬编码
+      - 记录一次完整调用的耗时分布
+    deliverable: Agent + MCP 联调成功
+    refs: [v-sgg-mcp, r-sai-mcp]
+    notes_prompt: 工具名冲突时怎么办？
+
+  - id: W11D05
+    day: 5
+    title: 鉴权、限流与审计放在 Java 层
+    minutes: 140
+    goal: 这是 Java 后端最该发挥价值的地方。
+    tasks:
+      - 给 MCP Server 加调用方鉴权（token/租户）
+      - 加限流与配额（按租户/按工具）
+      - 审计每次调用：谁调的、查了什么、返回多少行
+    deliverable: 带治理能力的 MCP Server
+    refs: [r-mcp-spec-zh, v-mcp-ultimate, r-mcp-spec]
+    notes_prompt: 如果工具能查全表，审计能发现异常吗？
+
+  - id: W11D06
+    day: 6
+    title: 选型结论：Function Calling vs MCP
+    minutes: 120
+    goal: 能对团队说清「什么时候用哪个」。
+    tasks:
+      - 做对比表：开发成本、复用性、治理、部署、调试
+      - 给出你的结论与适用边界
+      - 写一段 200 字的选型建议（面试可直接讲）
+    deliverable: 选型对比表 + 结论
+    refs: [v-mcp-vs-fc, v-fc-vs-mcp]
+    notes_prompt: 小团队一开始就上 MCP 会不会过度设计？
+
+  - id: W11D07
+    day: 7
+    title: 周复盘 + 缓冲
+    minutes: 100
+    goal: 收口，准备作品打磨。
+    tasks:
+      - 补做未完成项
+      - 把 MCP 部分并入主项目结构
+      - 更新疑点清单
+    deliverable: 周复盘
+    refs: []
+    notes_prompt: MCP 是「协议」还是「产品」？我分清了吗？

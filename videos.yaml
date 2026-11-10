@@ -1,0 +1,553 @@
+# 视频资源库：每条都经 B 站 view 接口核验（bvid / 标题 / UP 主 / 时长 / 播放量）。
+# 核验日期见 verified 字段；若某条失效，直接删掉该条并在周计划里换一个 refs。
+#
+# 字段：id / title / url / type / lang / minutes / must / after / note / author / bvid / play / published / verified
+#   minutes 是按真实时长换算的分钟数，长课程请配合 note 里的「只看哪部分」。
+
+videos:
+  - id: v-agent-principles
+    title: "Agent 的概念、原理与构建模式 —— 从零打造一个简化版的 Claude Code"
+    url: https://www.bilibili.com/video/BV1TSg7zuEqR
+    type: video
+    lang: zh
+    minutes: 28
+    must: true
+    after: "能说出 Agent 循环的四步，以及它和固定 workflow 的边界"
+    note: "跟着视频实现一遍简化版循环"
+    author: "马克的技术工作坊"
+    bvid: BV1TSg7zuEqR
+    play: 604706
+    published: "2025-07"
+    verified: 2026-11-09
+  - id: v-docker-40min
+    title: "40分钟的Docker实战攻略，一期视频精通Docker"
+    url: https://www.bilibili.com/video/BV1THKyzBER6
+    type: video
+    lang: zh
+    minutes: 39
+    must: true
+    after: "能独立写出 Dockerfile 与 compose 文件"
+    note: "40 分钟，够用，别陷进镜像优化"
+    author: "技术爬爬虾"
+    bvid: BV1THKyzBER6
+    play: 732697
+    published: "2025-06"
+    verified: 2026-11-09
+  - id: v-docker-sgg
+    title: "Docker教程，3小时速通，docker部署到实战！"
+    url: https://www.bilibili.com/video/BV1Zn4y1X7AZ
+    type: video
+    lang: zh
+    minutes: 164
+    must: false
+    after: "能解释镜像分层与数据卷"
+    note: "3 小时备选，只看前 40 分钟"
+    author: "尚硅谷"
+    bvid: BV1Zn4y1X7AZ
+    play: 477194
+    published: "2024-06"
+    verified: 2026-11-09
+  - id: v-fc-vs-mcp
+    title: "什么是Function Calling与MCP协议？它们为何要这样设计？"
+    url: https://www.bilibili.com/video/BV1qTYizcEN3
+    type: video
+    lang: zh
+    minutes: 57
+    must: true
+    after: "能画出 Function Calling 的一次完整往返"
+    note: "57 分钟，讲设计动机，比看文档快"
+    author: "堂吉诃德拉曼查的英豪"
+    bvid: BV1qTYizcEN3
+    play: 109857
+    published: "2025-08"
+    verified: 2026-11-09
+  - id: v-hm-rag-agent-project
+    title: "黑马程序员大模型RAG与Agent智能体项目实战教程，基于主流的LangChain技术从大模型提示词到实战项目"
+    url: https://www.bilibili.com/video/BV1yjz5BLEoY
+    type: video
+    lang: zh
+    minutes: 932
+    must: false
+    after: "能对照出完整项目的分层与模块"
+    note: "15 小时，第 12 周当参考"
+    author: "黑马程序员"
+    bvid: BV1yjz5BLEoY
+    play: 3904444
+    published: "2026-01"
+    verified: 2026-11-09
+  - id: v-hm-springai-deepseek
+    title: "黑马程序员SpringAI+DeepSeek大模型应用开发实战视频教程，传统Java项目AI化转型必学课程"
+    url: https://www.bilibili.com/video/BV1MtZnYtEB3
+    type: video
+    lang: zh
+    minutes: 512
+    must: false
+    after: "能对照自己的项目判断哪些做法更工程化"
+    note: "8.5 小时备选主线，与尚硅谷那套二选一"
+    author: "黑马程序员"
+    bvid: BV1MtZnYtEB3
+    play: 1018789
+    published: "2025-04"
+    verified: 2026-11-09
+  - id: v-kvcache-promptcache
+    title: "什么是缓存命中？8分钟说清楚KVCache与Prompt Cache"
+    url: https://www.bilibili.com/video/BV1keLp6GERQ
+    type: video
+    lang: zh
+    minutes: 8
+    must: false
+    after: "能说清缓存命中怎么降本、什么情况会命中"
+    note: "8 分钟，成本专题"
+    author: "费曼学徒冬瓜"
+    bvid: BV1keLp6GERQ
+    play: 102124
+    published: "2026-05"
+    verified: 2026-11-09
+  - id: v-lc4j-heima
+    title: "黑马程序员LangChain4j从入门到实战项目全套视频课程，涵盖LangChain4j+ollama+RAG，Java传统项目AI智能化升级"
+    url: https://www.bilibili.com/video/BV1sDMqzpEQ3
+    type: video
+    lang: zh
+    minutes: 332
+    must: false
+    after: "能对照两套框架的 API 差异"
+    note: "332 分钟，选看 RAG 章节"
+    author: "黑马程序员"
+    bvid: BV1sDMqzpEQ3
+    play: 568317
+    published: "2025-06"
+    verified: 2026-11-09
+  - id: v-lc4j-sgg-medical
+    title: "小智医疗：Java大模型应用项目全流程实战，企业级java项目LangChain4J项目，LangChain+向量数据库+RAG"
+    url: https://www.bilibili.com/video/BV1cpLTz1EVp
+    type: video
+    lang: zh
+    minutes: 357
+    must: false
+    after: "能看到一个完整的 LangChain4j 项目结构"
+    note: "356 分钟，只看目录与架构"
+    author: "尚硅谷"
+    bvid: BV1cpLTz1EVp
+    play: 788237
+    published: "2025-04"
+    verified: 2026-11-09
+  - id: v-lc4j-yupi
+    title: "Java开发AI项目，太爽了！LangChain4j实战教程保姆级 | 代码开源"
+    url: https://www.bilibili.com/video/BV1X4GGziEyr
+    type: video
+    lang: zh
+    minutes: 114
+    must: true
+    after: "能用 LangChain4j 写出工具调用 + RAG"
+    note: "114 分钟，代码开源，可对照实现"
+    author: "程序员鱼皮"
+    bvid: BV1X4GGziEyr
+    play: 389488
+    published: "2025-07"
+    verified: 2026-11-09
+  - id: v-llm-agent-skill
+    title: "从 LLM 到 Agent Skill，一期视频带你打通底层逻辑！"
+    url: https://www.bilibili.com/video/BV1E7wtzaEdq
+    type: video
+    lang: zh
+    minutes: 33
+    must: true
+    after: "能用一句话说清 LLM、Agent、工具调用三者的关系"
+    note: "认知底座，当纪录片看，别暂停做笔记"
+    author: "马克的技术工作坊"
+    bvid: BV1E7wtzaEdq
+    play: 2222505
+    published: "2026-03"
+    verified: 2026-11-09
+  - id: v-llm-security
+    title: "【AI大模型安全】攻击・防御・评估三位一体：大模型安全体系完整构建！提示注入怎么攻、怎么防、怎么评？"
+    url: https://www.bilibili.com/video/BV1H6LB6WE9X
+    type: video
+    lang: zh
+    minutes: 61
+    must: true
+    after: "能各说出一种提示注入的攻击与防御手法"
+    note: "60 分钟，安全周主线"
+    author: "卢菁博士"
+    bvid: BV1H6LB6WE9X
+    play: 3604
+    published: "2026-05"
+    verified: 2026-11-09
+  - id: v-mcp-ultimate
+    title: "MCP终极指南 - 从原理到实战，带你深入掌握MCP（基础篇）"
+    url: https://www.bilibili.com/video/BV1uronYREWR
+    type: video
+    lang: zh
+    minutes: 27
+    must: true
+    after: "能说清 host/client/server 三者关系与三种能力"
+    note: "27 分钟，原理篇"
+    author: "马克的技术工作坊"
+    bvid: BV1uronYREWR
+    play: 323341
+    published: "2025-04"
+    verified: 2026-11-09
+  - id: v-mcp-vs-fc
+    title: "MCP 与 Function Calling 到底什么关系，以及为什么我认为大部分人的观点都是错误的"
+    url: https://www.bilibili.com/video/BV15YJTzkENC
+    type: video
+    lang: zh
+    minutes: 27
+    must: false
+    after: "能给出「何时用 MCP、何时直接 Function Calling」的结论"
+    note: "27 分钟，观点向，注意分辨主观判断"
+    author: "马克的技术工作坊"
+    bvid: BV15YJTzkENC
+    play: 101446
+    published: "2025-05"
+    verified: 2026-11-09
+  - id: v-ng-prompt
+    title: "【吴恩达】2025年公认最好的【提示词工程】教程！大模型入门到进阶，一套全解决！Prompt Engineering-附带课件代码"
+    url: https://www.bilibili.com/video/BV1173jzNELG
+    type: video
+    lang: zh
+    minutes: 94
+    must: true
+    after: "能写出带角色、示例、输出格式约束的 system prompt"
+    note: "吴恩达官方课，跳过 Python 代码只看思路"
+    author: "吴恩达深度学习"
+    bvid: BV1173jzNELG
+    play: 321641
+    published: "2025-07"
+    verified: 2026-11-09
+  - id: v-otel-itlaoqi
+    title: "【IT老齐695】OpenTelemetry日志、指标、链路一站解决方案"
+    url: https://www.bilibili.com/video/BV1NwNVemEyE
+    type: video
+    lang: zh
+    minutes: 23
+    must: true
+    after: "能说清 trace / metric / log 三者关系"
+    note: "23 分钟，先建立整体图"
+    author: "IT老齐"
+    bvid: BV1NwNVemEyE
+    play: 17456
+    published: "2025-02"
+    verified: 2026-11-09
+  - id: v-otel-springboot
+    title: "【IT老齐432】可观测性，优雅零侵入，Spring Boot接入OpenTelemetry"
+    url: https://www.bilibili.com/video/BV1GQ4y137V5
+    type: video
+    lang: zh
+    minutes: 18
+    must: true
+    after: "能让 Spring Boot 零侵入上报链路"
+    note: "18 分钟，跟着配一次"
+    author: "IT老齐"
+    bvid: BV1GQ4y137V5
+    play: 15333
+    published: "2023-12"
+    verified: 2026-11-09
+  - id: v-otel-yangming
+    title: "OpenTelemetry入门｜一看就懂"
+    url: https://www.bilibili.com/video/BV1bF411r71X
+    type: video
+    lang: zh
+    minutes: 102
+    must: false
+    after: "能自己搭一个最小的 Collector"
+    note: "102 分钟，补课用"
+    author: "阳明云原生"
+    bvid: BV1bF411r71X
+    play: 16204
+    published: "2023-09"
+    verified: 2026-11-09
+  - id: v-pgvector-kunlun
+    title: "PostgreSQL技术分享：pgvector的应用和原理"
+    url: https://www.bilibili.com/video/BV1Xw411S7sh
+    type: video
+    lang: zh
+    minutes: 44
+    must: false
+    after: "能说出 pgvector 的适用场景与性能边界"
+    note: "44 分钟偏原理，可 1.25 倍速"
+    author: "KunlunBase"
+    bvid: BV1Xw411S7sh
+    play: 5858
+    published: "2023-09"
+    verified: 2026-11-09
+  - id: v-prompt-agent-mcp-10min
+    title: "10分钟讲清楚 Prompt, Agent, MCP 是什么"
+    url: https://www.bilibili.com/video/BV1aeLqzUE6L
+    type: video
+    lang: zh
+    minutes: 12
+    must: false
+    after: "能区分 Prompt / Agent / MCP 各在哪一层"
+    note: "12 分钟建立全局地图，第一周看"
+    author: "隔壁的程序员老王"
+    bvid: BV1aeLqzUE6L
+    play: 910913
+    published: "2025-05"
+    verified: 2026-11-09
+  - id: v-rag-17
+    title: "RAG优化：17种RAG方案，谁才是RAG最佳选择？全程干货！带你搞懂这17种RAG方案，少走99%的弯路！大模型|LLM|RAG"
+    url: https://www.bilibili.com/video/BV1DmzABsEty
+    type: video
+    lang: zh
+    minutes: 26
+    must: false
+    after: "能列出至少 5 种优化手段及其代价"
+    note: "26 分钟，当清单用，不要照抄"
+    author: "AI敲代码的阿Q"
+    bvid: BV1DmzABsEty
+    play: 20992
+    published: "2026-01"
+    verified: 2026-11-09
+  - id: v-rag-eval-interview
+    title: "面试官问：如何评估RAG系统的效果？"
+    url: https://www.bilibili.com/video/BV1b69gB5E3h
+    type: video
+    lang: zh
+    minutes: 12
+    must: true
+    after: "能完整回答「如何评估 RAG 系统」这道面试题"
+    note: "12 分钟，评测周第一天看"
+    author: "AI深度幻觉"
+    bvid: BV1b69gB5E3h
+    play: 19183
+    published: "2026-04"
+    verified: 2026-11-09
+  - id: v-rag-kb-project
+    title: "【AI实战】AI企业知识库，基于SpringAI+Springboot+Vue+RAG+PGVector+Embedding的企业智能问答系统"
+    url: https://www.bilibili.com/video/BV141Kn69EEq
+    type: video
+    lang: zh
+    minutes: 34
+    must: true
+    after: "能对照出一个企业知识库需要哪些模块"
+    note: "34 分钟，看整体结构不要纠结代码细节"
+    author: "武哥聊编程"
+    bvid: BV141Kn69EEq
+    play: 24893
+    published: "2026-07"
+    verified: 2026-11-09
+  - id: v-rag-optimize-4step
+    title: "【RAG优化四步通关】从原理到实战：rag工作原理 Query环节优化 多模态rag rag 评估体系！大模型rag实战  rag知识库搭建   大模型应用开发"
+    url: https://www.bilibili.com/video/BV17eTvzaEWh
+    type: video
+    lang: zh
+    minutes: 41
+    must: true
+    after: "能说出查询/检索/生成/评估四段各自的优化手段"
+    note: "41 分钟，配合第 4 周实验"
+    author: "卢菁博士"
+    bvid: BV17eTvzaEWh
+    play: 5477
+    published: "2025-06"
+    verified: 2026-11-09
+  - id: v-rag-workflow
+    title: "RAG 工作机制详解——一个高质量知识库背后的技术全流程"
+    url: https://www.bilibili.com/video/BV1JLN2z4EZQ
+    type: video
+    lang: zh
+    minutes: 17
+    must: true
+    after: "能画出 RAG 全流程并指出三个最易出错的环节"
+    note: "17 分钟，RAG 周开头看"
+    author: "马克的技术工作坊"
+    bvid: BV1JLN2z4EZQ
+    play: 453637
+    published: "2025-06"
+    verified: 2026-11-09
+  - id: v-ragas
+    title: "【有手就行】20分钟教会你基于RAGas自动化评估RAG方案的优劣！从原理到代码实现，一个视频带你彻底搞懂RAG评估！全程干货无废话，草履虫都能学会~~~"
+    url: https://www.bilibili.com/video/BV1d1DfBWErT
+    type: video
+    lang: zh
+    minutes: 24
+    must: true
+    after: "能跑通一次 RAGas 评估并读懂四个指标"
+    note: "24 分钟，跟着敲一遍"
+    author: "AI产品实战"
+    bvid: BV1d1DfBWErT
+    play: 6463
+    published: "2026-04"
+    verified: 2026-11-09
+  - id: v-saa-xushu
+    title: "【2026版】B站唯一讲的最好的SpringAi Alibaba教程，AI Agent Framework+RAG+Graph+Claw+Skill一次讲完了！"
+    url: https://www.bilibili.com/video/BV1aB5K6rE8K
+    type: video
+    lang: zh
+    minutes: 588
+    must: false
+    after: "能说清 SAA Graph 的多 Agent 编排方式"
+    note: "9.8 小时，需要时再查"
+    author: "图灵学院徐庶"
+    bvid: BV1aB5K6rE8K
+    play: 23454
+    published: "2026-05"
+    verified: 2026-11-09
+  - id: v-sgg-mcp
+    title: "MCP实战指南，mcp视频教程，2小时学透mcp"
+    url: https://www.bilibili.com/video/BV1eK5DzHEWu
+    type: video
+    lang: zh
+    minutes: 123
+    must: true
+    after: "能写出一个可被调用的 MCP Server"
+    note: "2 小时，MCP 周主线"
+    author: "尚硅谷"
+    bvid: BV1eK5DzHEWu
+    play: 429874
+    published: "2025-04"
+    verified: 2026-11-09
+  - id: v-sgg-springai
+    title: "SpringAI教程，全网最强springai Alibaba，springai实战（RAG、SAA、MCP）"
+    url: https://www.bilibili.com/video/BV1pvWGznEqh
+    type: video
+    lang: zh
+    minutes: 530
+    must: true
+    after: "能说出 SAA 与 Spring AI 关系，以及 RAG/MCP 章节讲了什么"
+    note: "8.8 小时主线课程，按章节挑，不要一次看完"
+    author: "尚硅谷"
+    bvid: BV1pvWGznEqh
+    play: 868882
+    published: "2025-09"
+    verified: 2026-11-09
+  - id: v-sgg-springai-practice
+    title: "尚硅谷SpringAI实战教程，springai轻松上手大模型应用开发"
+    url: https://www.bilibili.com/video/BV1Cxj7zjEng
+    type: video
+    lang: zh
+    minutes: 235
+    must: true
+    after: "能跟着写完一个 ChatClient 对话接口"
+    note: "3.9 小时，上手最短路径"
+    author: "尚硅谷"
+    bvid: BV1Cxj7zjEng
+    play: 231160
+    published: "2025-05"
+    verified: 2026-11-09
+  - id: v-springboot-autoconfig
+    title: "B站目前讲的最透彻的SpringBoot自动配置，大厂面试必备知识点#安员外很有码"
+    url: https://www.bilibili.com/video/BV1NY411P7VX
+    type: video
+    lang: zh
+    minutes: 11
+    must: true
+    after: "能解释 @SpringBootApplication 背后的自动配置过程"
+    note: "11 分钟，第 1 周必看，面试常考"
+    author: "码场安员外"
+    bvid: BV1NY411P7VX
+    play: 116780
+    published: "2022-04"
+    verified: 2026-11-09
+  - id: v-springboot3-sgg
+    title: "springboot教程，SpringBoot3干货拉满，从零开始轻松拿下面试&加薪"
+    url: https://www.bilibili.com/video/BV1Es4y1q7Bf
+    type: video
+    lang: zh
+    minutes: 2570
+    must: false
+    after: "能按需查到 Web / 配置 / 异常处理章节"
+    note: "42 小时全集，只当字典查，别顺序刷"
+    author: "尚硅谷"
+    bvid: BV1Es4y1q7Bf
+    play: 1107841
+    published: "2023-05"
+    verified: 2026-11-09
+  - id: v-threadpool
+    title: "面试官求放过，快被问烂的线程池，二十分钟给你讲的明明白白"
+    url: https://www.bilibili.com/video/BV1dt4y1i7Gt
+    type: video
+    lang: zh
+    minutes: 18
+    must: false
+    after: "能说清核心线程数、队列、拒绝策略怎么配合"
+    note: "18 分钟，并发前补课"
+    author: "Java大联盟"
+    bvid: BV1dt4y1i7Gt
+    play: 109212
+    published: "2020-09"
+    verified: 2026-11-09
+  - id: v-token
+    title: "Token 到底是什么？—— 揭秘大模型背后的“文字压缩术”"
+    url: https://www.bilibili.com/video/BV1S5miBvEsu
+    type: video
+    lang: zh
+    minutes: 11
+    must: false
+    after: "能解释中文一个字大约几个 token、长对话为什么贵"
+    note: "10 分钟，通勤听"
+    author: "马克的技术工作坊"
+    bvid: BV1S5miBvEsu
+    play: 293332
+    published: "2025-12"
+    verified: 2026-11-09
+  - id: v-tooluse-principle
+    title: "从原理到代码，将清楚大模型的Tool Use和Function Calling"
+    url: https://www.bilibili.com/video/BV1wPEm6DEzS
+    type: video
+    lang: zh
+    minutes: 17
+    must: false
+    after: "能解释模型只输出调用提议、执行权在你自己手里"
+    note: "17 分钟，原理向"
+    author: "懂点AI的H先生"
+    bvid: BV1wPEm6DEzS
+    play: 3699
+    published: "2026-06"
+    verified: 2026-11-09
+  - id: v-turing-rag-project
+    title: "2026版Java+AI企业级RAG知识库项目实战全套教程，Spring AI实战RAG解决企业级知识库落地的10大痛点！让你少走99%的弯路！"
+    url: https://www.bilibili.com/video/BV1GYkKBVEcW
+    type: video
+    lang: zh
+    minutes: 254
+    must: false
+    after: "能看到企业级 RAG 的落地清单"
+    note: "4 小时，选看架构篇"
+    author: "图灵官方"
+    bvid: BV1GYkKBVEcW
+    play: 31305
+    published: "2026-01"
+    verified: 2026-11-09
+  - id: v-vector-index
+    title: "AI Agent的RAG、Memory底层的语义检索原理是啥 | 向量数据库-索引篇"
+    url: https://www.bilibili.com/video/BV1RCGR6yEEw
+    type: video
+    lang: zh
+    minutes: 10
+    must: false
+    after: "能说清 HNSW 索引大概在做什么、代价是什么"
+    note: "10 分钟，配合建表练习看"
+    author: "小白debug"
+    bvid: BV1RCGR6yEEw
+    play: 86783
+    published: "2026-05"
+    verified: 2026-11-09
+  - id: v-virtual-thread
+    title: "【尚硅谷】新版JDK21，深度详解java21虚拟线程新特性"
+    url: https://www.bilibili.com/video/BV1Xg4y197DB
+    type: video
+    lang: zh
+    minutes: 33
+    must: true
+    after: "能说清虚拟线程适合什么、不适合什么"
+    note: "33 分钟，第 14 周看"
+    author: "尚硅谷"
+    bvid: BV1Xg4y197DB
+    play: 60334
+    published: "2023-10"
+    verified: 2026-11-09
+  - id: v-yupi-springai
+    title: "炸裂，Spring AI让Java再次伟大！还有人没用过吗？"
+    url: https://www.bilibili.com/video/BV1xkJxzEEmD
+    type: video
+    lang: zh
+    minutes: 13
+    must: false
+    after: "能说清 Spring AI 到底解决什么问题"
+    note: "13 分钟建立直觉"
+    author: "程序员鱼皮"
+    bvid: BV1xkJxzEEmD
+    play: 202109
+    published: "2025-05"
+    verified: 2026-11-09

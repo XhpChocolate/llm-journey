@@ -1,0 +1,97 @@
+week: 14
+phase: F
+phase_name: 缓冲与拓展（第13-14周）：补欠账，决定下一步
+theme: 拓展与求职：把能力换成机会
+goal: 试 3 个「用到再学」的能力，并把作品推到能公开的程度。
+acceptance: 简历可投、作品链接可发、能讲清下一步方向。
+days:
+  - id: W14D01
+    day: 1
+    title: 虚拟线程实战
+    minutes: 150
+    goal: 知道它在什么场景有用、什么场景没用。
+    tasks:
+      - 把一版阻塞式模型调用改成虚拟线程执行
+      - 用同样的限流配置压测，对比吞吐与资源占用
+      - 写结论：什么条件下才值得切换
+    deliverable: 虚拟线程版本 + 压测对比
+    refs: [r-jep444-zh, v-virtual-thread, r-jep444]
+    notes_prompt: 虚拟线程解决了 I/O 等待，解决不了什么？
+
+  - id: W14D02
+    day: 2
+    title: 模型路由与成本实验
+    minutes: 140
+    goal: 用最少的钱跑出可接受的效果。
+    tasks:
+      - 设计路由规则：简单问题、长文档、需要推理各走哪个模型
+      - 用 eval 集跑三种路由策略，对比准确率与成本
+      - 绘制「成本-质量」曲线
+    deliverable: 路由策略 + 成本质量对比
+    refs: [v-kvcache-promptcache, r-deepseek-docs]
+    notes_prompt: 省下的钱，值得多写的复杂度吗？
+
+  - id: W14D03
+    day: 3
+    title: 微调边界判断
+    minutes: 120
+    goal: 建立「什么时候不该微调」的判断力，不动手训。
+    tasks:
+      - 整理判断树：不知道 / 格式风格 / 推理能力 分别该怎么解
+      - 列出 3 个「该用微调」的场景与 3 个「别用」的场景
+      - 估算一次 LoRA 微调的成本与验证方式
+    deliverable: 判断树 + 成本估算
+    refs: [v-llm-agent-skill]
+    notes_prompt: 效果不好时，我怎么排除是检索和 Prompt 的问题？
+
+  - id: W14D04
+    day: 4
+    title: 线上 badcase 回流评测
+    minutes: 140
+    goal: 让系统能随着使用变好。
+    tasks:
+      - 设计反馈入口（赞/踩 + 一句话原因）
+      - 把 badcase 自动转成新的 eval 用例
+      - 跑一次「新增用例 → 修复 → 回归」闭环
+    deliverable: 反馈回流链路
+    refs: [v-rag-eval-interview, r-ragas]
+    notes_prompt: 用户点了踩但不说原因，我能做什么？
+
+  - id: W14D05
+    day: 5
+    title: 部署与公开（可选）
+    minutes: 160
+    goal: 有一个别人能点开的链接，说服力完全不同。
+    tasks:
+      - 部署到一台云主机或免费平台（注意密钥与额度）
+      - 配置基础防护：限流、额度上限、错误页
+      - 生成可分享的演示链接与二维码
+    deliverable: 公开演示地址（或本地一键启动包）
+    refs: [v-docker-sgg, r-docker]
+    notes_prompt: 公开出去最怕什么？那个风险怎么兜？
+
+  - id: W14D06
+    day: 6
+    title: 求职与转岗沟通
+    minutes: 140
+    goal: 把作品换成一次真实的对话机会。
+    tasks:
+      - 简历定稿，项目放最前，量化指标加粗
+      - 准备 3 个版本的项目介绍：30 秒 / 3 分钟 / 10 分钟
+      - 找 3 个目标岗位或内部转岗机会，投递或约聊
+    deliverable: 简历终版 + 三版介绍 + 投递记录
+    refs: []
+    notes_prompt: 我最怕被问的那个问题是什么？现在就写答案。
+
+  - id: W14D07
+    day: 7
+    title: 总复盘与下一阶段
+    minutes: 120
+    goal: 结束这一轮，开始下一轮。
+    tasks:
+      - 统计 14 周：总投入、完成率、产出的可展示物
+      - 写「能力自评雷达」（Java 工程/LLM 应用/RAG/Agent/工程化/表达）
+      - 定下一个 8 周方向（深耕一域 or 拓宽）
+    deliverable: 总复盘 + 能力雷达 + 下阶段计划
+    refs: []
+    notes_prompt: 14 周后，我和刚开始的自己最大的区别是什么？

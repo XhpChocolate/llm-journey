@@ -1,0 +1,97 @@
+week: 8
+phase: C
+phase_name: Agent（第6-8周）：从「能调工具」到「可靠地完成任务」
+theme: 生产化最小底座
+goal: 把 Demo 变成「别人能启动、出错能查、改动能验」的项目。
+acceptance: docker compose up 一键起，eval 一条命令跑。
+days:
+  - id: W08D01
+    day: 1
+    title: 限流与并发
+    minutes: 140
+    goal: 并发不是把线程开大，而是把压力控住。
+    tasks:
+      - 用线程池/信号量限制同时在跑的模型请求数
+      - 压测 20 并发，记录 P95 延迟与错误率
+      - 加排队与拒绝策略（超限返回友好提示）
+    deliverable: 限流实现 + 压测数据
+    refs: [v-threadpool, r-resilience4j]
+    notes_prompt: 模型服务限流了，我的服务会怎么样？
+
+  - id: W08D02
+    day: 2
+    title: 熔断与降级
+    minutes: 130
+    goal: 下游挂了，我的服务不能跟着挂。
+    tasks:
+      - 配熔断器（失败率阈值、半开探测）
+      - 实现降级：返回缓存答案或明确提示稍后再试
+      - 人为关掉模型服务，验证降级生效
+    deliverable: 熔断降级生效的验证记录
+    refs: [r-resilience4j]
+    notes_prompt: 降级时给用户的文案，应该说什么？
+
+  - id: W08D03
+    day: 3
+    title: Prompt 版本管理
+    minutes: 120
+    goal: Prompt 是代码，得能回滚。
+    tasks:
+      - 把 Prompt 抽到外部模板文件，加版本号
+      - 建变更记录（改了什么、为什么、指标变化）
+      - 支持按版本切换并 A/B 对比
+    deliverable: 版本化 Prompt 目录 + 变更记录
+    refs: [v-ng-prompt, r-anthropic-prompt]
+    notes_prompt: 没有版本管理，我怎么知道是哪次改动让效果变差？
+
+  - id: W08D04
+    day: 4
+    title: 把评测接进 CI
+    minutes: 150
+    goal: 让「效果回归」像编译失败一样被拦住。
+    tasks:
+      - 把第 5 周的 eval 脚本接到 GitHub Actions
+      - 设置阈值：低于基线就失败
+      - 故意改坏一个 Prompt，确认 CI 能拦住
+    deliverable: CI 评测流水线
+    refs: [v-ragas, r-ragas]
+    notes_prompt: CI 跑一次评测要多少成本？值得每次提交都跑吗？
+
+  - id: W08D05
+    day: 5
+    title: Docker Compose 一键启动
+    minutes: 150
+    goal: 任何人 clone 之后一条命令能跑起来。
+    tasks:
+      - 写 Dockerfile（多阶段构建，镜像尽量小）
+      - compose 起 app + pgvector，配置健康检查
+      - 在一台干净环境（或删掉本地数据）验证启动
+    deliverable: Dockerfile + compose + 启动文档
+    refs: [v-docker-40min, r-docker, r-docker-compose]
+    notes_prompt: 换台电脑，我能 10 分钟内跑起来吗？
+
+  - id: W08D06
+    day: 6
+    title: 里程碑 M3：Agent 可演示
+    minutes: 150
+    goal: 拿得出手的第三个里程碑。
+    tasks:
+      - 整理端到端演示路径（3 个场景：成功/失败/越权）
+      - 补 README 的「30 秒上手」部分
+      - 找一个人（同事/朋友）照文档跑一遍，记录卡点
+    deliverable: M3 可演示 Agent + 他人验证记录
+    refs: [v-hm-rag-agent-project]
+    notes_prompt: 别人卡住的第一处，就是我 README 的漏洞。
+
+  - id: W08D07
+    day: 7
+    title: 周复盘 + 阶段复盘
+    minutes: 110
+    goal: Agent 阶段收口，准备进入工程深水区。
+    tasks:
+      - 写阶段复盘：三个里程碑各做到什么程度
+      - 列出「不敢上线」的 5 个理由（这就是接下来要补的）
+      - 更新简历草稿里的项目描述
+    deliverable: 阶段复盘 + 不敢上线清单
+    refs: []
+    notes_prompt: 「不敢上线」的清单里，哪条最致命？

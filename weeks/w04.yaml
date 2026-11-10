@@ -1,0 +1,97 @@
+week: 4
+phase: B
+phase_name: RAG（第3-5周）：让模型「知道」你的知识
+theme: 检索质量：从「能查到」到「查得准」
+goal: 会诊断和改善召回质量，而不是调参碰运气。
+acceptance: 同一批问题，召回率比第3周有可量化提升。
+days:
+  - id: W04D01
+    day: 1
+    title: 混合检索
+    minutes: 130
+    goal: 理解向量检索的盲区，为什么还需要关键词。
+    tasks:
+      - 用 PG 全文检索（tsvector）做 BM25 近似
+      - 同一问题分别用向量/关键词/混合三种方式检索
+      - 找出向量查不到但关键词能查到的例子
+    deliverable: 三路检索对比 + 1 个反例
+    refs: [v-rag-optimize-4step, r-sai-vectordb, r-pgvector]
+    notes_prompt: 什么类型的问题最适合关键词检索？
+
+  - id: W04D02
+    day: 2
+    title: 重排（Rerank）
+    minutes: 130
+    goal: 知道什么时候值得多花一次模型调用。
+    tasks:
+      - 了解交叉编码器与向量检索的区别
+      - 接一个 rerank 能力（API 或本地小模型）
+      - 对比 top5 在重排前后的排序变化
+    deliverable: 带重排的检索接口
+    refs: [v-rag-17, r-sai-rag]
+    notes_prompt: 重排的成本换来了多少准确率？值吗？
+
+  - id: W04D03
+    day: 3
+    title: 查询改写
+    minutes: 120
+    goal: 让用户那句随口的问题变成能检索的查询。
+    tasks:
+      - 试多查询（一个问题生成 3 个变体）并合并结果
+      - 试 HyDE（先生成假答案再检索）
+      - 记录两种方法各自在什么问题上有效
+    deliverable: 查询改写模块 + 效果记录
+    refs: [v-rag-optimize-4step, r-sai-rag]
+    notes_prompt: 改写会不会把用户的真实意图改丢？
+
+  - id: W04D04
+    day: 4
+    title: 上下文组装
+    minutes: 120
+    goal: 检索到的片段怎么放进 Prompt，直接决定答案质量。
+    tasks:
+      - 实现带编号的引用（[1][2]）与来源标注
+      - 做去重与 token 预算控制（超长截断策略）
+      - 对比「按相似度排」与「按文档顺序排」的效果
+    deliverable: 上下文组装器 + 两种顺序对比
+    refs: [v-rag-workflow, r-sai-rag, r-sai-advisors]
+    notes_prompt: 片段顺序为什么会影响模型回答？
+
+  - id: W04D05
+    day: 5
+    title: 带引用的生成与拒答
+    minutes: 130
+    goal: 答案必须能追溯到原文，没有依据时要敢说不知道。
+    tasks:
+      - 写 Prompt：只用给定资料回答，并标注引用编号
+      - 加拒答逻辑：检索为空或相关度低时明确说不知道
+      - 构造 3 个「资料里没有」的问题验证拒答
+    deliverable: 带引用 + 拒答的问答接口
+    refs: [v-rag-17, r-sai-rag]
+    notes_prompt: 模型明明没资料却编了答案，我在哪一步能拦住？
+
+  - id: W04D06
+    day: 6
+    title: 失败归因
+    minutes: 130
+    goal: 建立分类习惯，而不是笼统地说「效果不好」。
+    tasks:
+      - 收集 10 个失败案例
+      - 分三类：检索不到 / 检索到但没用 / 生成不忠实
+      - 每类各写一条可能的修复手段
+    deliverable: 10 条 badcase 归因表
+    refs: [r-ragas-zh, v-rag-eval-interview, r-ragas]
+    notes_prompt: 三类失败里，哪一类占比最高？
+
+  - id: W04D07
+    day: 7
+    title: 周复盘 + 缓冲
+    minutes: 100
+    goal: 补欠账，避免滚雪球。
+    tasks:
+      - 清空本周未完成项或明确放弃
+      - 更新疑点清单，把已解决的标注答案
+      - 写「下周我最想验证的一个假设」
+    deliverable: 周复盘 + 更新后的疑点清单
+    refs: []
+    notes_prompt: 这周我是在学，还是在收集教程？

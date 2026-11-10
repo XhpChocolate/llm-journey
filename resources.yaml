@@ -1,0 +1,570 @@
+# 资源库：所有链接集中在这里维护。
+# 链接失效时只改这一处，计划文件（weeks/*.yaml）用 id 引用，不会散落。
+#
+# 字段说明
+#   id      唯一标识，天计划里用 refs: [id] 引用
+#   title   资源名
+#   url     链接
+#   type    doc | video | code | tool
+#   lang    zh | en
+#   minutes 建议投入分钟数（单次阅读/观看）
+#   must    true=当天主资源（先用它），false=补充/查询型
+#   after   看完后应该能回答的问题（验收标准，比「看完」有用）
+#   note    使用提示
+#
+# 视频类说明：直接指向具体视频的链接半年内大概率失效，因此视频条目使用
+# 「平台搜索页」作为入口，并标注筛选标准。文档类为官方稳定地址。
+
+resources:
+  # ---------- LLM / API 认知 ----------
+  - id: r-deepseek-docs
+    title: DeepSeek API 文档（总览）
+    url: https://api-docs.deepseek.com/
+    type: doc
+    lang: zh
+    minutes: 30
+    must: true
+    after: 能说清 base_url、model 名、token 计费方式和速率限制在哪看
+
+  - id: r-deepseek-chat
+    title: DeepSeek 创建对话补全 API
+    url: https://api-docs.deepseek.com/api/create-chat-completion
+    type: doc
+    lang: zh
+    minutes: 30
+    must: true
+    after: 能默写 messages 的结构，说清 stream、temperature、max_tokens 的作用
+
+  - id: r-openai-fc
+    title: Function Calling 机制（DeepSeek 指南）
+    url: https://api-docs.deepseek.com/guides/function_calling
+    type: doc
+    lang: zh
+    minutes: 40
+    must: true
+    after: 能解释「模型只输出调用提议，执行者是你的代码」这句话的含义
+
+  - id: r-anthropic-prompt
+    title: Anthropic Prompt 工程总览
+    url: https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview
+    type: doc
+    lang: en
+    minutes: 35
+    must: true
+    after: 能说出 system 与 user 分工、few-shot 的适用场景
+
+  - id: r-prompting-guide
+    title: 提示工程指南（中文）
+    url: https://www.promptingguide.ai/zh
+    type: doc
+    lang: zh
+    minutes: 30
+    must: false
+    after: 能挑出 3 个立刻可用的技巧
+
+  - id: r-anthropic-agents
+    title: Building effective agents（Agent 设计模式权威短文）
+    url: https://www.anthropic.com/research/building-effective-agents
+    type: doc
+    lang: en
+    minutes: 45
+    must: true
+    after: 能区分 workflow 与 agent，说出「复杂度必须匹配业务复杂度」
+
+  - id: r-ragas
+    title: Ragas 评测框架文档
+    url: https://docs.ragas.io/
+    type: doc
+    lang: en
+    minutes: 40
+    must: true
+    after: 能说出 faithfulness / answer relevancy / context precision 各自衡量什么
+
+  - id: r-owasp-llm
+    title: OWASP LLM Top 10
+    url: https://genai.owasp.org/llm-top-10/
+    type: doc
+    lang: en
+    minutes: 50
+    must: true
+    after: 能列出与自己项目最相关的 3 个风险
+
+  - id: r-prompt-injection
+    title: Simon Willison 的 Prompt Injection 系列
+    url: https://simonwillison.net/series/prompt-injection/
+    type: doc
+    lang: en
+    minutes: 40
+    must: true
+    after: 能解释「间接注入」为什么比直接注入危险
+
+  # ---------- Java / Spring 基础 ----------
+  - id: r-start-spring
+    title: Spring Initializr（生成工程）
+    url: https://start.spring.io/
+    type: tool
+    lang: en
+    minutes: 10
+    must: true
+    after: 知道依赖怎么选、生成后怎么本地跑起来
+
+  - id: r-spring-boot-docs
+    title: Spring Boot 中文文档（3.5）
+    url: https://springdoc.tech/spring-boot/3.5.10/reference/
+    type: doc
+    lang: zh
+    minutes: 40
+    must: true
+    note: 当手册查，不要通读
+
+  - id: r-spring-config-props
+    title: Spring Boot 外部化配置（中文）
+    url: https://springdoc.tech/spring-boot/3.5.10/reference/features/external-config
+    type: doc
+    lang: zh
+    minutes: 35
+    must: true
+    after: 能说出配置优先级顺序，知道密钥为什么不能写进 yml
+
+  - id: r-spring-props
+    title: Spring Boot 配置项清单（中文）
+    url: https://springdoc.tech/spring-boot/3.5.10/appendix/application-properties/index
+    type: tool
+    lang: zh
+    minutes: 15
+    must: false
+    note: 查配置项用
+
+  - id: r-baeldung-start
+    title: Spring Boot 第一个应用（中文教程）
+    url: https://springdoc.tech/spring-boot/3.5.10/tutorial/first-application/index
+    type: doc
+    lang: zh
+    minutes: 25
+    must: false
+
+  - id: r-webclient
+    title: WebClient 中文文档
+    url: https://springdoc.tech/spring-framework/6.2.3/web-reactive/webflux-webclient/
+    type: doc
+    lang: zh
+    minutes: 40
+    must: true
+    after: 能设置超时、处理 4xx/5xx、拿到响应体
+
+  - id: r-baeldung-exception
+    title: Spring MVC 统一异常处理（中文）
+    url: https://springdoc.tech/spring-framework/6.2.3/web/webmvc/mvc-controller/ann-exceptionhandler
+    type: doc
+    lang: zh
+    minutes: 30
+    must: true
+    after: 能写出带错误码和 traceId 的统一错误响应体
+
+  - id: r-junit
+    title: JUnit 5 用户指南
+    url: https://junit.org/junit5/docs/current/user-guide/
+    type: doc
+    lang: en
+    minutes: 35
+    must: true
+    note: 只看断言、生命周期、参数化三章
+
+  - id: r-mockito
+    title: Mockito 官网
+    url: https://site.mockito.org/
+    type: doc
+    lang: en
+    minutes: 20
+    must: false
+
+  - id: r-baeldung-testing
+    title: Spring Boot 测试（中文）
+    url: https://springdoc.tech/spring-boot/3.5.10/reference/testing/
+    type: doc
+    lang: zh
+    minutes: 30
+    must: false
+
+  - id: r-jackson
+    title: Jackson Databind
+    url: https://github.com/FasterXML/jackson-databind
+    type: code
+    lang: en
+    minutes: 20
+    must: false
+    note: 看 README 里 ObjectMapper 配置示例即可
+
+  - id: r-resilience4j
+    title: Resilience4j 文档（重试/熔断/限流）
+    url: https://resilience4j.readme.io/docs/getting-started
+    type: doc
+    lang: en
+    minutes: 40
+    must: true
+    after: 能配出「最多重试 2 次、指数退避、熔断阈值 50%」
+
+  - id: r-jep444
+    title: JEP 444 虚拟线程
+    url: https://openjdk.org/jeps/444
+    type: doc
+    lang: en
+    minutes: 35
+    must: false
+    after: 能说清虚拟线程解决什么问题、不解决什么问题
+
+  - id: r-maven
+    title: Maven 教程（菜鸟教程·中文）
+    url: https://www.runoob.com/maven/maven-tutorial.html
+    type: doc
+    lang: zh
+    minutes: 20
+    must: false
+
+  - id: r-docker
+    title: Docker 教程（菜鸟教程·中文）
+    url: https://www.runoob.com/docker/docker-tutorial.html
+    type: doc
+    lang: zh
+    minutes: 30
+    must: true
+    after: 能写出 Dockerfile 和 docker-compose.yml 的最小版本
+
+  - id: r-docker-compose
+    title: Docker Compose 中文教程
+    url: https://www.runoob.com/docker/docker-compose.html
+    type: doc
+    lang: zh
+    minutes: 20
+    must: false
+
+  - id: r-testcontainers
+    title: Testcontainers for Java
+    url: https://java.testcontainers.org/
+    type: code
+    lang: en
+    minutes: 30
+    must: false
+    note: 需要真实 PG 做集成测试时再看
+
+  - id: r-micrometer
+    title: Micrometer 文档
+    url: https://micrometer.io/docs
+    type: doc
+    lang: en
+    minutes: 30
+    must: false
+
+  - id: r-spring-boot-actuator
+    title: Actuator REST API（中文）
+    url: https://springdoc.tech/spring-boot/3.5.10/api/rest/actuator/
+    type: doc
+    lang: zh
+    minutes: 30
+    must: true
+    after: 能暴露 /actuator/metrics 并读懂几个关键指标
+
+  - id: r-otel-java
+    title: OpenTelemetry Java 中文文档
+    url: https://opentelemetry.io/zh/docs/languages/java/
+    type: doc
+    lang: zh
+    minutes: 35
+    must: false
+
+  - id: r-otel-genai
+    title: OTel GenAI 语义约定
+    url: https://opentelemetry.io/docs/specs/semconv/gen-ai/
+    type: doc
+    lang: en
+    minutes: 40
+    must: true
+    after: 能说出 LLM span 应该带哪些属性（模型、token 数、耗时）
+
+  # ---------- Spring AI ----------
+  - id: r-sai-root
+    title: Spring AI 中文文档（1.1）
+    url: https://springdoc.tech/spring-ai/1.1.0/
+    type: doc
+    lang: zh
+    minutes: 40
+    must: true
+    after: 知道 ChatClient / ChatModel / Advisor / VectorStore 各自角色
+
+  - id: r-sai-chatclient
+    title: Spring AI ChatClient（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/chatclient/
+    type: doc
+    lang: zh
+    minutes: 45
+    must: true
+    after: 能写出流式与非流式两种调用，能挂 Advisor
+
+  - id: r-sai-chatmodel
+    title: Spring AI ChatModel（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/chatmodel
+    type: doc
+    lang: zh
+    minutes: 30
+    must: false
+
+  - id: r-sai-structured
+    title: Spring AI 结构化输出（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/structured-output-converter
+    type: doc
+    lang: zh
+    minutes: 40
+    must: true
+    after: 能把模型输出直接映射成 Java record，并处理解析失败
+
+  - id: r-sai-tools
+    title: Spring AI 工具调用 @Tool（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/tools
+    type: doc
+    lang: zh
+    minutes: 45
+    must: true
+    after: 能说清工具描述、参数 schema、错误返回如何影响模型行为
+
+  - id: r-sai-memory
+    title: Spring AI 对话记忆（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/chat-memory
+    type: doc
+    lang: zh
+    minutes: 35
+    must: true
+    after: 能说出 3 种记忆策略的取舍
+
+  - id: r-sai-advisors
+    title: Spring AI Advisors（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/advisors/
+    type: doc
+    lang: zh
+    minutes: 35
+    must: false
+
+  - id: r-sai-rag
+    title: Spring AI RAG（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/retrieval-augmented-generation/
+    type: doc
+    lang: zh
+    minutes: 50
+    must: true
+    after: 能画出 ETL → 检索 → 增强 → 生成的完整链路
+
+  - id: r-sai-vectordb
+    title: Spring AI 向量库抽象（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/vectordbs/
+    type: doc
+    lang: zh
+    minutes: 40
+    must: true
+    after: 能说出 VectorStore 接口的核心方法，知道元数据过滤怎么用
+
+  - id: r-sai-pgvector
+    title: Spring AI 集成 PGVector（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/vectordbs/pgvector
+    type: doc
+    lang: zh
+    minutes: 35
+    must: true
+    after: 能建表、写入、按相似度查询并加元数据过滤
+
+  - id: r-sai-embedding
+    title: Spring AI Embedding（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/embeddings/
+    type: doc
+    lang: zh
+    minutes: 25
+    must: false
+
+  - id: r-sai-mcp
+    title: Spring AI MCP（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/api/mcp/mcp-overview/
+    type: doc
+    lang: zh
+    minutes: 45
+    must: true
+    after: 能说出 MCP Server 暴露什么、Client 怎么发现工具、传输方式怎么选
+
+  - id: r-sai-observability
+    title: Spring AI 可观测性（中文）
+    url: https://springdoc.tech/spring-ai/1.1.0/observability/index
+    type: doc
+    lang: zh
+    minutes: 35
+    must: true
+    note: 若路径随版本变化，从 reference 首页搜索 observability
+
+  - id: r-sai-alibaba
+    title: Spring AI Alibaba（文档站）
+    url: https://java2ai.com/
+    type: doc
+    lang: zh
+    minutes: 30
+    must: false
+    note: 国内项目常用，含 Graph 多智能体编排
+
+  - id: r-sai-alibaba-gh
+    title: Spring AI Alibaba（GitHub）
+    url: https://github.com/alibaba/spring-ai-alibaba
+    type: code
+    lang: en
+    minutes: 20
+    must: false
+
+  # ---------- LangChain4j（对照学习，不并行深学） ----------
+  - id: r-lc4j-root
+    title: LangChain4j 文档
+    url: https://docs.langchain4j.dev/
+    type: doc
+    lang: en
+    minutes: 40
+    must: false
+    after: 能说出它和 Spring AI 在定位上的差别
+
+  - id: r-lc4j-tools
+    title: LangChain4j 工具调用
+    url: https://docs.langchain4j.dev/tutorials/tools
+    type: doc
+    lang: en
+    minutes: 30
+    must: false
+
+  - id: r-lc4j-rag
+    title: LangChain4j RAG
+    url: https://docs.langchain4j.dev/tutorials/rag
+    type: doc
+    lang: en
+    minutes: 30
+    must: false
+
+  - id: r-lc4j-memory
+    title: LangChain4j 对话记忆
+    url: https://docs.langchain4j.dev/tutorials/chat-memory
+    type: doc
+    lang: en
+    minutes: 25
+    must: false
+
+  # ---------- MCP ----------
+  - id: r-mcp-root
+    title: Model Context Protocol 官网
+    url: https://modelcontextprotocol.io/
+    type: doc
+    lang: en
+    minutes: 35
+    must: true
+    after: 能用自己的话解释「为什么 AI 应用需要一个工具协议标准」
+
+  - id: r-mcp-spec
+    title: MCP 规范
+    url: https://modelcontextprotocol.io/specification
+    type: doc
+    lang: en
+    minutes: 45
+    must: true
+    note: 只看 architecture / tools / transport 三节
+    after: 能画出 host-client-server 三者关系
+
+  - id: r-mcp-java
+    title: MCP Java SDK
+    url: https://github.com/modelcontextprotocol/java-sdk
+    type: code
+    lang: en
+    minutes: 40
+    must: true
+    after: 能跑通一个最小 Server 并让 Client 列出工具
+
+  # ---------- RAG 基础设施 ----------
+  - id: r-pgvector
+    title: pgvector 官方仓库
+    url: https://github.com/pgvector/pgvector
+    type: code
+    lang: en
+    minutes: 35
+    must: true
+    after: 能建带向量列的表、建 HNSW 索引、写一次近邻查询
+
+  - id: r-pgvector-docker
+    title: pgvector 官方镜像与 docker 启动说明
+    url: https://github.com/pgvector/pgvector#docker
+    type: tool
+    lang: en
+    minutes: 10
+    must: true
+
+  - id: r-tika
+    title: Apache Tika（文档解析）
+    url: https://tika.apache.org/
+    type: code
+    lang: en
+    minutes: 25
+    must: true
+    after: 能把 PDF/DOCX 抽成纯文本
+
+  - id: r-pdfbox
+    title: Apache PDFBox
+    url: https://pdfbox.apache.org/
+    type: code
+    lang: en
+    minutes: 20
+    must: false
+
+  # 视频资源统一放在同目录的 videos.yaml（每条都经 bvid 核验，含 UP 主/时长/播放量）。
+
+  # ---------- 中文伴读（官方文档为英文时的替代阅读） ----------
+  - id: r-mcp-spec-zh
+    title: MCP 规范中文译文（2025-03-26 版）
+    url: https://cloud.tencent.com/developer/article/2541726
+    type: doc
+    lang: zh
+    minutes: 40
+    must: true
+    after: 能用中文说清 host/client/server 与 tools/resources/prompts
+    note: 腾讯云社区译文，英文原版见 r-mcp-spec
+
+  - id: r-mcp-tutorial-zh
+    title: MCP 中文教程（GitHub 系列）
+    url: https://github.com/chenmingyong0423/mcp-tutorials
+    type: code
+    lang: zh
+    minutes: 40
+    must: false
+    after: 能照着写完一个最小 Server 并连上客户端
+
+  - id: r-owasp-llm-zh
+    title: OWASP LLM Top 10 中文解读与防御
+    url: https://www.freebuf.com/articles/496787.html
+    type: doc
+    lang: zh
+    minutes: 35
+    must: true
+    after: 能说出与自己项目最相关的 3 类风险及对应防御
+
+  - id: r-ragas-zh
+    title: RAGas 评测框架深度测评（中文）
+    url: https://cloud.tencent.com/developer/article/2505892
+    type: doc
+    lang: zh
+    minutes: 30
+    must: true
+    after: 能说清 RAGas 的指标覆盖范围与局限
+
+  - id: r-agents-zh
+    title: 《Building effective agents》中文译文
+    url: https://github.com/harrisliangsu/ai-agent-engineer-handbook/blob/main/translations/building-effective-agents.md
+    type: doc
+    lang: zh
+    minutes: 35
+    must: true
+    after: 能区分 workflow 与 agent，并说出复杂度匹配业务复杂度
+
+  - id: r-jep444-zh
+    title: 虚拟线程到底解决了什么问题（中文）
+    url: https://bbs.huaweicloud.com/blogs/499564
+    type: doc
+    lang: zh
+    minutes: 25
+    must: true
+    after: 能说清虚拟线程解决 I/O 等待、但不解决 CPU 密集

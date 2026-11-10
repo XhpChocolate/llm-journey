@@ -1,0 +1,5 @@
+# 站点产物与编辑器/工具缓存
+site/shots/
+site/.taste-skill/
+.DS_Store
+*.log

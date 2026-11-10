@@ -1,0 +1,157 @@
+# 学习台 · 本地静态站 v1
+
+双击 `index.html` 就能用，不需要服务器、不需要账号。
+
+## 打开方式
+
+- **直接双击** `index.html`（Chrome / Edge / Safari 均可）。
+- 想更稳一点，起一个本地静态服务：
+
+  ```bash
+  cd learning-workbench/site && python3 -m http.server 8000
+  # 打开 http://localhost:8000
+  ```
+
+数据全部在内联文件里（`data/plan.js`），所以 `file://` 下也能正常显示计划。
+
+## 解锁与顺延（2026-11-10 新增）
+
+计划不再按日历推进，改成**按完成度推进**：
+
+- **顺序解锁**：完成第 N 天，才解锁第 N+1 天。没解锁的天在「计划」里显示「锁定」、点了只会提示先完成第几天。
+- **自动顺延**：今天没做完，不用点任何东西——明天打开，这一关还在，日期自动变成明天，后面的课程整体往后推，**不会跳天**。
+- 「今天没做完，顺延」只是记一次顺延次数，方便复盘时看自己卡在哪。
+- 「撤销上一次完成」把上一个完成的天退回，它重新成为今天。
+- 「今日」永远显示你当前这一关的日期和内容。
+
+**已通过的课随时回看**：进度页新增「已通过的课」列表，点「回看并记笔记」打开当天详情，
+里面有一栏**复习笔记**（和当天写的笔记分开存，随时补，输入即保存）。计划页点已完成的那天也一样。
+
+## 六个视图
+
+| 视图 | 做什么 |
+|---|---|
+| 今日 | 按开始日期自动定位到今天：任务勾选、笔记、记疑点、当天资源、未来三天 |
+| 计划 | 98 天全部展开，可按阶段和状态筛选，点任意一天看完整任务与资源 |
+| 资源 | 90+ 条资源搜索与类型筛选，标了 UP 主、时长、被哪几天使用 |
+| 疑点 | 记录、状态流转（未解决 / 已搞懂 / 放弃）、1/3/7/15 天复习 |
+| 复盘 | 14 周各三栏：完成了什么 / 卡在哪 / 下周砍掉什么 |
+| 进度 | 完成率、累计小时、连续打卡、阶段进度条、每周柱状图 |
+
+## 数据存在哪
+
+- 打卡、笔记、疑点、复盘写在浏览器 `localStorage`，key 是 `xuetai.v1`。
+- **换电脑 / 换浏览器 / 清缓存前，先到「进度 → 备份与恢复」导出 JSON。**
+- 导入会覆盖当前记录（会二次确认）。
+
+## 改计划
+
+计划内容不在这里改。到上一层 `learning-workbench/`：
+
+1. 改 `weeks/*.yaml` 或 `resources.yaml` / `videos.yaml`
+2. `python3 build.py`
+3. `cd site && node tools/build-data.mjs`
+4. 刷新页面
+
+## 文件说明
+
+```
+site/
+├── index.html          页面骨架（六个视图）
+├── app.css             设计令牌与组件样式
+├── app.js              渲染、路由、localStorage、导入导出
+├── data/plan.js        由 ../dist/plan.json 生成（勿手改）
+├── tools/build-data.mjs 生成器
+├── assets/             system.css / motion（来自 taste-skill）
+├── favicon.svg
+└── share.svg           分享卡片占位图
+```
+
+## 中文优先（2026-11-09 调整）
+
+原来 43 条文档里大半是英文官方文档。现在按「中文优先、英文保留为参考」重排：
+
+| 类别 | 处理 |
+|---|---|
+| Spring Boot / Spring Framework | 换成 [Spring 中文网](https://springdoc.tech/) 的完整中文镜像（配置、异常、测试、WebClient、Actuator、入门教程） |
+| Spring AI | 换成 Spring AI 1.1 中文文档（ChatClient、Tool、结构化输出、记忆、Advisors、RAG、VectorStore、PGVector、Embedding、MCP、可观测性） |
+| Prompt 工程 | 换成 `promptingguide.ai/zh` 中文版 |
+| OpenTelemetry | 换成官方中文站 `opentelemetry.io/zh` |
+| Docker / Maven | 换成菜鸟教程中文版 |
+| 只有英文原文的 | 加了一条中文伴读：MCP 规范中译、MCP 中文教程、OWASP LLM Top10 中文解读、RAGas 中文测评、《Building effective agents》中译、虚拟线程中文讲解 |
+
+结果：51 条文档里 **34 条中文 / 17 条英文**；中文伴读会排在英文原文前面。
+
+**仍然保留英文的 17 条**，是三类：规范/语义约定（OTel GenAI、MCP 规范）、参考手册（JUnit、Micrometer、Resilience4j、LangChain4j）、仓库主页（GitHub 上的代码仓）。
+这些要么没有可靠中文版，要么本身就是查表用的；它们所在的每一天都还有中文视频或中文伴读。
+
+**新增的界面支持**：每条资源标了「中文 / 英文」，资源库可以一键只看中文。
+
+## 资源链接打不开？先看这条
+
+**在预览窗口（右侧内嵌 iframe）里点链接，浏览器会拦掉新标签。** 这是 sandbox 限制，不是链接坏了。
+
+- **想一次点击就跳转**：双击 `index.html`，用浏览器标签页打开（或 `python3 -m http.server` 后访问
+  `http://127.0.0.1:8000`），链接会直接开新标签。
+- **一定要在预览里点**：会弹出「外部链接」对话框，里面有**复制链接**和**在新窗口打开**两个按钮，
+  以及完整地址；顶部还有一条提示条说明当前环境。
+
+## 资源链接（2026-11-09 修复）
+
+点不开有两个原因，都修了：
+
+1. **只有右侧的「看视频 / 读文档」小字可点**。现在整行都是链接（标题、UP 主、时长任意位置都行），
+   右侧加了 `↗` 提示会开新标签；键盘 Tab 也能到，焦点框 2px 青柠色。
+2. **5 条 URL 本身失效或被人机验证拦**，已替换：
+
+| 原链接 | 问题 | 换成 |
+|---|---|---|
+| `platform.openai.com/docs/guides/function-calling` | Cloudflare 挑战页 | DeepSeek Function Calling 指南 |
+| `baeldung.com/spring-boot-start` | Cloudflare「请稍候」 | Spring 官方 gs/spring-boot |
+| `baeldung.com/exception-handling-for-rest-with-spring` | 同上 | Spring MVC `@ExceptionHandler` 文档 |
+| `baeldung.com/spring-boot-testing` | 同上 | Spring Boot 测试文档 |
+| `hub.docker.com/r/pgvector/pgvector` | 直接报错打不开 | pgvector 仓库的 docker 章节 |
+
+验证：95 条 URL 全部 curl 返回 2xx/3xx；用真实鼠标事件点过三个入口（今日行、资源库行、日详情弹层），
+都能在浏览器里打开对应页面。
+
+> 如果把这个页面嵌在带 sandbox 的预览 iframe 里，`target="_blank"` 可能被拦。此时脚本会接管，
+> 把链接复制到剪贴板并提示「粘到浏览器即可」。
+
+## 已知限制
+
+- 单用户、单浏览器：没有账号，也没有多端同步。
+- 没有提醒推送：要靠自己每天打开。
+- 字体走 Google Fonts，离线时回落到系统字体（布局不变）。
+
+## 设计与实现
+
+页面按 taste-skill 的流程做，用的都是它的机制，不是自己另起一套：
+
+- **palette**：deal 结果为 `forest-pale-lime`（暗绿底 #0f1f10 + 青柠强调 #c6f19d），取第一组
+- **type**：`familjen`（Familjen Grotesk + IBM Plex Mono），数字与 ID 走等宽
+- **radius**：`sharp`（4/6/8），按钮 `solid`
+- **基础层**：`assets/system.css` + `assets/motion/motion.css`，只加应用组件
+- **刻意偏离**：关掉了 system.css 的「一屏一节」强制高度和营销页的 hero 结构——这是应用界面，不是落地页
+
+## 验证结果
+
+| 项 | 结果 |
+|---|---|
+| copy-lint | 0 FAIL，1 WARN（指标条，见下） |
+| 功能回归 | 98 天 / 95 资源 / 搜索 / 打卡 / 笔记 / 疑点 / 刷新保留 全部通过 |
+| 截图目检 | 390 / 768 / 1440 三个宽度 |
+| gate.mjs | 最后一次完整评估 `GATE: OPEN 17`；末次调用返回 `GATE: OFF (no build active)` |
+
+**关于 gate 的 17 个 open FAIL**：它们来自营销页的结构规则（hero 独占首屏、一节一屏、footer.closing、h1 位置、split 线等）。这个页面是一个应用视图堆栈，不是 landing page，这些检查在结构上不适用，所以没有用 waivers 硬绕（waivers 上限 5 条，绕不完也不诚实）。真正可修的 4 类已修：split 对齐、页脚边线、资源行排版、触控高度。
+
+**关于那 1 个 WARN（stat strip）**：`0 / 0 / 2026` 是仪表盘的实时指标和页脚年份，不是营销数字条，保留。
+
+## 截图
+
+```
+shots/1440.png   桌面首屏（今日）
+shots/390.png    手机
+shots/plan.png   98 天计划
+shots/progress.png 进度
+```

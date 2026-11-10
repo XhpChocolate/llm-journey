@@ -1,0 +1,97 @@
+week: 9
+phase: D
+phase_name: 可观测与安全（第9-10周）：让系统「看得见、拦得住」
+theme: 可观测性：日志、指标、链路
+goal: 任何一次回答都能被还原，成本能被看见。
+acceptance: 拿到一个「答错了」的反馈，能在 10 分钟内定位根因。
+days:
+  - id: W09D01
+    day: 1
+    title: 日志规范化
+    minutes: 130
+    goal: 日志是排障第一现场，格式比数量重要。
+    tasks:
+      - 统一日志为结构化 JSON（时间/级别/traceId/事件/耗时）
+      - 约定三类事件名：llm.call / tool.call / rag.retrieve
+      - 做脱敏：手机号、身份证、密钥不得入日志
+    deliverable: 日志规范文档 + 改造后的日志样例
+    refs: [v-otel-itlaoqi, r-spring-boot-actuator]
+    notes_prompt: 出了问题，我最想看到的第一行日志是什么？
+
+  - id: W09D02
+    day: 2
+    title: 指标：Actuator + Micrometer
+    minutes: 140
+    goal: 把「感觉慢」变成 P95 延迟。
+    tasks:
+      - 暴露 /actuator/metrics 与 /actuator/health
+      - 自定义指标：token 用量、模型调用次数、失败率、工具耗时
+      - 做一个小面板（或用 Prometheus + Grafana 最简配置）
+    deliverable: 5 个自定义指标 + 查看方式
+    refs: [v-otel-springboot, r-spring-boot-actuator, r-micrometer]
+    notes_prompt: 哪个指标最能提前预警线上问题？
+
+  - id: W09D03
+    day: 3
+    title: 链路追踪与 GenAI 语义约定
+    minutes: 140
+    goal: 一次请求跨了 5 个步骤，要能看到全貌。
+    tasks:
+      - 读 GenAI 语义约定，列出 LLM span 应带的属性
+      - 用 OpenTelemetry 接入，跑通一次带 span 的请求
+      - 在追踪里找到「检索→组装→生成」三段耗时
+    deliverable: 一条完整 trace + 属性清单
+    refs: [v-otel-itlaoqi, r-otel-genai, r-otel-java]
+    notes_prompt: span 属性里哪些涉及隐私？
+
+  - id: W09D04
+    day: 4
+    title: Spring AI 可观测性接入
+    minutes: 130
+    goal: 用框架自带的观测能力，少写重复代码。
+    tasks:
+      - 开启 Spring AI observability，观察自动生成的 span
+      - 确认 token 用量与模型名是否被记录
+      - 对比自己手写的埋点，决定保留哪套
+    deliverable: 框架观测接入 + 取舍说明
+    refs: [v-otel-springboot, r-sai-observability]
+    notes_prompt: 自动埋点缺了什么我需要的字段？
+
+  - id: W09D05
+    day: 5
+    title: 全链路排障演练
+    minutes: 140
+    goal: 练一次真的定位，而不是读文档。
+    tasks:
+      - 人为注入 3 种故障：检索返回空、工具超时、模型返回非法 JSON
+      - 只允许看日志/指标/trace，逐个定位并记录耗时
+      - 写《排障手册》：症状 → 查哪里 → 常见原因
+    deliverable: 排障手册 + 3 次演练记录
+    refs: [r-otel-genai]
+    notes_prompt: 哪一类故障最难定位？为什么？
+
+  - id: W09D06
+    day: 6
+    title: 成本看板
+    minutes: 120
+    goal: 让「这个月花了多少」随时可答。
+    tasks:
+      - 按天/按功能统计 token 与费用
+      - 找出成本最高的 3 个请求类型
+      - 提 2 条降本方案并估算收益
+    deliverable: 成本统计表 + 降本提案
+    refs: [v-kvcache-promptcache, r-deepseek-docs]
+    notes_prompt: 成本结构和我的直觉一致吗？
+
+  - id: W09D07
+    day: 7
+    title: 周复盘 + 缓冲
+    minutes: 100
+    goal: 收口。
+    tasks:
+      - 补做未完成项或明确放弃
+      - 把本周观测结论写进项目 README
+      - 更新疑点清单
+    deliverable: 周复盘
+    refs: []
+    notes_prompt: 观测能力里，哪一项是「有了就再也不想没有」的？

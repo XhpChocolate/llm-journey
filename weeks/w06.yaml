@@ -1,0 +1,97 @@
+week: 6
+phase: C
+phase_name: Agent（第6-8周）：从「能调工具」到「可靠地完成任务」
+theme: Agent 循环与工具设计
+goal: 让模型自己决定调哪个工具、调几次，并能跑通一次真实查询。
+acceptance: 一个能查业务数据的单工具 Agent，失败时有清晰错误返回。
+days:
+  - id: W06D01
+    day: 1
+    title: Agent 循环的本质
+    minutes: 130
+    goal: 分清楚 workflow 和 agent，别一上来就做复杂编排。
+    tasks:
+      - 读 Agent 设计模式，画出 think→act→observe→think 循环
+      - 写笔记：什么任务该用固定 workflow，什么才需要 agent
+      - 列出 3 个「用 agent 反而更糟」的场景
+    deliverable: 循环图 + workflow/agent 判定清单
+    refs: [r-agents-zh, v-agent-principles, r-anthropic-agents]
+    notes_prompt: 我的场景真的需要 agent 吗？
+
+  - id: W06D02
+    day: 2
+    title: 工具设计规范
+    minutes: 120
+    goal: 工具的「描述」比「实现」更影响成功率。
+    tasks:
+      - 为一个查询工具写清命名、描述、参数 schema、返回格式
+      - 对比「描述模糊」与「描述精确」两种版本的调用成功率
+      - 约定错误返回结构（模型能读懂的错误信息）
+    deliverable: 一份工具设计规范 + 两组对比
+    refs: [v-tooluse-principle, r-sai-tools]
+    notes_prompt: 模型看不懂的错误信息会怎么处理？
+
+  - id: W06D03
+    day: 3
+    title: 单工具 Agent 跑通
+    minutes: 160
+    goal: 第一次让模型自己决定「去查一下」。
+    tasks:
+      - 用本地 H2/SQLite 造 20 条订单数据
+      - 实现 queryOrder(orderId) 工具并注册
+      - 让 Agent 完成「订单 1001 到哪了」的完整闭环
+    deliverable: 可用的单工具 Agent
+    refs: [v-hm-springai-deepseek, r-sai-tools]
+    notes_prompt: 模型调错参数时，是参数设计问题还是描述问题？
+
+  - id: W06D04
+    day: 4
+    title: 多工具与选择策略
+    minutes: 140
+    goal: 观察工具变多后，准确率会发生什么。
+    tasks:
+      - 增加到 4 个工具（查订单、查物流、查退款、算运费）
+      - 用 10 个问题测工具选择准确率
+      - 记录「工具越多越容易选错」的具体表现
+    deliverable: 10 条工具选择测试结果
+    refs: [v-fc-vs-mcp, r-sai-tools]
+    notes_prompt: 工具数量上限大概在哪？靠什么缓解？
+
+  - id: W06D05
+    day: 5
+    title: 上下文管理
+    minutes: 140
+    goal: 亲手制造一次 token 爆炸，才知道为什么要裁剪。
+    tasks:
+      - 跑 20 轮长对话，打印每轮 token 数，画出增长曲线
+      - 实现两种裁剪：滑动窗口、早期对话摘要
+      - 对比裁剪前后的回答质量与成本
+    deliverable: token 增长曲线 + 裁剪实现
+    refs: [v-sgg-springai, r-sai-memory]
+    notes_prompt: 摘要丢掉了什么关键信息？
+
+  - id: W06D06
+    day: 6
+    title: 重试、超时与幂等
+    minutes: 130
+    goal: Agent 失败是常态，要能安全重试。
+    tasks:
+      - 给模型调用加指数退避重试（区分可重试与不可重试）
+      - 给工具调用加超时与兜底返回
+      - 检查写操作是否幂等（重复调用会不会重复下单）
+    deliverable: 带重试与幂等的 Agent
+    refs: [v-hm-springai-deepseek, r-resilience4j]
+    notes_prompt: 哪个工具绝对不能自动重试？
+
+  - id: W06D07
+    day: 7
+    title: 周复盘 + 缓冲
+    minutes: 100
+    goal: 收口，别让欠账带进下一周。
+    tasks:
+      - 补做未完成项或明确放弃
+      - 记录本周最意外的一个发现
+      - 更新疑点清单
+    deliverable: 周复盘
+    refs: []
+    notes_prompt: 这周哪个认知被推翻了？

@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="zh-CN" data-type="software" data-radius="sharp" data-buttons="solid" data-motion>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>学习台：14 周大模型应用开发，98 天计划与打卡</title>
+<meta name="description" content="把 14 周大模型应用开发计划落到每天：今日任务、笔记、疑点、资源与进度，数据只存在本机。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="学习台：14 周大模型应用开发，98 天计划与打卡">
+<meta property="og:description" content="98 天、95 个资源的每日计划，带打卡、笔记、疑点复习与进度统计。">
+<meta property="og:image" content="share.svg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0f1f10">
+<meta name="site-kind" content="software">
+<meta name="page-type" content="software">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/system.css">
+<link rel="stylesheet" href="assets/motion/motion.css">
+<link rel="stylesheet" href="app.css">
+<style>
+:root {
+  --p-bg: #0f1f10; --p-surface: #162a17; --p-ink: #ffffff; --p-muted: #9aa39a;
+  --p-accent: #c6f19d; --p-accent-ink: #0f1f10; --p-action: #c6f19d; --p-action-ink: #0f1f10;
+  --p-inv-bg: #ffffff; --p-inv-surface: #ecedec; --p-inv-ink: #0f1f10; --p-inv-muted: #606c60;
+  --p-inv-accent: #0f1f10; --p-inv-accent-ink: #ffffff; --p-inv-action: #0f1f10; --p-inv-action-ink: #ffffff;
+  --font-display: "Familjen Grotesk", system-ui, sans-serif;
+  --font-text: "Familjen Grotesk", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 400;
+  --display-tracking: -0.03em;
+  --display-tracking-xl: -0.04em;
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#top">跳到内容</a>
+
+<header class="nav">
+  <div class="wrap nav__bar">
+    <a class="brand" href="#top" data-view="today">
+      <span class="brand__mark" aria-hidden="true"></span>
+      <span class="brand__text">学习台<span class="brand__sub">14 周 · 98 天</span></span>
+    </a>
+    <div class="tabbar" role="tablist" aria-label="视图">
+      <button class="tab" role="tab" id="tab-today" aria-controls="panel-today" aria-selected="true">今日</button>
+      <button class="tab" role="tab" id="tab-plan" aria-controls="panel-plan" aria-selected="false" tabindex="-1">计划</button>
+      <button class="tab" role="tab" id="tab-res" aria-controls="panel-res" aria-selected="false" tabindex="-1">资源</button>
+      <button class="tab" role="tab" id="tab-q" aria-controls="panel-q" aria-selected="false" tabindex="-1">疑点</button>
+      <button class="tab" role="tab" id="tab-review" aria-controls="panel-review" aria-selected="false" tabindex="-1">复盘</button>
+      <button class="tab" role="tab" id="tab-progress" aria-controls="panel-progress" aria-selected="false" tabindex="-1">进度</button>
+    </div>
+    <div class="navtools">
+      <span class="navdate" id="navDate">—</span>
+      <button class="btn btn--secondary btn--sm" id="exportBtn" type="button">导出数据</button>
+    </div>
+  </div>
+</header>
+
+<div class="envbar" id="envBar" hidden>
+  <div class="wrap envbar__inner">
+    <p>当前在<b>预览窗口</b>中打开，外部链接会被浏览器拦截。用浏览器直接打开 <code>index.html</code>，或访问本地地址即可正常跳转。</p>
+    <button class="envbar__x" id="envClose" type="button" aria-label="关闭提示">关闭</button>
+  </div>
+</div>
+
+<main id="top">
+<h1 class="sr-only">14 周大模型应用开发学习台</h1>
+
+<!-- 今日 -->
+<section class="view" id="panel-today" role="tabpanel" aria-labelledby="tab-today" tabindex="0">
+  <div class="wrap">
+    <p class="kicker" id="tKicker">第 1 周 · 第 1 天</p>
+    <div class="today-head">
+      <div>
+        <h2 class="today-title" id="tTitle">今天的任务</h2>
+        <p class="lead" id="tGoal"></p>
+      </div>
+      <div class="today-stats">
+        <div class="stat"><span class="stat__v" id="tMin">2 小时</span><span class="stat__k">今天的时长</span></div>
+        <div class="stat"><span class="stat__v" id="tDone">0</span><span class="stat__k">已完成天数</span></div>
+        <div class="stat"><span class="stat__v" id="tLeft">0</span><span class="stat__k">剩余天数</span></div>
+      </div>
+    </div>
+
+    <div class="today-grid">
+      <section class="card card--work">
+        <h3 class="card__h">今天要做</h3>
+        <ul class="tasks" id="tTasks"></ul>
+        <p class="ask" id="tAsk"></p>
+        <div class="btn-row">
+          <button class="btn btn--primary" id="doneBtn" type="button">完成今天，解锁下一天</button>
+          <button class="btn btn--secondary" id="deferBtn" type="button">今天没做完，顺延</button>
+          <button class="btn btn--quiet" id="undoBtn" type="button">撤销上一次完成</button>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card">
+          <h3 class="card__h">今日笔记</h3>
+          <label class="lbl" for="tNote">学了什么 / 卡在哪 / 明天第一步</label>
+          <textarea id="tNote" rows="5" placeholder="三行就够：学了什么 / 卡在哪 / 明天第一步"></textarea>
+          <p class="hint" id="noteHint">输入即保存，存在本机浏览器</p>
+        </section>
+        <section class="card">
+          <h3 class="card__h">记一个疑点</h3>
+          <form id="tqForm" class="inline-form" autocomplete="off">
+            <label class="lbl" for="tqInput">疑点</label>
+            <input id="tqInput" type="text" placeholder="为什么 HNSW 比 IVFFlat 稳？">
+            <button class="btn btn--secondary btn--sm" type="submit">记下疑点</button>
+          </form>
+          <p class="hint">记下来就忘掉它，周日统一清理。</p>
+        </section>
+      </aside>
+    </div>
+
+    <section class="card res-card">
+      <h3 class="card__h">今天看这些</h3>
+      <ul class="res-list" id="tRes"></ul>
+    </section>
+
+    <section class="next">
+      <h3 class="card__h">接下来三天</h3>
+      <ol class="next-list" id="tNext"></ol>
+    </section>
+  </div>
+</section>
+
+<!-- 计划 -->
+<section class="view" id="panel-plan" role="tabpanel" aria-labelledby="tab-plan" tabindex="0" hidden>
+  <div class="wrap">
+    <div class="panel-head">
+      <h2>98 天计划</h2>
+      <p class="lead">14 周，6 个阶段。完成一天才解锁下一天；没完成的会顺延，不会被跳过。</p>
+      <div class="filters">
+        <div class="chips" id="planStatus" role="group" aria-label="按状态筛选">
+          <button class="chip is-on" type="button" data-status="all">全部</button>
+          <button class="chip" type="button" data-status="done">已完成</button>
+          <button class="chip" type="button" data-status="defer">顺延</button>
+          <button class="chip" type="button" data-status="todo">未开始</button>
+        </div>
+        <div class="chips" id="planPhase" role="group" aria-label="按阶段筛选">
+          <button class="chip is-on" type="button" data-phase="all">全部阶段</button>
+          <button class="chip" type="button" data-phase="A">A 打底</button>
+          <button class="chip" type="button" data-phase="B">B RAG</button>
+          <button class="chip" type="button" data-phase="C">C Agent</button>
+          <button class="chip" type="button" data-phase="D">D 可观测与安全</button>
+          <button class="chip" type="button" data-phase="E">E MCP 与作品</button>
+          <button class="chip" type="button" data-phase="F">F 缓冲与求职</button>
+        </div>
+      </div>
+    </div>
+    <div class="weeks" id="planWeeks"></div>
+  </div>
+</section>
+
+<!-- 资源 -->
+<section class="view" id="panel-res" role="tabpanel" aria-labelledby="tab-res" tabindex="0" hidden>
+  <div class="wrap">
+    <div class="panel-head">
+      <h2>资源库</h2>
+      <p class="lead">官方文档优先，视频标了 UP 主、时长和「看完要能回答什么」。</p>
+      <div class="res-toolbar">
+        <label class="sr-only" for="resSearch">搜索资源</label>
+        <input id="resSearch" type="search" placeholder="搜标题、UP 主、关键词" autocomplete="off">
+        <div class="chips" id="resLang" role="group" aria-label="按语言筛选">
+          <button class="chip is-on" type="button" data-lang="all">全部语言</button>
+          <button class="chip" type="button" data-lang="zh">中文</button>
+          <button class="chip" type="button" data-lang="en">英文</button>
+        </div>
+        <div class="chips" id="resType" role="group" aria-label="按类型筛选">
+          <button class="chip is-on" type="button" data-type="all">全部类型</button>
+          <button class="chip" type="button" data-type="doc">文档</button>
+          <button class="chip" type="button" data-type="video">视频</button>
+          <button class="chip" type="button" data-type="code">代码</button>
+          <button class="chip" type="button" data-type="tool">工具</button>
+        </div>
+        <span class="count" id="resCount"></span>
+      </div>
+    </div>
+    <ul class="res-all" id="resAll"></ul>
+  </div>
+</section>
+
+<!-- 疑点 -->
+<section class="view" id="panel-q" role="tabpanel" aria-labelledby="tab-q" tabindex="0" hidden>
+  <div class="wrap">
+    <div class="panel-head">
+      <h2>疑点与复习</h2>
+      <p class="lead">没搞懂的地方先记下来。标记「已搞懂」后，按 1 / 3 / 7 / 15 天回来复习。</p>
+    </div>
+    <form id="qForm" class="q-form" autocomplete="off">
+      <div class="field">
+        <label for="qText">疑点</label>
+        <input id="qText" type="text" required placeholder="一句话说清卡在哪">
+      </div>
+      <div class="field">
+        <label for="qDay">来自哪天</label>
+        <select id="qDay"></select>
+      </div>
+      <button class="btn btn--primary" type="submit">记下疑点</button>
+    </form>
+    <div class="q-list" id="qList"></div>
+  </div>
+</section>
+
+<!-- 复盘 -->
+<section class="view" id="panel-review" role="tabpanel" aria-labelledby="tab-review" tabindex="0" hidden>
+  <div class="wrap">
+    <div class="panel-head">
+      <h2>每周复盘</h2>
+      <p class="lead">每周第 7 天是复盘加缓冲日。三栏写完，再定下周砍掉什么。</p>
+    </div>
+    <div class="reviews" id="reviewList"></div>
+  </div>
+</section>
+
+<!-- 进度 -->
+<section class="view" id="panel-progress" role="tabpanel" aria-labelledby="tab-progress" tabindex="0" hidden>
+  <div class="wrap">
+    <div class="panel-head">
+      <h2>进度与数据</h2>
+      <p class="lead">所有记录只存在这台电脑的浏览器里，换设备请先导出备份。</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat stat--big"><span class="stat__v" id="pDone">0</span><span class="stat__k">已完成天数</span></div>
+      <div class="stat stat--big"><span class="stat__v" id="pHours">0</span><span class="stat__k">累计小时</span></div>
+      <div class="stat stat--big"><span class="stat__v" id="pStreak">0</span><span class="stat__k">连续打卡</span></div>
+      <div class="stat stat--big"><span class="stat__v" id="pRate">0%</span><span class="stat__k">完成率</span></div>
+    </div>
+
+    <section class="card">
+      <h3 class="card__h">阶段进度</h3>
+      <ul class="bars" id="phaseBars"></ul>
+    </section>
+
+    <section class="card">
+      <h3 class="card__h">已通过的课</h3>
+      <p class="lead">随时回看，补一条复习笔记。</p>
+      <ul class="done-list" id="doneList"></ul>
+    </section>
+
+    <section class="card">
+      <h3 class="card__h">每周完成</h3>
+      <div class="weekchart" id="weekChart"></div>
+    </section>
+
+    <section class="card">
+      <h3 class="card__h">解锁规则</h3>
+      <p class="lead">按完成度推进：完成第 N 天，才解锁第 N+1 天。没做完的那天不会跳过，整条计划自动往后顺延——今天永远是你当前这一关。</p>
+    </section>
+
+    <section class="card">
+      <h3 class="card__h">备份与恢复</h3>
+      <p class="lead">导出一个 JSON 文件。换电脑、换浏览器时导入即可恢复打卡、笔记和疑点。</p>
+      <div class="btn-row">
+        <button class="btn btn--primary" id="exportBtn2" type="button">导出数据</button>
+        <button class="btn btn--secondary" id="importBtn" type="button">导入备份</button>
+        <button class="btn btn--quiet" id="resetBtn" type="button">清空全部记录</button>
+      </div>
+      <p class="hint" id="saveState">自动保存已开启</p>
+    </section>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__bar">
+    <p class="foot__brand">学习台 · 14 周大模型应用开发</p>
+    <p class="foot__note">计划与资源来自 learning-workbench；打卡、笔记、疑点只存在本机浏览器。</p>
+    <p class="foot__year">2026</p>
+  </div>
+</footer>
+
+<dialog class="dlg" id="dayDlg" aria-labelledby="dlgTitle">
+  <div class="dlg__head">
+    <p class="kicker" id="dlgKicker"></p>
+    <h2 id="dlgTitle"></h2>
+    <button class="dlg__x" id="dlgClose" type="button" aria-label="关闭">关闭</button>
+  </div>
+  <div class="dlg__body" id="dlgBody"></div>
+</dialog>
+
+<dialog class="dlg dlg--link" id="linkDlg" aria-labelledby="linkTitle">
+  <div class="dlg__head">
+    <p class="kicker">外部链接</p>
+    <h2 id="linkTitle">打开资源</h2>
+    <button class="dlg__x" id="linkClose" type="button" aria-label="关闭">关闭</button>
+  </div>
+  <div class="dlg__body">
+    <p class="lead" id="linkNote">预览窗口拦住了新标签。可以复制链接，或在新窗口里打开。</p>
+    <label class="lbl" for="linkUrl">地址</label>
+    <input id="linkUrl" type="text" readonly>
+    <div class="btn-row">
+      <button class="btn btn--primary" id="linkCopy" type="button">复制链接</button>
+      <button class="btn btn--secondary" id="linkOpen" type="button">在新窗口打开</button>
+    </div>
+    <p class="hint">想让每次点击都直接跳转：用浏览器打开 <code>index.html</code>（双击即可），不要在预览窗口里点。</p>
+  </div>
+</dialog>
+
+<input type="file" id="importFile" accept="application/json,.json" hidden>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="data/plan.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

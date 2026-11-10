@@ -1,0 +1,97 @@
+week: 3
+phase: B
+phase_name: RAG（第3-5周）：让模型「知道」你的知识
+theme: RAG 全景与数据入口
+goal: 走通 文档 → 切片 → 向量 → 检索 的数据链路。
+acceptance: 输入一个问题，能返回 top3 相关片段，且片段确实来自原文。
+days:
+  - id: W03D01
+    day: 1
+    title: RAG 全景与我为什么需要它
+    minutes: 120
+    goal: 先想清楚问题，再动手写代码。
+    tasks:
+      - 读 RAG 文档，画出 ETL→检索→增强→生成 四段架构图
+      - 写「我的 RAG 要解决什么问题」：模型不知道什么？谁会用？
+      - 列出 3 个「不适合用 RAG」的场景
+    deliverable: 一张架构图 + 一页问题定义
+    refs: [v-rag-workflow, r-sai-rag]
+    notes_prompt: 没有 RAG，我的 Agent 会怎么失败？
+
+  - id: W03D02
+    day: 2
+    title: 文档解析
+    minutes: 130
+    goal: 把 PDF/DOCX/MD 稳定转成纯文本 + 元数据。
+    tasks:
+      - 用 Tika 解析 PDF 和 DOCX，输出文本长度与页数
+      - 抽取元数据（文件名、页码、章节标题）
+      - 处理解析失败的坏文件（扫描版 PDF 抽不出字）
+    deliverable: 一个能解析目录的 /parse 接口
+    refs: [v-rag-kb-project, r-tika, r-pdfbox]
+    notes_prompt: 表格和图片里的信息，我的解析丢掉了吗？
+
+  - id: W03D03
+    day: 3
+    title: 切片策略
+    minutes: 140
+    goal: 知道切片会怎样决定检索上限。
+    tasks:
+      - 实现固定长度、按标题、递归三种切片
+      - 对同一份文档跑三种策略，对比片段数与平均长度
+      - 给每个片段加元数据（来源、章节、序号）
+    deliverable: 三份切片结果对比 + 选型理由
+    refs: [v-rag-workflow, r-sai-rag]
+    notes_prompt: 一个片段被切断在句子中间，会带来什么后果？
+
+  - id: W03D04
+    day: 4
+    title: Embedding 与相似度
+    minutes: 120
+    goal: 向量是最容易被当成黑箱的部分，先拆开。
+    tasks:
+      - 调 embeddings 接口，拿到一组向量
+      - 手算两句话的余弦相似度，验证「近义句更近」
+      - 记录维度、单次成本、批量上限
+    deliverable: 一段能算相似度的小程序
+    refs: [v-vector-index, r-sai-embedding]
+    notes_prompt: 为什么「字数差不多的句子」不一定更相似？
+
+  - id: W03D05
+    day: 5
+    title: PGVector 上手
+    minutes: 160
+    goal: 用自己的库存向量，能查、能过滤。
+    tasks:
+      - docker 起 pgvector，建带 vector 列的表
+      - 插入 20 条片段向量，写一次近邻查询
+      - 建 HNSW 索引，对比建索引前后耗时
+    deliverable: 可查询的向量表 + 建表 SQL
+    refs: [v-pgvector-kunlun, r-pgvector, r-pgvector-docker]
+    notes_prompt: 索引参数（m、ef_construction）影响什么？
+
+  - id: W03D06
+    day: 6
+    title: 用 Spring AI 的 VectorStore
+    minutes: 140
+    goal: 不写 SQL 也能存取，同时知道它在背后做了什么。
+    tasks:
+      - 配置 PGVector VectorStore，写入切片
+      - 用 similaritySearch 检索，试元数据过滤
+      - 对照第 5 天手写 SQL 的结果，确认一致
+    deliverable: VectorStore 版检索接口
+    refs: [v-sgg-springai, r-sai-vectordb, r-sai-pgvector]
+    notes_prompt: 框架的默认 topK 和相似度阈值是多少？合理吗？
+
+  - id: W03D07
+    day: 7
+    title: 周复盘 + 检索最小 Demo
+    minutes: 120
+    goal: 把本周零件拼成一个能演示的东西。
+    tasks:
+      - 做 /search?q= 返回 top3 片段（带来源）
+      - 用 5 个真实问题试，记录哪些查不准
+      - 周复盘：数据链路哪一步最脏？
+    deliverable: 可用的检索 Demo + 5 条 badcase
+    refs: []
+    notes_prompt: 查不准时，我第一反应是怪模型还是怪检索？

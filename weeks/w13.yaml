@@ -1,0 +1,97 @@
+week: 13
+phase: F
+phase_name: 缓冲与拓展（第13-14周）：补欠账，决定下一步
+theme: 补课周：按自己的缺口补，而不是按课程顺序补
+goal: 把前 12 周半懂的部分补到「能讲清」，并做一次框架对照。
+acceptance: 结余清单里 80% 项已关闭或明确「不学了」。
+days:
+  - id: W13D01
+    day: 1
+    title: 结余盘点
+    minutes: 120
+    goal: 先把欠账列清楚，再决定补什么。
+    tasks:
+      - 翻出全部疑点清单，合并同类项
+      - 按「影响作品」和「影响面试」两个维度排序
+      - 只选 5 项进本周补课，其余明确放弃
+    deliverable: 结余清单 + 本周 5 项补课计划
+    refs: []
+    notes_prompt: 哪些疑点其实不影响我做事，只是让我焦虑？
+
+  - id: W13D02
+    day: 2
+    title: 补课一：最弱的那个概念
+    minutes: 160
+    goal: 把最大的知识空洞填上。
+    tasks:
+      - 用「费曼法」写一页解释：给不懂的人讲明白
+      - 找到官方文档依据并标注出处
+      - 写一个最小可运行验证
+    deliverable: 一页解释 + 验证代码
+    refs: [v-otel-yangming]
+    notes_prompt: 我能不用术语讲清它吗？
+
+  - id: W13D03
+    day: 3
+    title: 补课二：代码质量欠账
+    minutes: 160
+    goal: 把「能跑」的代码修成「敢给人看」的代码。
+    tasks:
+      - 挑出最丑的一个类，重写并说明为什么
+      - 补日志、补校验、补边界处理
+      - 加一条注释解释「为什么这么写」
+    deliverable: 重构提交 + 说明
+    refs: []
+    notes_prompt: 三个月后我还能看懂这段吗？
+
+  - id: W13D04
+    day: 4
+    title: 框架对照：LangChain4j
+    minutes: 160
+    goal: 不做第二种框架的深学，只做概念对照。
+    tasks:
+      - 用 LangChain4j 实现「工具调用 + RAG」最小版
+      - 列 API 对照表：AI Services vs ChatClient、Tool vs @Tool
+      - 写结论：什么场景我会选它
+    deliverable: LangChain4j 最小实现 + 对照表
+    refs: [v-lc4j-yupi, v-lc4j-sgg-medical, r-lc4j-root, r-lc4j-tools, r-lc4j-rag, r-lc4j-memory, r-sai-alibaba, r-sai-alibaba-gh]
+    notes_prompt: 两个框架同时学，会分散我什么？
+
+  - id: W13D05
+    day: 5
+    title: 补课三：按需自选
+    minutes: 160
+    goal: 弹性日，补你觉得最值得的那一项。
+    tasks:
+      - 从结余清单剩余项里挑 1 项
+      - 设定 90 分钟硬上限，到点就停
+      - 写「学到什么 + 还有什么没懂」
+    deliverable: 补课记录
+    refs: [v-hm-springai-deepseek, v-saa-xushu]
+    notes_prompt: 时间到了，我是该继续还是该放弃？
+
+  - id: W13D06
+    day: 6
+    title: 文档与演示补强
+    minutes: 140
+    goal: 作品的可信度，一半来自文档。
+    tasks:
+      - 补「架构决策记录」（3 条：选型/取舍/放弃的方案）
+      - 补「已知限制」一节（诚实比完美重要）
+      - 演示视频重录一版（比第 12 周更顺）
+    deliverable: ADR + 限制说明 + 新演示
+    refs: [v-lc4j-heima]
+    notes_prompt: 我最不想写的那条限制，恰恰是面试官最爱问的。
+
+  - id: W13D07
+    day: 7
+    title: 周复盘
+    minutes: 100
+    goal: 收口。
+    tasks:
+      - 关闭结余清单里已完成的项
+      - 更新简历与项目描述
+      - 写下周（拓展周）计划
+    deliverable: 周复盘
+    refs: []
+    notes_prompt: 这周补的东西，哪些其实可以不学？
