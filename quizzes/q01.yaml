@@ -1,0 +1,251 @@
+# 每周小测：每天 2 题（里程碑日 3 题）
+# type: choice 单选 / judge 判断 / short 简答（要点自评）
+# answer: choice 是选项下标（0 起）；judge 是 true/false；short 是参考答案要点
+quizzes:
+  - day: W01D01
+    items:
+      - type: choice
+        q: Maven 的 pom.xml 里 parent 段主要解决什么
+        options:
+          - 声明项目依赖的下载地址
+          - 统一继承父工程的版本与插件配置
+          - 指定 JDK 的安装路径
+          - 定义代码的包名
+        answer: 1
+        explain: parent 用来继承依赖版本、插件和属性，少写重复配置。
+      - type: judge
+        q: 把 API Key 写进 application.yml 再提交到 Git，只要仓库是私有的就安全
+        answer: false
+        explain: 私有仓库也可能被fork、泄露或留在历史里；密钥走环境变量。
+
+  - day: W01D02
+    items:
+      - type: choice
+        q: Spring Boot 内嵌 Tomcat 的默认端口是
+        options:
+          - "80"
+          - "8080"
+          - "3306"
+          - "9000"
+        answer: 1
+        explain: 默认 8080，可用 server.port 改。
+      - type: judge
+        q: 启动日志里出现 Started Application in ... seconds，说明 Spring 容器已经初始化完成
+        answer: true
+        explain: 这行之后端口开始监听，可以接请求。
+
+  - day: W01D03
+    items:
+      - type: choice
+        q: 同一个配置项同时出现在 application.yml 和环境变量里，Spring Boot 默认取谁
+        options:
+          - application.yml
+          - 环境变量
+          - 随机一个
+          - 启动失败
+        answer: 1
+        explain: 外部化配置有优先级，环境变量高于配置文件。
+      - type: choice
+        q: 下面哪种写法能读到一个自定义配置项
+        options:
+          - 直接在字段上加 @Autowired
+          - 用 @Value 或 @ConfigurationProperties 绑定前缀
+          - 写个 main 方法读文件
+          - 用 System.getProperty 读 yml
+        answer: 1
+        explain: @Value 读单个值，@ConfigurationProperties 按前缀批量绑定。
+
+  - day: W01D04
+    items:
+      - type: choice
+        q: 调用第三方接口时必须设置超时，主要原因是
+        options:
+          - 让代码看起来规范
+          - 防止下游卡住把线程和连接耗光
+          - 提高返回结果的准确率
+          - 减少 JSON 体积
+        answer: 1
+        explain: 没有超时，故障会沿着调用链放大。
+      - type: judge
+        q: 下游返回 404 时，重试三次通常能成功
+        answer: false
+        explain: 4xx 是客户端错误，重试无意义；只对超时、5xx 这类可重试错误退避重试。
+
+  - day: W01D05
+    items:
+      - type: choice
+        q: 用 Java record 定义 DTO 的好处不包括
+        options:
+          - 自动生成构造器和访问器
+          - 天然不可变
+          - 可以直接当数据库实体映射
+          - 代码短、可读性好
+        answer: 2
+        explain: DTO 与实体职责不同，不要混用。
+      - type: judge
+        q: 未知字段默认会让 Jackson 反序列化失败，需要显式忽略
+        answer: false
+        explain: 默认忽略未知字段；但建议显式配置，行为更可控。
+
+  - day: W01D06
+    items:
+      - type: choice
+        q: traceId 放进 MDC 之后，最直接的收益是
+        options:
+          - 提高接口吞吐
+          - 同一次请求的日志能串起来
+          - 自动加密日志
+          - 减少日志体积
+        answer: 1
+        explain: 一次请求跨多个类、多个服务，靠 traceId 串成一条链。
+      - type: choice
+        q: @ControllerAdvice 统一异常处理的核心作用是
+        options:
+          - 让异常不再抛出
+          - 把各类异常收敛成统一的错误响应结构
+          - 提升模型准确率
+          - 替代日志
+        answer: 1
+        explain: 错误码、消息、traceId 统一，前端和排障都省事。
+
+  - day: W01D07
+    items:
+      - type: choice
+        q: 给一个会调用外部接口的方法写单测，正确做法是
+        options:
+          - 真的去调外部接口
+          - 用 Mockito mock 掉外部依赖，只测自己的逻辑
+          - 直接删掉这个方法
+          - 只测 happy path
+        answer: 1
+        explain: 单测要快、稳定、可重复，外部依赖必须隔离。
+      - type: judge
+        q: 单测覆盖率 100% 就说明代码没有 bug
+        answer: false
+        explain: 覆盖率只说明被执行过，不说明断言有效。
+
+  - day: W02D01
+    items:
+      - type: choice
+        q: 调用 chat completions 时，messages 里 role 为 user 的那条表示
+        options:
+          - 系统设定的行为约束
+          - 用户这一轮说的话
+          - 模型之前的回答
+          - 工具的执行结果
+        answer: 1
+        explain: system 定规则，user 提需求，assistant 是历史回答。
+      - type: judge
+        q: 模型返回的 usage.total_tokens 可以直接用来估算成本
+        answer: true
+        explain: 按输入输出单价乘以 token 数，是成本核算的基础。
+
+  - day: W02D02
+    items:
+      - type: choice
+        q: 流式输出（SSE）相比一次性返回，最大的体验差异是
+        options:
+          - 结果更准确
+          - 首字延迟低，用户能立刻看到内容
+          - 更省 token
+          - 不需要网络
+        answer: 1
+        explain: 首字延迟（TTFT）决定体感，总耗时未必更短。
+      - type: judge
+        q: 客户端断开连接后，服务端应该继续把整段回答生成完再丢弃
+        answer: false
+        explain: 应尽快取消上游请求，否则白烧 token。
+
+  - day: W02D03
+    items:
+      - type: choice
+        q: 用 Spring AI 的 ChatClient 相比手写 HTTP 调用，主要省掉的是
+        options:
+          - 模型能力变强
+          - 请求组装、流式解析、工具调用协议这些样板代码
+          - 网络延迟
+          - 密钥管理
+        answer: 1
+        explain: 框架封装协议细节，你只关心业务。
+      - type: judge
+        q: 用了 Spring AI 之后，就不需要理解底层 HTTP 请求长什么样了
+        answer: false
+        explain: 出问题时还得会看请求体、tool_calls 和流式分块。
+
+  - day: W02D04
+    items:
+      - type: choice
+        q: 想让模型输出格式稳定，最有效的手段是
+        options:
+          - 反复强调“很重要”
+          - 给出明确的输出结构约束和示例
+          - 提高 temperature
+          - 多问几遍取平均
+        answer: 1
+        explain: 结构约束加示例，比形容词有效得多。
+      - type: choice
+        q: temperature 调高会带来什么
+        options:
+          - 输出更确定
+          - 输出更发散、更多样
+          - 速度更快
+          - token 更少
+        answer: 1
+        explain: 抽样的随机性变大，事实类任务建议低温。
+
+  - day: W02D05
+    items:
+      - type: choice
+        q: 结构化输出时模型返回了非法 JSON，工程上更应该
+        options:
+          - 直接把异常抛给用户
+          - 校验失败后重试一次，仍失败则降级并记录原文
+          - 用正则手工修补任意 JSON
+          - 忽略这次请求
+        answer: 1
+        explain: 有界重试加降级，同时保留原始输出来定位问题。
+      - type: judge
+        q: 模型返回的 JSON 字段类型，可以与 Java record 的类型不一致再自动转换
+        answer: false
+        explain: 类型不匹配会反序列化失败，需要校验和兜底。
+
+  - day: W02D06
+    items:
+      - type: choice
+        q: Function Calling 的过程中，真正执行工具的是
+        options:
+          - 模型自己
+          - 你的应用代码
+          - 模型提供商的服务器
+          - 浏览器
+        answer: 1
+        explain: 模型只输出调用提议，执行和鉴权都在你的代码里。
+      - type: choice
+        q: 一次带工具调用的完整往返，至少需要几次模型请求
+        options:
+          - 1 次
+          - 2 次
+          - 3 次
+          - 不需要模型
+        answer: 1
+        explain: 第一次决定调工具，拿到结果后第二次生成最终回答。
+
+  - day: W02D07
+    items:
+      - type: choice
+        q: M1 验收标准里，下面哪条最能说明服务“可交付”
+        options:
+          - 代码行数够多
+          - 流式、超时重试、统一异常、traceId 日志都能演示
+          - 用了最新的框架版本
+          - 注释写得详细
+        answer: 1
+        explain: 可交付看的是异常路径和可观测性，不是功能清单。
+      - type: judge
+        q: 只有 happy path 跑通的对话接口，也满足 M1
+        answer: false
+        explain: 断网、超时、非法输出三种情况都要不崩。
+      - type: short
+        q: 用一句话说明你的 M1 服务和“直接调 API 的脚本”有什么区别
+        answer: 有超时与重试、统一错误结构、可追踪日志、可运行的测试，异常路径有兜底
+        explain: 工程化能力才是分水岭。

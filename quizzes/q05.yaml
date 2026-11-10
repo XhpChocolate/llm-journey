@@ -1,0 +1,234 @@
+quizzes:
+  - day: W09D01
+    items:
+      - type: choice
+        q: 结构化日志相比纯文本日志，最大的好处是
+        options:
+          - 更短
+          - 可以按字段检索、聚合和告警
+          - 更安全
+          - 更省磁盘
+        answer: 1
+        explain: 字段化之后才能做查询和统计。
+      - type: judge
+        q: 日志里记录用户手机号和身份证号是正常操作
+        answer: false
+        explain: 日志要脱敏，否则合规风险很高。
+
+  - day: W09D02
+    items:
+      - type: choice
+        q: 用 Micrometer 记录模型调用耗时，应该优先用
+        options:
+          - 计数器
+          - 定时器（Timer）或直方图
+          - 日志
+          - 断点
+        answer: 1
+        explain: 耗时是分布，需要分位数而不是平均值。
+      - type: judge
+        q: P95 延迟比平均延迟更能反映用户体感
+        answer: true
+        explain: 平均值会被大量快请求拉低，掩盖长尾。
+
+  - day: W09D03
+    items:
+      - type: choice
+        q: 一次请求跨检索、组装、生成三步，链路追踪的作用是
+        options:
+          - 加速请求
+          - 看出每一步各花了多久、在哪一步出错
+          - 减少 token
+          - 替代日志
+        answer: 1
+        explain: span 把耗时和错误定位到具体环节。
+      - type: choice
+        q: LLM 的 span 通常应该带哪些属性
+        options:
+          - 只带时间
+          - 模型名、token 数、耗时、状态
+          - 用户密码
+          - 数据库连接串
+        answer: 1
+        explain: 这些是成本和排障的核心维度。
+
+  - day: W09D04
+    items:
+      - type: choice
+        q: 使用框架自带的可观测性（Spring AI observability）前，应该先
+        options:
+          - 直接上生产
+          - 搞清它自动埋了哪些字段，还缺什么
+          - 关掉日志
+          - 换框架
+        answer: 1
+        explain: 自动埋点覆盖不到业务语义，需要补。
+      - type: judge
+        q: 自动埋点能覆盖所有业务指标，不需要自己加
+        answer: false
+        explain: 业务维度（功能名、租户、缓存命中）通常要自己加。
+
+  - day: W09D05
+    items:
+      - type: choice
+        q: 排障演练的意义在于
+        options:
+          - 消耗时间
+          - 在真实故障前验证日志和链路是否够用
+          - 提高代码覆盖率
+          - 满足流程
+        answer: 1
+        explain: 演练能发现“日志记了但没用”的问题。
+      - type: choice
+        q: 制造“检索返回空”的故障，最该先看
+        options:
+          - 模型版本
+          - 检索请求参数与向量库返回条数
+          - 前端样式
+          - 磁盘
+        answer: 1
+        explain: 从最靠近故障点的证据开始看。
+
+  - day: W09D06
+    items:
+      - type: choice
+        q: 做成本看板时，最该按什么维度拆
+        options:
+          - 随便拆
+          - 按功能、按天、按模型
+          - 按代码文件
+          - 按开发者
+        answer: 1
+        explain: 拆到能定位“谁在花钱”为止。
+      - type: judge
+        q: 降成本最安全的第一步是压缩上下文和减少无效调用，而不是换小模型
+        answer: true
+        explain: 先消除浪费，再动质量敏感的部分。
+
+  - day: W09D07
+    items:
+      - type: judge
+        q: 可观测性做到位之后，出问题应该先看数据而不是先猜
+        answer: true
+        explain: 日志、指标、链路是判断依据。
+      - type: short
+        q: 哪一项观测能力是“有了就再也不想没有”的，为什么
+        answer: 例如 traceId 贯穿的链路，因为它把跨步骤的失败定位从猜测变成证据
+        explain: 要说出具体能力与它解决的问题。
+
+  - day: W10D01
+    items:
+      - type: choice
+        q: OWASP LLM Top 10 里，与 Agent 工具调用关系最直接的风险是
+        options:
+          - 模型训练成本
+          - 过度授权（Excessive Agency）
+          - 显存不足
+          - 网络抖动
+        answer: 1
+        explain: Agent 能调工具，权限过大就等于把系统交出去。
+      - type: judge
+        q: 大模型安全只需要模型厂商负责
+        answer: false
+        explain: 应用层的输入、工具、数据、输出都要自己防。
+
+  - day: W10D02
+    items:
+      - type: choice
+        q: 间接 Prompt Injection 指的是
+        options:
+          - 用户直接在对话框里下指令
+          - 恶意指令藏在检索到的文档或网页里
+          - 模型自己产生指令
+          - 数据库注入
+        answer: 1
+        explain: 间接注入来自被检索的内容，危害更大。
+      - type: choice
+        q: 面对间接注入，最有效的结构性防御是
+        options:
+          - 提高温度
+          - 把检索内容当数据而不是指令，并限制工具权限
+          - 加长 System Prompt
+          - 换模型
+        answer: 1
+        explain: 内容与指令分离，再叠加最小权限。
+
+  - day: W10D03
+    items:
+      - type: choice
+        q: 输出护栏中，校验引用是否存在的作用是
+        options:
+          - 让答案更长
+          - 防止模型编造不存在的来源
+          - 提高速度
+          - 减少 token
+        answer: 1
+        explain: 引用必须能对上原文，否则就是装饰。
+      - type: judge
+        q: 护栏越严格越好，误杀可以忽略
+        answer: false
+        explain: 误杀会毁掉可用性，阈值要按场景调。
+
+  - day: W10D04
+    items:
+      - type: choice
+        q: 审计日志至少要能回答
+        options:
+          - 谁在什么时候调了什么、参数和结果
+          - 只有时间
+          - 只有用户 id
+          - 只有模型名
+        answer: 0
+        explain: 审计的核心是还原全过程。
+      - type: judge
+        q: 工具白名单应该由 Prompt 决定
+        answer: false
+        explain: 白名单是代码里的授权，不交给模型判断。
+
+  - day: W10D05
+    items:
+      - type: choice
+        q: 数据合规上，最该先做的是
+        options:
+          - 买保险
+          - 梳理哪些数据绝对不能进 Prompt 和日志
+          - 换云厂商
+          - 加密所有字段
+        answer: 1
+        explain: 先分类，再谈控制和脱敏。
+      - type: judge
+        q: 把密钥放在前端代码里，只要混淆过就安全
+        answer: false
+        explain: 前端没有秘密，密钥必须在服务端。
+
+  - day: W10D06
+    items:
+      - type: choice
+        q: 安全自查表的价值在于
+        options:
+          - 应付检查
+          - 把“知道的风险”转成逐项可验证的状态
+          - 增加文档
+          - 显得专业
+        answer: 1
+        explain: 可勾选、可复查，才知道还剩什么没做。
+      - type: short
+        q: 自查表里哪一项“未做”让你最不安，为什么不
+        answer: 要具体到攻击路径和后果，例如越权工具可查全表却没有审计
+        explain: 说清风险和触发条件。
+
+  - day: W10D07
+    items:
+      - type: judge
+        q: 安全是上线前一次性检查，之后不用再管
+        answer: false
+        explain: 模型、数据、工具权限都在变，需要持续复查。
+      - type: choice
+        q: 这一阶段结束后，最该补的一项通常是
+        options:
+          - 更多功能
+          - 把自查表里高风险的未做项补上
+          - 换框架
+          - 加动画
+        answer: 1
+        explain: 先补风险，再谈功能。

@@ -1,0 +1,239 @@
+quizzes:
+  - day: W05D01
+    items:
+      - type: choice
+        q: RAG 评测里 faithfulness（忠实度）衡量的是
+        options:
+          - 检索到的片段多不多
+          - 答案是否只依据给定资料得出
+          - 回答速度快不快
+          - 问题覆盖全不全
+        answer: 1
+        explain: 忠实度看答案有没有超出资料范围编造。
+      - type: choice
+        q: 只用“感觉答得不错”来评价 RAG，最大的问题是
+        options:
+          - 太慢
+          - 无法判断改动是变好还是变坏
+          - 成本高
+          - 不能上线
+        answer: 1
+        explain: 没有度量，Prompt 与检索的调整就是碰运气。
+
+  - day: W05D02
+    items:
+      - type: choice
+        q: 20 条评测集里，为什么要特意包含“应当拒答”的题
+        options:
+          - 凑数
+          - 检验模型会不会在没依据时编造
+          - 增加难度
+          - 减少 token
+        answer: 1
+        explain: 拒答题专门测幻觉控制。
+      - type: judge
+        q: 评测集应该用真实用户可能问的问题，而不是自己编的“好问题”
+        answer: true
+        explain: 好问题会高估效果，真实问法才暴露缺口。
+
+  - day: W05D03
+    items:
+      - type: choice
+        q: 用 LLM 给 LLM 打分（LLM as judge），最需要注意
+        options:
+          - 让它多打几分
+          - 裁判模型可能偏袒同类风格，需要固定版本并抽样人工复核
+          - 打分必须整数
+          - 只能打 0 分或 100 分
+        answer: 1
+        explain: 裁判也有偏好，固定模型版本并人工抽检。
+      - type: judge
+        q: 每次评测都要保存配置快照，否则结果无法复现
+        answer: true
+        explain: topK、切片大小、模型版本都要记下来。
+
+  - day: W05D04
+    items:
+      - type: choice
+        q: 一次只改一个变量做对比，目的是
+        options:
+          - 省时间
+          - 能确定分数变化由哪个改动带来
+          - 减少成本
+          - 让报告好看
+        answer: 1
+        explain: 多变量同时改，结论无法归因。
+      - type: judge
+        q: 评测分数没变，说明这次改动没有价值
+        answer: false
+        explain: 可能这批题太容易，也可能变化体现在延迟或成本上。
+
+  - day: W05D05
+    items:
+      - type: choice
+        q: Agentic RAG 相比固定流水线，多出来的是
+        options:
+          - 更强的模型
+          - 由模型决定是否检索、检索几次、结果够不够
+          - 更大的向量库
+          - 更快的索引
+        answer: 1
+        explain: 把检索决策权交给模型，代价是延迟和不确定性。
+      - type: judge
+        q: Agentic RAG 一定比固定 RAG 效果好
+        answer: false
+        explain: 简单问题用固定流程更快更稳，复杂问题才值得。
+
+  - day: W05D06
+    items:
+      - type: choice
+        q: M2 作品能被别人跑起来的关键是
+        options:
+          - 代码很酷
+          - README 写清启动步骤、配置项和评测结果
+          - 用最新框架
+          - 注释很多
+        answer: 1
+        explain: 别人能复现，才算作品。
+      - type: judge
+        q: 作品里有 eval 报告比“功能很全”更有说服力
+        answer: true
+        explain: 指标和对比说明你能量化效果。
+
+  - day: W05D07
+    items:
+      - type: judge
+        q: 阶段复盘时，没解决的问题应该明确写下来而不是藏起来
+        answer: true
+        explain: 写下未解决项，下一阶段才有输入。
+      - type: choice
+        q: 这一阶段结束时最该保留的资产是
+        options:
+          - 大量截图
+          - 评测集、配置快照和 badcase 归因
+          - 更长的代码
+          - 新框架体验
+        answer: 1
+        explain: 这些是下一轮迭代的输入。
+
+  - day: W06D01
+    items:
+      - type: choice
+        q: 判断一个任务该用固定 workflow 还是 Agent，关键看
+        options:
+          - 老板的要求
+          - 步骤是否可预先确定、失败代价多大
+          - 模型价格
+          - 代码行数
+        answer: 1
+        explain: 步骤确定就用 workflow，不确定才交给 Agent。
+      - type: choice
+        q: Agent 循环的正确顺序是
+        options:
+          - 观察-思考-行动
+          - 思考-行动-观察，再判断是否继续
+          - 行动-思考-总结
+          - 检索-生成-打分
+        answer: 1
+        explain: think → act → observe → 判断是否继续。
+
+  - day: W06D02
+    items:
+      - type: choice
+        q: 工具描述写得模糊，最可能的结果是
+        options:
+          - 模型拒绝调用
+          - 模型选错工具或传错参数
+          - 工具执行更快
+          - 自动补全描述
+        answer: 1
+        explain: 描述就是模型的说明书，模糊就会猜。
+      - type: judge
+        q: 工具返回的错误信息应该给模型看，而不是直接抛异常
+        answer: true
+        explain: 结构化错误能让模型自我修正或换策略。
+
+  - day: W06D03
+    items:
+      - type: choice
+        q: 单工具 Agent 跑通的最低标准是
+        options:
+          - 代码能编译
+          - 模型能自己决定调用工具并基于结果回答
+          - 界面好看
+          - 支持多轮
+        answer: 1
+        explain: 能完成一次“思考-调用-回答”的闭环。
+      - type: judge
+        q: 工具参数越自由（都做成 string），模型越好用
+        answer: false
+        explain: 类型和枚举越明确，模型越不容易传错。
+
+  - day: W06D04
+    items:
+      - type: choice
+        q: 工具数量增加到十几个后，常见问题是
+        options:
+          - 模型变慢
+          - 选错工具的概率上升
+          - 向量维度增加
+          - 内存泄漏
+        answer: 1
+        explain: 候选太多，模型的选择准确率下降。
+      - type: choice
+        q: 缓解工具选择错误的有效做法是
+        options:
+          - 把所有工具合并成一个
+          - 分组或先用一个路由步骤挑工具集
+          - 增加 temperature
+          - 让用户自己选
+        answer: 1
+        explain: 缩小候选集比堆描述更有效。
+
+  - day: W06D05
+    items:
+      - type: choice
+        q: 长对话 token 爆炸的根本原因是
+        options:
+          - 模型记性太好
+          - 每轮都把全部历史塞回上下文
+          - 网络慢
+          - 向量太大
+        answer: 1
+        explain: 模型无状态，历史全靠重新发送。
+      - type: choice
+        q: 滑动窗口裁剪的最大代价是
+        options:
+          - 成本变高
+          - 早期关键信息丢失
+          - 模型变慢
+          - 不能流式
+        answer: 1
+        explain: 裁剪要有策略，重要信息先摘要保留。
+
+  - day: W06D06
+    items:
+      - type: choice
+        q: 下面哪种工具调用绝对不能自动重试
+        options:
+          - 查询订单
+          - 提交退款
+          - 计算运费
+          - 查天气
+        answer: 1
+        explain: 非幂等的写操作重试会重复执行。
+      - type: judge
+        q: 指数退避重试时应该区分可重试与不可重试错误
+        answer: true
+        explain: 4xx 重试没意义，超时和 5xx 才值得退避。
+
+  - day: W06D07
+    items:
+      - type: judge
+        q: 每周留缓冲日的作用是补欠账，而不是把计划排满
+        answer: true
+        explain: 缓冲让计划在现实里可持续。
+      - type: short
+        q: 这一周你发现哪个认知被推翻了
+        answer: 要能说出具体的一条旧判断和新的证据，而不是泛泛而谈
+        explain: 复盘的价值在于修正判断。

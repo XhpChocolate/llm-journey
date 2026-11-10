@@ -199,6 +199,68 @@ def load_data():
 
 
 # --------------------------------------------------------------------------
+# 题库：quizzes/*.yaml -> dist/quizzes.json
+# --------------------------------------------------------------------------
+VALID_TYPES = {"choice", "judge", "short"}
+
+
+def load_quizzes(weeks):
+    day_ids = {d["id"] for w in weeks for d in w["days"]}
+    quizzes, errors = {}, []
+    files = sorted((ROOT / "quizzes").glob("q*.yaml"))
+    if not files:
+        return {}, [], []
+    for f in files:
+        try:
+            data = load_yaml(f)
+        except Exception as exc:  # noqa: BLE001
+            errors.append(f"{f.name}: 解析失败 {exc}")
+            continue
+        for block in data.get("quizzes") or []:
+            day = block.get("day")
+            if day not in day_ids:
+                errors.append(f"{f.name}: 未知的 day {day}")
+                continue
+            # 同一天可以出现在多个文件里（后续按周扩题），题目累加
+            quizzes.setdefault(day, []).extend(block.get("items") or [])
+
+    for day, items in quizzes.items():
+        if len(items) < 2:
+            errors.append(f"{day}: 只有 {len(items)} 题，至少 2 题")
+        for i, it in enumerate(items, 1):
+            t = it.get("type")
+            tag = f"{day}#{i}"
+            if t not in VALID_TYPES:
+                errors.append(f"{tag}: 未知题型 {t}")
+                continue
+            if not it.get("q"):
+                errors.append(f"{tag}: 缺少题干")
+            if not it.get("explain"):
+                errors.append(f"{tag}: 缺少解析")
+            if t == "choice":
+                opts = it.get("options") or []
+                if len(opts) < 2:
+                    errors.append(f"{tag}: 选项不足")
+                a = it.get("answer")
+                if not isinstance(a, int) or not (0 <= a < len(opts)):
+                    errors.append(f"{tag}: answer 应为 0..{len(opts)-1} 的整数")
+            elif t == "judge":
+                if not isinstance(it.get("answer"), bool):
+                    errors.append(f"{tag}: 判断题 answer 应为 true/false")
+            elif not it.get("answer"):
+                errors.append(f"{tag}: 简答题缺少参考答案")
+
+    missing = sorted(day_ids - set(quizzes))
+    return quizzes, errors, missing
+
+
+def write_quizzes(quizzes):
+    (DIST / "quizzes.json").write_text(
+        json.dumps(quizzes, ensure_ascii=False, indent=1), encoding="utf-8"
+    )
+
+
+# --------------------------------------------------------------------------
 # plan.md
 # --------------------------------------------------------------------------
 def write_markdown(weeks, resources):
@@ -616,6 +678,14 @@ def main():
             print("  -", e)
         return 1
 
+    quizzes, q_errors, q_missing = load_quizzes(weeks)
+    if q_errors:
+        print("题库校验失败：")
+        for e in q_errors:
+            print("  -", e)
+        return 1
+    write_quizzes(quizzes)
+
     write_markdown(weeks, resources)
     write_csv(weeks, resources)
     write_json(weeks, resources)
@@ -631,6 +701,9 @@ def main():
         print(f"  阶段 {ph}: {len(ws)} 周 / {mins / 60:.0f} 小时")
     if unused:
         print("未引用的资源:", ", ".join(unused))
+    total_q = sum(len(v) for v in quizzes.values())
+    pools = sorted(len(v) for v in quizzes.values())
+    print(f"题库: {len(quizzes)} 天 / {total_q} 题（每天 {pools[0]}–{pools[-1]} 题）" + (f"（缺 {len(q_missing)} 天：{', '.join(q_missing[:5])}…）" if q_missing else ""))
     print("生成:", out.relative_to(ROOT))
     return 0
 

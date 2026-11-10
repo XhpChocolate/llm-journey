@@ -11,12 +11,21 @@ const out = join(siteRoot, "data", "plan.js");
 
 const plan = JSON.parse(await readFile(src, "utf8"));
 
+// 题库与计划分开维护：quizzes.json 由 build.py 从 quizzes/*.yaml 生成
+let quizzes = {};
+try {
+  quizzes = JSON.parse(await readFile(join(siteRoot, "..", "dist", "quizzes.json"), "utf8"));
+} catch (e) {
+  console.warn("dist/quizzes.json 缺失，先运行 build.py");
+}
+
 const slim = {
   schema: plan.schema,
   totalWeeks: plan.total_weeks,
   totalDays: plan.total_days,
   totalMinutes: plan.total_minutes,
   resources: plan.resources,
+  quizzes,
   weeks: plan.weeks.map((w) => ({
     week: w.week,
     phase: w.phase,
@@ -46,4 +55,5 @@ const body =
 
 await writeFile(out, body, "utf8");
 const kb = (Buffer.byteLength(body) / 1024).toFixed(0);
-console.log(`data/plan.js: ${slim.totalDays} 天 / ${Object.keys(slim.resources).length} 资源 / ${kb} KB`);
+const qCount = Object.values(quizzes).reduce((n, arr) => n + arr.length, 0);
+console.log(`data/plan.js: ${slim.totalDays} 天 / ${Object.keys(slim.resources).length} 资源 / ${qCount} 题 / ${kb} KB`);

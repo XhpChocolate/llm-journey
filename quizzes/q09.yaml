@@ -1,0 +1,267 @@
+# 扩充题池：第 5-8 周每天 +1 题
+quizzes:
+  - day: W05D01
+    items:
+      - type: judge
+        q: 忠实度高但答非所问，仍然算好答案
+        answer: false
+        explain: 忠实只说明没编造，相关性还要单独看。
+
+  - day: W05D02
+    items:
+      - type: choice
+        q: 20 条评测集里，最不该全是
+        options:
+          - 事实查找题
+          - 只有简单事实题、没有多跳和拒答
+          - 来自真实场景
+          - 标注了出处的题
+        answer: 1
+        explain: 题型单一会高估效果。
+
+  - day: W05D03
+    items:
+      - type: judge
+        q: 评测脚本要能一条命令跑完并输出报告，否则迟早会被放弃
+        answer: true
+        explain: 门槛越低，越可能持续跑。
+
+  - day: W05D04
+    items:
+      - type: choice
+        q: 改了切片大小后分数下降，正确结论是
+        options:
+          - 模型变差了
+          - 这个配置在当前评测集上更差，需要看是哪类题退步
+          - 数据集错了
+          - 重跑一次
+        answer: 1
+        explain: 要看分项，而不是只盯总分。
+
+  - day: W05D05
+    items:
+      - type: judge
+        q: Agentic RAG 的代价之一是延迟和不确定性上升
+        answer: true
+        explain: 多一次模型决策就多一次开销。
+
+  - day: W05D06
+    items:
+      - type: choice
+        q: 作品 README 里的「已知限制」应该
+        options:
+          - 删掉
+          - 写清在什么情况下不适用
+          - 写得很模糊
+          - 放到最后一行小字
+        answer: 1
+        explain: 明确边界反而增加可信度。
+
+  - day: W05D07
+    items:
+      - type: judge
+        q: 阶段复盘时应该重新看一遍原始目标，而不是只看完成了多少任务
+        answer: true
+        explain: 目标可能已经变了，要对齐。
+
+  - day: W06D01
+    items:
+      - type: choice
+        q: 下面哪个场景更适合固定 workflow 而不是 Agent
+        options:
+          - 开放式研究
+          - 每天固定生成一份格式固定的报表
+          - 排查未知故障
+          - 多轮需求澄清
+        answer: 1
+        explain: 步骤固定就不要引入不确定性。
+
+  - day: W06D02
+    items:
+      - type: judge
+        q: 工具返回给模型的错误信息，应该写成模型能理解的自然语言
+        answer: true
+        explain: 模型看不懂堆栈，但看得懂“订单不存在”。
+
+  - day: W06D03
+    items:
+      - type: choice
+        q: Agent 调工具时如果参数缺了必填项，正确的做法是
+        options:
+          - 传 null 让工具报错
+          - 让模型重新生成或追问用户
+          - 用默认值瞎猜
+          - 跳过这一步
+        answer: 1
+        explain: 校验失败要回到模型或用户，而不是硬闯。
+
+  - day: W06D04
+    items:
+      - type: judge
+        q: 工具越多，模型选错的概率越高，所以应该控制单次可用的工具数量
+        answer: true
+        explain: 可以用路由或分组缩小候选集。
+
+  - day: W06D05
+    items:
+      - type: choice
+        q: 早期对话摘要比直接丢弃更合适，因为
+        options:
+          - 更省 token
+          - 保留了关键约束和结论
+          - 模型更喜欢摘要
+          - 可以并行
+        answer: 1
+        explain: 摘要保留信息密度，但要注意失真。
+
+  - day: W06D06
+    items:
+      - type: judge
+        q: 工具调用超时后重试，要确认这个工具是否幂等
+        answer: true
+        explain: 非幂等重试会造成重复副作用。
+
+  - day: W06D07
+    items:
+      - type: choice
+        q: 每周复盘最有价值的一栏是
+        options:
+          - 完成了什么
+          - 卡在哪一步、下周砍掉什么
+          - 学了几个小时
+          - 收藏了多少链接
+        answer: 1
+        explain: 复盘是为了调整下一步，不是记账。
+
+  - day: W07D01
+    items:
+      - type: judge
+        q: 用户偏好这类长期记忆需要设置过期或可删除
+        answer: true
+        explain: 偏好会变，也要尊重用户删除权。
+
+  - day: W07D02
+    items:
+      - type: choice
+        q: ReAct 循环里，如果连续几步都没有新信息，应该
+        options:
+          - 继续循环
+          - 设置最大步数并提前终止
+          - 换模型
+          - 增加温度
+        answer: 1
+        explain: 没有步数上限的循环会烧钱且不收敛。
+
+  - day: W07D03
+    items:
+      - type: judge
+        q: 工具白名单和参数校验应该写在代码里，而不是只写在 Prompt 里
+        answer: true
+        explain: Prompt 会被绕过，代码不会。
+
+  - day: W07D04
+    items:
+      - type: choice
+        q: 排查“答案错了”时，最没用的信息是
+        options:
+          - 检索到的片段
+          - 工具入参与返回
+          - 服务器 CPU 使用率
+          - 每步耗时
+        answer: 2
+        explain: CPU 与答案错误通常无关。
+
+  - day: W07D05
+    items:
+      - type: judge
+        q: 拒答时给用户一个“可以怎么问”的建议，比只说不知道更好
+        answer: true
+        explain: 降低挫败感，也引导有效提问。
+
+  - day: W07D06
+    items:
+      - type: choice
+        q: 统计成本时，最容易被漏掉的是
+        options:
+          - 输入 token
+          - 输出 token
+          - 重试和失败请求产生的开销
+          - 模型单价
+        answer: 2
+        explain: 失败请求同样计费，容易被忽略。
+
+  - day: W07D07
+    items:
+      - type: judge
+        q: 可靠性自评应该用具体场景打分，而不是凭感觉
+        answer: true
+        explain: 有场景才有改进目标。
+
+  - day: W08D01
+    items:
+      - type: choice
+        q: 并发上来后错误率升高，最先怀疑
+        options:
+          - 模型能力
+          - 下游限流、连接池或超时设置
+          - 前端
+          - 数据库索引
+        answer: 1
+        explain: 先看资源与限流，再看业务逻辑。
+
+  - day: W08D02
+    items:
+      - type: judge
+        q: 熔断打开后应该让请求直接失败，而不是继续排队等待
+        answer: true
+        explain: 快速失败保护下游，也保护自己。
+
+  - day: W08D03
+    items:
+      - type: choice
+        q: Prompt 版本管理里最该记录的是
+        options:
+          - 修改时间
+          - 改了什么、为什么改、指标变化
+          - 作者
+          - 文件大小
+        answer: 1
+        explain: 没有理由和指标，版本号没有意义。
+
+  - day: W08D04
+    items:
+      - type: judge
+        q: CI 里的评测应该用固定数据集和固定配置，才能比较
+        answer: true
+        explain: 变量越多，回归结果越不可信。
+
+  - day: W08D05
+    items:
+      - type: choice
+        q: compose 里配置健康检查的作用是
+        options:
+          - 让日志好看
+          - 让依赖服务在真正就绪后再启动
+          - 提高 CPU
+          - 减少镜像
+        answer: 1
+        explain: 否则应用会比数据库先起来然后失败。
+
+  - day: W08D06
+    items:
+      - type: judge
+        q: 找人按 README 跑一遍，比自己再读十遍更有效
+        answer: true
+        explain: 新手会踩到你已经自动忽略的坑。
+
+  - day: W08D07
+    items:
+      - type: choice
+        q: 阶段复盘里“不敢上线的 5 个理由”，最有价值的是
+        options:
+          - 全部都是技术问题
+          - 按影响和发生概率排序
+          - 写得越多越好
+          - 只写能解决的
+        answer: 1
+        explain: 排序之后才知道先修哪个。

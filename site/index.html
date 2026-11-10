@@ -95,6 +95,7 @@
           <button class="btn btn--secondary" id="deferBtn" type="button">今天没做完，顺延</button>
           <button class="btn btn--quiet" id="undoBtn" type="button">撤销上一次完成</button>
         </div>
+        <p class="hint" id="quizGate"></p>
       </section>
 
       <aside class="side">
@@ -119,6 +120,18 @@
     <section class="card res-card">
       <h3 class="card__h">今天看这些</h3>
       <ul class="res-list" id="tRes"></ul>
+    </section>
+
+    <section class="card quiz-card" id="quizCard">
+      <div class="quiz-head">
+        <h3 class="card__h">今日小测</h3>
+        <span class="quiz-tools">
+          <span class="quiz-score" id="quizScore">—</span>
+          <button class="btn btn--quiet btn--sm" id="quizShuffle" type="button" hidden>换一组题</button>
+        </span>
+      </div>
+      <p class="hint quiz-hint">先自己做，再看解析。答错不影响打卡，只记进度。</p>
+      <ol class="quiz" id="quizList"></ol>
     </section>
 
     <section class="next">
@@ -241,6 +254,17 @@
       <h3 class="card__h">已通过的课</h3>
       <p class="lead">随时回看，补一条复习笔记。</p>
       <ul class="done-list" id="doneList"></ul>
+    </section>
+
+    <section class="card">
+      <h3 class="card__h">错题本</h3>
+      <p class="lead" id="wrongSummary">还没有错题。答错或自评「部分对」的题会收到这里。</p>
+      <ul class="wrong-list" id="wrongList"></ul>
+    </section>
+
+    <section class="card">
+      <h3 class="card__h">小测成绩</h3>
+      <p class="lead" id="quizSummary">还没有答题记录。</p>
     </section>
 
     <section class="card">

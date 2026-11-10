@@ -1,0 +1,336 @@
+# 扩充题池：第 9-12 周每天 +1 题
+quizzes:
+  - day: W09D01
+    items:
+      - type: choice
+        q: 日志里记录模型原始输入输出，最大的风险是
+        options:
+          - 日志太大
+          - 把用户隐私和密钥写进日志
+          - 影响性能
+          - 格式不统一
+        answer: 1
+        explain: 需要脱敏或只记摘要。
+
+  - day: W09D02
+    items:
+      - type: judge
+        q: 只记录调用次数而不记录耗时分布，会漏掉长尾问题
+        answer: true
+        explain: 平均值掩盖长尾，要看分位数。
+
+  - day: W09D03
+    items:
+      - type: choice
+        q: 追踪一次 RAG 请求，最该为哪一步单独加 span
+        options:
+          - 启动加载
+          - 检索、上下文组装、模型调用
+          - 定时任务
+          - 健康检查
+        answer: 1
+        explain: 这三步是延迟和失败的主要来源。
+
+  - day: W09D04
+    items:
+      - type: judge
+        q: 开了自动埋点就不用再关心字段命名和维度了
+        answer: false
+        explain: 维度决定能不能按功能和租户聚合。
+
+  - day: W09D05
+    items:
+      - type: choice
+        q: 排障演练最好在什么时候做
+        options:
+          - 上线出事后
+          - 上线前，用人为注入的故障
+          - 永远不做
+          - 只在面试前
+        answer: 1
+        explain: 提前演练，真出事才不慌。
+
+  - day: W09D06
+    items:
+      - type: judge
+        q: 成本看板要能下钻到单次请求，否则定位不到浪费点
+        answer: true
+        explain: 只有总数没法改。
+
+  - day: W09D07
+    items:
+      - type: choice
+        q: 观测能力上线后，最该同步更新的是
+        options:
+          - 官网
+          - 排障手册和告警阈值
+          - 配色
+          - 依赖版本
+        answer: 1
+        explain: 工具要配流程才有效。
+
+  - day: W10D01
+    items:
+      - type: choice
+        q: 把你的项目对照 OWASP LLM Top 10，第一步是
+        options:
+          - 全部修复
+          - 标出与自己最相关的几类，其余记录为不适用
+          - 忽略
+          - 买产品
+        answer: 1
+        explain: 先做风险登记，再按优先级处理。
+
+  - day: W10D02
+    items:
+      - type: judge
+        q: 把检索到的文档内容直接拼进 System Prompt 会放大注入风险
+        answer: true
+        explain: 内容进了指令区，模型更容易把它当命令。
+
+  - day: W10D03
+    items:
+      - type: choice
+        q: 输出侧校验“引用是否存在于检索结果”属于
+        options:
+          - 性能优化
+          - 事实护栏
+          - 格式美化
+          - 成本控制
+        answer: 1
+        explain: 防止编造来源。
+
+  - day: W10D04
+    items:
+      - type: judge
+        q: 审计日志本身也含敏感信息，需要同样的访问控制
+        answer: true
+        explain: 审计不能成为新的泄露点。
+
+  - day: W10D05
+    items:
+      - type: choice
+        q: 处理用户粘贴的身份证号，合理做法是
+        options:
+          - 原样发给模型
+          - 脱敏后再发给模型，日志里也不落原文
+          - 存到数据库
+          - 打印出来
+        answer: 1
+        explain: 最小化传输和留存。
+
+  - day: W10D06
+    items:
+      - type: judge
+        q: 自查表里“不适用”也要写，否则下次还得重新判断
+        answer: true
+        explain: 记录判断本身就是资产。
+
+  - day: W10D07
+    items:
+      - type: choice
+        q: 安全阶段最容易被忽略的一环是
+        options:
+          - 模型选择
+          - 依赖与供应链（第三方包、SDK）
+          - 前端配色
+          - 文档
+        answer: 1
+        explain: 依赖漏洞同样能打穿系统。
+
+  - day: W11D01
+    items:
+      - type: judge
+        q: MCP 的 tools、resources、prompts 是三种不同的能力
+        answer: true
+        explain: 工具、资源、提示模板，用途不同。
+
+  - day: W11D02
+    items:
+      - type: choice
+        q: MCP Server 用 stdio 传输时，日志最不该写到
+        options:
+          - 文件
+          - stdout
+          - 远端服务
+          - 内存
+        answer: 1
+        explain: stdout 是协议通道，写日志会污染消息。
+
+  - day: W11D03
+    items:
+      - type: judge
+        q: MCP Server 暴露的工具同样需要参数校验
+        answer: true
+        explain: 协议层不校验业务参数。
+
+  - day: W11D04
+    items:
+      - type: choice
+        q: Agent 通过 MCP 发现工具后，最该记录的是
+        options:
+          - 工具数量
+          - 工具来源（哪个 server）与版本
+          - 工具图标
+          - 工具作者
+        answer: 1
+        explain: 出问题时要能定位到来源。
+
+  - day: W11D05
+    items:
+      - type: judge
+        q: 给 MCP 加限流应该按调用方和工具分别统计
+        answer: true
+        explain: 单租户滥用不应拖垮所有人。
+
+  - day: W11D06
+    items:
+      - type: choice
+        q: 团队里推广 MCP 的最大阻力通常是
+        options:
+          - 协议太新
+          - 多一层运维成本和调试复杂度
+          - 没有中文文档
+          - 不支持 Java
+        answer: 1
+        explain: 收益要大于这层成本才值得。
+
+  - day: W11D07
+    items:
+      - type: judge
+        q: MCP 接入后，原有 Function Calling 就应该全部删掉
+        answer: false
+        explain: 简单内部工具直接调更省事，可以共存。
+
+  - day: W12D01
+    items:
+      - type: choice
+        q: 架构图里最不该出现的是
+        options:
+          - 数据流箭头
+          - 每个类的字段
+          - 外部依赖
+          - 关键组件
+        answer: 1
+        explain: 图是给人看结构，不是看代码。
+
+  - day: W12D02
+    items:
+      - type: judge
+        q: 业务层直接 import 具体模型 SDK，会让换模型很痛苦
+        answer: true
+        explain: 应该依赖抽象接口。
+
+  - day: W12D03
+    items:
+      - type: choice
+        q: 集成测试里调用真实模型的问题是
+        options:
+          - 太慢且不稳定、还花钱
+          - 不真实
+          - 不能断言
+          - 需要网络
+        answer: 0
+        explain: 通常用固定响应或 mock 服务替代。
+
+  - day: W12D04
+    items:
+      - type: judge
+        q: 演示脚本要写清每一步点击和预期结果
+        answer: true
+        explain: 避免现场自由发挥翻车。
+
+  - day: W12D05
+    items:
+      - type: choice
+        q: 简历里写“负责大模型应用开发”不如写
+        options:
+          - 参与团队项目
+          - 用 Spring AI 做了带评测的 RAG 问答，召回率从 X 提到 Y
+          - 熟悉 AI
+          - 学习能力强
+        answer: 1
+        explain: 具体动作加可量化结果。
+
+  - day: W12D06
+    items:
+      - type: judge
+        q: 面试被问“为什么不用微调”时，能讲清 RAG 与微调的边界就是加分项
+        answer: true
+        explain: 说明你有技术判断，不是跟风。
+
+  - day: W12D07
+    items:
+      - type: choice
+        q: 总复盘里最该量化的是
+        options:
+          - 学习时长
+          - 完成率、产出物数量、可展示成果
+          - 收藏数
+          - 笔记字数
+        answer: 1
+        explain: 结果比过程更能说明问题。
+
+  - day: W13D01
+    items:
+      - type: judge
+        q: 结余清单应该按“影响作品/影响面试”排序，而不是按新旧
+        answer: true
+        explain: 排序决定这周先补什么。
+
+  - day: W13D02
+    items:
+      - type: choice
+        q: 补一个概念时，最有效的验证是
+        options:
+          - 再看一遍视频
+          - 写出最小可运行例子并解释给别人
+          - 收藏文档
+          - 记笔记
+        answer: 1
+        explain: 能跑能讲才算懂。
+
+  - day: W13D03
+    items:
+      - type: judge
+        q: 重构时顺手改需求，会让问题难以定位
+        answer: true
+        explain: 重构与功能变更分开提交。
+
+  - day: W13D04
+    items:
+      - type: choice
+        q: 对照 LangChain4j 时，最值得学的是
+        options:
+          - 它的类名
+          - 它如何组织 AI Service 抽象与工具注册
+          - 它的官网设计
+          - 它的版本节奏
+        answer: 1
+        explain: 学抽象思路，不是背 API。
+
+  - day: W13D05
+    items:
+      - type: judge
+        q: 补课日不做记录，等于下周还得再补一次
+        answer: true
+        explain: 记录学到什么、还剩什么没懂。
+
+  - day: W13D06
+    items:
+      - type: choice
+        q: 演示视频重录一版的原因通常是
+        options:
+          - 画质
+          - 上一版讲不清取舍和限制
+          - 时长
+          - 背景音乐
+        answer: 1
+        explain: 讲清判断比画面重要。
+
+  - day: W13D07
+    items:
+      - type: judge
+        q: 关闭一个疑点时，应该写下结论而不是只改状态
+        answer: true
+        explain: 结论才是可复用的资产。

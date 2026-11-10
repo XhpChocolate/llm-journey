@@ -1,0 +1,229 @@
+quizzes:
+  - day: W13D01
+    items:
+      - type: choice
+        q: 结余盘点时，判断一个疑点要不要补，应该看
+        options:
+          - 是不是最新技术
+          - 是否影响作品或面试，其余可以明确放弃
+          - 有没有人讨论
+          - 难不难
+        answer: 1
+        explain: 学习也要做取舍，放弃写下来也算处理。
+      - type: judge
+        q: 补课阶段应该把所有疑点都补完
+        answer: false
+        explain: 时间和精力有限，只补高影响的。
+
+  - day: W13D02
+    items:
+      - type: choice
+        q: 用费曼法检验自己是否真的懂了，标准是
+        options:
+          - 能背出定义
+          - 能不用术语给外行讲明白
+          - 收藏了文章
+          - 看完了视频
+        answer: 1
+        explain: 讲不清楚就是没懂。
+      - type: judge
+        q: 补课时找到一个官方文档截图存下来，就算学会了
+        answer: false
+        explain: 要能复述并验证。
+
+  - day: W13D03
+    items:
+      - type: choice
+        q: 重构“能跑但很丑”的代码，优先做的是
+        options:
+          - 换语言
+          - 拆职责、补边界处理和日志
+          - 加注释
+          - 改缩进
+        answer: 1
+        explain: 可维护性来自职责清晰和错误处理。
+      - type: judge
+        q: 重构时不需要测试保护
+        answer: false
+        explain: 先有测试再重构，否则改坏了不知道。
+
+  - day: W13D04
+    items:
+      - type: choice
+        q: 把 LangChain4j 和 Spring AI 都学一遍的主要风险是
+        options:
+          - 浪费时间背 API
+          - 概念混淆、两边都不深
+          - 找不到工作
+          - 代码变长
+        answer: 1
+        explain: 一个主用一个对照，够了。
+      - type: choice
+        q: 对照两个框架时，最该比较的是
+        options:
+          - 官网设计
+          - 抽象层次、工具调用与 RAG 的 API 形态、可观测性支持
+          - star 数
+          - 版本号
+        answer: 1
+        explain: 比的是工程能力，不是热度。
+
+  - day: W13D05
+    items:
+      - type: judge
+        q: 补课日设 90 分钟硬上限，到点就停，是防止陷进细节
+        answer: true
+        explain: 时间盒能保护整体进度。
+      - type: short
+        q: 今天补的这一点，你打算怎么在项目里用上
+        answer: 要说出具体落点，例如把检索改成混合检索并跑一次评测对比
+        explain: 不落地就等于没学。
+
+  - day: W13D06
+    items:
+      - type: choice
+        q: 文档里写“已知限制”，作用是
+        options:
+          - 显得谦虚
+          - 提前回答别人的质疑，说明你知道边界
+          - 免责
+          - 凑字数
+        answer: 1
+        explain: 诚实说明边界，比假装完美更可信。
+      - type: judge
+        q: 架构决策记录（ADR）只记最终方案即可
+        answer: false
+        explain: 还要记被放弃的方案和理由。
+
+  - day: W13D07
+    items:
+      - type: judge
+        q: 有些疑点明确放弃，是合理的复盘结论
+        answer: true
+        explain: 放弃也要写下来，才不会再反复纠结。
+      - type: choice
+        q: 这周结束时，最该更新的是
+        options:
+          - 简历和项目描述
+          - 桌面壁纸
+          - 学习计划模板
+          - 框架版本
+        answer: 0
+        explain: 边做边更新，投递时才不用突击。
+
+  - day: W14D01
+    items:
+      - type: choice
+        q: 虚拟线程最适合的场景是
+        options:
+          - CPU 密集计算
+          - 大量阻塞 I/O 等待
+          - 图像渲染
+          - 排序算法
+        answer: 1
+        explain: 虚拟线程解决的是线程等待成本。
+      - type: judge
+        q: 用了虚拟线程就不需要限流了
+        answer: false
+        explain: 并发能力变强，下游压力也更大，限流更必要。
+
+  - day: W14D02
+    items:
+      - type: choice
+        q: 模型路由（简单问题走小模型）要成立，前提是
+        options:
+          - 小模型更便宜
+          - 能判断难度，且用评测证明质量可接受
+          - 用户不介意
+          - 有缓存
+        answer: 1
+        explain: 省成本不能以效果失控为代价。
+      - type: choice
+        q: 成本与质量的权衡，最科学的做法是
+        options:
+          - 拍脑袋
+          - 用评测集画成本-质量曲线再决策
+          - 全用最贵的
+          - 全用最便宜的
+        answer: 1
+        explain: 有曲线才能选拐点。
+
+  - day: W14D03
+    items:
+      - type: choice
+        q: 下面哪种情况更适合微调而不是 RAG
+        options:
+          - 知识经常更新
+          - 输出格式和语气要高度一致
+          - 需要引用原文
+          - 资料很多
+        answer: 1
+        explain: 风格格式靠微调，事实知识靠检索。
+      - type: judge
+        q: 效果不好时，应该先尝试微调
+        answer: false
+        explain: 先排查检索质量、Prompt 结构和工具设计。
+
+  - day: W14D04
+    items:
+      - type: choice
+        q: 把线上 badcase 回流成评测用例，价值是
+        options:
+          - 增加工作量
+          - 让评测集跟着真实问题进化
+          - 提高模型智商
+          - 减少成本
+        answer: 1
+        explain: 真实失败才是最值钱的测试集。
+      - type: judge
+        q: 用户点踩但不说原因时，就没有可用信息了
+        answer: false
+        explain: 可以从当次 trace 和答案里复盘。
+
+  - day: W14D05
+    items:
+      - type: choice
+        q: 把演示环境公开到公网前，必须先做的是
+        options:
+          - 买域名
+          - 限额、限流、错误兜底和密钥隔离
+          - 加动画
+          - 写博客
+        answer: 1
+        explain: 公开意味着有人会刷你的额度。
+      - type: judge
+        q: 演示环境可以复用生产密钥
+        answer: false
+        explain: 必须隔离，单独的低额度密钥。
+
+  - day: W14D06
+    items:
+      - type: choice
+        q: 不同时长的项目介绍（30 秒/3 分钟/10 分钟）之所以都要准备，是因为
+        options:
+          - 显得准备充分
+          - 场景不同，信息密度和重点不同
+          - 面试官会抽查
+          - 可以背下来
+        answer: 1
+        explain: 电梯、面聊、深聊是三种场景。
+      - type: judge
+        q: 转岗沟通时，应该先讲自己学了什么技术
+        answer: false
+        explain: 先讲能解决团队的什么问题，技术作为支撑。
+
+  - day: W14D07
+    items:
+      - type: choice
+        q: 14 周结束时，最能说明你成长的是
+        options:
+          - 看完的课程数
+          - 一个能跑、能讲清取舍、有评测和边界的作品
+          - 收藏的链接数
+          - 学习时长
+        answer: 1
+        explain: 作品和判断力才是结果。
+      - type: short
+        q: 下一个 8 周，你打算深耕一域还是拓宽，为什么
+        answer: 要给出选择和理由，并说明会用什么产出验证
+        explain: 目标要有可验证的落点。

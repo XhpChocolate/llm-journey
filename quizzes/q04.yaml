@@ -1,0 +1,234 @@
+quizzes:
+  - day: W07D01
+    items:
+      - type: choice
+        q: 会话记忆、长期记忆、用户画像的差别在于
+        options:
+          - 存储位置
+          - 保留时长与用途不同
+          - 模型不同
+          - 向量维度不同
+        answer: 1
+        explain: 会话内、跨会话、跨用户偏好，三层用途不同。
+      - type: judge
+        q: 所有对话内容都应该存进长期记忆，记得越多越好
+        answer: false
+        explain: 记错了比不记更糟，要筛选和过期。
+
+  - day: W07D02
+    items:
+      - type: choice
+        q: ReAct 与 Plan-and-Execute 的核心差别是
+        options:
+          - 用的模型不同
+          - 先想好完整计划再执行，还是边做边决定
+          - 是否需要工具
+          - 是否流式
+        answer: 1
+        explain: 前者灵活、易跑偏；后者可控、但计划可能过时。
+      - type: judge
+        q: 计划一旦生成就不该修改
+        answer: false
+        explain: 执行中发现信息变化要能重规划。
+
+  - day: W07D03
+    items:
+      - type: choice
+        q: Agent 的工具权限应该遵循
+        options:
+          - 全部开放，方便
+          - 最小权限，按角色分配并校验参数
+          - 只靠 Prompt 约束
+          - 交给用户自己控制
+        answer: 1
+        explain: 权限必须在代码层强制，Prompt 不算约束。
+      - type: choice
+        q: 危险操作（退款、删除）合理的做法是
+        options:
+          - 让模型自己判断
+          - 二次确认或走审批，并留审计日志
+          - 增加重试
+          - 直接禁用
+        answer: 1
+        explain: 不可逆动作要有人为确认和可追溯记录。
+
+  - day: W07D04
+    items:
+      - type: choice
+        q: 一次回答错了，能快速定位的前提是
+        options:
+          - 日志写得漂亮
+          - 每一步都有 span 和结构化入参出参
+          - 模型够大
+          - 有前端埋点
+        answer: 1
+        explain: 没有分步记录，只能猜。
+      - type: judge
+        q: 记录工具入参时，敏感字段应脱敏后再落日志
+        answer: true
+        explain: 日志同样受数据合规约束。
+
+  - day: W07D05
+    items:
+      - type: choice
+        q: 降低幻觉最有效的组合是
+        options:
+          - 提高 temperature
+          - 工具优先取事实、答案带引用、低置信度拒答
+          - 增加 Prompt 长度
+          - 换更大的模型
+        answer: 1
+        explain: 外部事实、可核对来源、敢说不知道。
+      - type: judge
+        q: 拒答率越低说明系统越好
+        answer: false
+        explain: 该拒答时硬答，等于把幻觉送出去。
+
+  - day: W07D06
+    items:
+      - type: choice
+        q: 用便宜模型处理简单问题（模型路由），前提是
+        options:
+          - 便宜模型一定更好
+          - 能判断问题难度，并用评测验证质量不降
+          - 用户同意
+          - 有缓存
+        answer: 1
+        explain: 路由要可度量，否则省了钱丢了效果。
+      - type: judge
+        q: 相同问题命中缓存时可以跳过模型调用
+        answer: true
+        explain: 但要注意上下文和用户差异，不能串答案。
+
+  - day: W07D07
+    items:
+      - type: choice
+        q: 可靠性自评（超时/重试/权限/日志/成本）里，最该先补的是
+        options:
+          - 分数最高的
+          - 分数最低且影响上线的那项
+          - 最容易做的
+          - 别人都在做的
+        answer: 1
+        explain: 补短板，且按风险排序。
+      - type: short
+        q: 你现在最不敢上线的理由是什么
+        answer: 要具体到某个场景和后果，例如并发下超时没有降级、审计缺失
+        explain: 越具体越能转成下一步任务。
+
+  - day: W08D01
+    items:
+      - type: choice
+        q: 给模型调用加限流，主要目的不是省 token，而是
+        options:
+          - 让日志更少
+          - 防止瞬时并发打爆下游或触发封禁
+          - 提高准确率
+          - 减少代码
+        answer: 1
+        explain: 保护下游、保证 P95。
+      - type: choice
+        q: 压测时最该看的两个指标是
+        options:
+          - CPU 和内存
+          - P95 延迟和错误率
+          - 代码行数和注释率
+          - QPS 和磁盘
+        answer: 1
+        explain: 用户体感和失败率才是服务质量的直接指标。
+
+  - day: W08D02
+    items:
+      - type: choice
+        q: 熔断器进入打开状态后，请求会
+        options:
+          - 继续打到下游
+          - 直接快速失败或走降级
+          - 自动扩容
+          - 无限重试
+        answer: 1
+        explain: 快速失败避免雪崩，半开时再试探恢复。
+      - type: judge
+        q: 降级时给用户的提示可以随便写，反正只是临时状态
+        answer: false
+        explain: 降级文案要说明发生了什么、什么时候再来。
+
+  - day: W08D03
+    items:
+      - type: choice
+        q: Prompt 做版本管理，最直接的收益是
+        options:
+          - 减少 token
+          - 改动可回滚、可对比、可归因
+          - 提升模型能力
+          - 加快响应
+        answer: 1
+        explain: 没有版本，效果变差时无法定位是哪次改动。
+      - type: judge
+        q: Prompt 只是文字，不需要进 Git
+        answer: false
+        explain: Prompt 是核心逻辑，必须版本化。
+
+  - day: W08D04
+    items:
+      - type: choice
+        q: 把评测接进 CI 的核心价值是
+        options:
+          - 跑得更快
+          - 效果回归像编译错误一样被拦住
+          - 省去人工测试
+          - 提升覆盖率
+        answer: 1
+        explain: 让效果退化在合并前暴露。
+      - type: judge
+        q: 评测阈值可以随时调低，只要 CI 能过
+        answer: false
+        explain: 阈值是质量基线，调低要写清理由。
+
+  - day: W08D05
+    items:
+      - type: choice
+        q: docker compose 一键启动的关键是把
+        options:
+          - 所有服务塞进一个容器
+          - 依赖服务、网络、健康检查和配置都声明清楚
+          - 镜像做到最小
+          - 用最新版本
+        answer: 1
+        explain: 别人 clone 后能一条命令跑起来才算完成。
+      - type: judge
+        q: 容器里不应该再写死数据库密码，应该用环境变量注入
+        answer: true
+        explain: 配置外置，密钥不进镜像。
+
+  - day: W08D06
+    items:
+      - type: choice
+        q: 让别人照 README 跑一遍的价值是
+        options:
+          - 显得友好
+          - 暴露你自己环境里掩盖的问题
+          - 增加文档量
+          - 满足规范
+        answer: 1
+        explain: 别人卡住的第一处，就是文档的漏洞。
+      - type: judge
+        q: M3 演示只要展示成功路径就够了
+        answer: false
+        explain: 失败和越权被拦住，才说明系统可靠。
+
+  - day: W08D07
+    items:
+      - type: choice
+        q: 列“不敢上线的 5 个理由”，本质是在做
+        options:
+          - 自我否定
+          - 把隐性问题转成可执行的风险清单
+          - 甩锅
+          - 拖延
+        answer: 1
+        explain: 风险一旦写下来，就能排优先级。
+      - type: short
+        q: 你现在的项目如果要接入真实用户，最大的风险是什么
+        answer: 具体到数据（隐私/越权）、稳定性（超时/雪崩）或效果（幻觉/拒答率）之一
+        explain: 说清风险类型和触发条件。

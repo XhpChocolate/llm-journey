@@ -1,0 +1,239 @@
+quizzes:
+  - day: W11D01
+    items:
+      - type: choice
+        q: MCP 里 host、client、server 的关系是
+        options:
+          - host 是服务端
+          - host 里有 client，client 连 server 提供的能力
+          - server 调用 client
+          - 三者是同一个进程
+        answer: 1
+        explain: host 承载应用，client 负责连接，server 暴露工具与资源。
+      - type: choice
+        q: MCP 相比直接写 Function Calling，主要多出来的是
+        options:
+          - 更强的模型
+          - 一套可复用的协议与治理边界
+          - 更快的推理
+          - 更少的 token
+        answer: 1
+        explain: 协议让工具能跨应用复用，并集中做鉴权和审计。
+
+  - day: W11D02
+    items:
+      - type: choice
+        q: 自己写一个 MCP Server，最小需要实现
+        options:
+          - 一个网页
+          - 声明工具清单并能响应调用
+          - 一个数据库
+          - 一个模型
+        answer: 1
+        explain: 暴露工具、处理调用、返回结构化结果。
+      - type: judge
+        q: MCP Server 里的工具描述会直接决定模型能不能正确调用
+        answer: true
+        explain: 描述就是给模型的说明书。
+
+  - day: W11D03
+    items:
+      - type: choice
+        q: 用 Spring AI 集成 MCP Server，好处是
+        options:
+          - 不用写业务逻辑
+          - 复用 Spring 的配置、依赖注入和安全体系
+          - 自动生成模型
+          - 免费调用
+        answer: 1
+        explain: 治理能力（鉴权、日志、配置）都在 Java 层。
+      - type: judge
+        q: MCP 传输方式只有 stdio 一种
+        answer: false
+        explain: 还有 SSE、Streamable HTTP 等，按部署形态选。
+
+  - day: W11D04
+    items:
+      - type: choice
+        q: 让 Agent 作为 MCP Client 之后，工具列表来自
+        options:
+          - 代码里硬编码
+          - Server 运行时暴露的清单
+          - 模型的记忆
+          - 用户的输入
+        answer: 1
+        explain: 动态发现是 MCP 的核心价值之一。
+      - type: choice
+        q: 工具名冲突时，合理做法是
+        options:
+          - 让模型自己猜
+          - 加命名空间或前缀区分来源
+          - 删掉一个
+          - 忽略
+        answer: 1
+        explain: 来源前缀能让模型和自己都分得清。
+
+  - day: W11D05
+    items:
+      - type: choice
+        q: MCP 场景下，鉴权和限流最合适放在
+        options:
+          - 模型里
+          - 服务端的 Java 层网关或拦截器
+          - 前端
+          - 数据库
+        answer: 1
+        explain: 模型不可信，治理必须在服务端。
+      - type: judge
+        q: MCP Server 暴露的查询工具可以不做行级权限，反正只在内部用
+        answer: false
+        explain: 内部系统同样有越权风险，审计和行级控制都要有。
+
+  - day: W11D06
+    items:
+      - type: choice
+        q: 什么时候更该用 MCP 而不是直接 Function Calling
+        options:
+          - 只做一个一次性小工具
+          - 多个应用要复用同一批企业能力、且需要统一治理
+          - 想省 token
+          - 模型太弱
+        answer: 1
+        explain: 复用与治理是 MCP 的收益点。
+      - type: short
+        q: 用两句话说明你会怎么跟团队解释 MCP 的取舍
+        answer: 收益是可复用和集中治理，成本是多一层服务和协议调试；工具少且只服务一个应用时不值得
+        explain: 要同时说出收益与成本。
+
+  - day: W11D07
+    items:
+      - type: judge
+        q: MCP 是协议标准，不是某个产品
+        answer: true
+        explain: 它定义的是 host/client/server 之间的交互方式。
+      - type: choice
+        q: 把 MCP 接进主项目前，最该先确认
+        options:
+          - 版本号够新
+          - 失败时的降级路径和调用超时
+          - 界面好看
+          - 社区热度
+        answer: 1
+        explain: 多一层服务就多一处故障点。
+
+  - day: W12D01
+    items:
+      - type: choice
+        q: README 里最该写清楚的是
+        options:
+          - 用了多少行代码
+          - 解决什么问题、怎么启动、关键取舍和已知限制
+          - 作者简介
+          - 未来规划
+        answer: 1
+        explain: 让人 60 秒看懂并能自己跑起来。
+      - type: judge
+        q: 架构图越复杂越显得专业
+        answer: false
+        explain: 图要让人一眼看懂数据流，而不是展示数量。
+
+  - day: W12D02
+    items:
+      - type: choice
+        q: 按 api / application / domain / infrastructure 分层，主要收益是
+        options:
+          - 代码变多
+          - 依赖方向清晰，替换模型或存储时影响可控
+          - 运行更快
+          - 减少测试
+        answer: 1
+        explain: 业务逻辑不依赖具体厂商。
+      - type: judge
+        q: 配置和魔法值应该散落在各处，方便就近修改
+        answer: false
+        explain: 配置外置、集中管理，才可审计可替换。
+
+  - day: W12D03
+    items:
+      - type: choice
+        q: 集成测试里覆盖“检索→生成”主链路，主要防的是
+        options:
+          - 语法错误
+          - 各部件各自正常但拼起来出错
+          - 网络延迟
+          - UI 错位
+        answer: 1
+        explain: 集成测试验证协作，不验证内部实现。
+      - type: judge
+        q: 评测全绿就说明没有 bug
+        answer: false
+        explain: 评测只覆盖题目涉及的范围。
+
+  - day: W12D04
+    items:
+      - type: choice
+        q: 3 分钟演示最该展示的三条线是
+        options:
+          - 登录、注册、退出
+          - 正常问答、失败兜底、越权被拦
+          - 代码、配置、部署
+          - 全部功能
+        answer: 1
+        explain: 展示可靠性和边界，比堆功能更有说服力。
+      - type: judge
+        q: 演示视频可以只录成功路径，失败场景口述即可
+        answer: false
+        explain: 失败现场才能证明兜底真的存在。
+
+  - day: W12D05
+    items:
+      - type: choice
+        q: 简历项目描述里的量化指标，最该写
+        options:
+          - 代码行数
+          - 效果指标、延迟、成本
+          - 学习时长
+          - 框架数量
+        answer: 1
+        explain: 招聘方看的是结果和工程判断。
+      - type: choice
+        q: STAR 法则里的 A（Action）应该写
+        options:
+          - 团队规模
+          - 你具体做了什么取舍和技术决策
+          - 公司介绍
+          - 项目周期
+        answer: 1
+        explain: 突出你的判断，而不是职责范围。
+
+  - day: W12D06
+    items:
+      - type: choice
+        q: 面试自测最有效的方式是
+        options:
+          - 看一遍题
+          - 口述并录音，标出卡壳的地方再补
+          - 背答案
+          - 跳过不会的
+        answer: 1
+        explain: 输出暴露理解空洞。
+      - type: judge
+        q: 答不上来的问题应该直接说不会，不要试着扯
+        answer: true
+        explain: 承认边界并说出会怎么查，比硬编可信。
+
+  - day: W12D07
+    items:
+      - type: choice
+        q: 总复盘最该产出的是
+        options:
+          - 感想
+          - 可复用的经验与下一个 4 周目标
+          - 截图合集
+          - 证书
+        answer: 1
+        explain: 复盘要能指导下一步。
+      - type: short
+        q: 如果重来一次，你会改哪三件事
+        answer: 要具体到行动，例如更早建评测集、少看长视频多写代码、固定复盘时间
+        explain: 空泛的“更努力”没有价值。

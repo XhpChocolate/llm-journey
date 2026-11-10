@@ -1,0 +1,70 @@
+# 扩充题池：第 13-14 周每天 +1 题
+quizzes:
+  - day: W14D01
+    items:
+      - type: choice
+        q: 把阻塞式模型调用改成虚拟线程后，最先可能暴露的问题是
+        options:
+          - 代码编译不过
+          - 下游被瞬间打满，需要限流
+          - 内存泄漏
+          - 日志丢失
+        answer: 1
+        explain: 并发能力变强，压力更快传到下游。
+
+  - day: W14D02
+    items:
+      - type: judge
+        q: 模型路由的规则应该可以用配置调整，而不是写死在代码里
+        answer: true
+        explain: 规则会随效果和成本变化。
+
+  - day: W14D03
+    items:
+      - type: choice
+        q: 判断该不该微调，最关键的信号是
+        options:
+          - 模型不够大
+          - 知识与格式问题用检索和 Prompt 都解决不了
+          - 预算充足
+          - 别人都在微调
+        answer: 1
+        explain: 先排除检索与 Prompt 的问题。
+
+  - day: W14D04
+    items:
+      - type: judge
+        q: badcase 回流时应该保留当时的 trace，方便复盘
+        answer: true
+        explain: 没有上下文，badcase 只能靠猜。
+
+  - day: W14D05
+    items:
+      - type: choice
+        q: 公开演示前，额度上限比功能更重要，因为
+        options:
+          - 用户会抱怨
+          - 有人会刷接口，成本失控
+          - 影响 SEO
+          - 影响加载速度
+        answer: 1
+        explain: 公网暴露就会被扫。
+
+  - day: W14D06
+    items:
+      - type: judge
+        q: 投递记录应该记下岗位、时间和结果，方便复盘转化率
+        answer: true
+        explain: 没有记录就不知道哪类岗位有效。
+
+  - day: W14D07
+    items:
+      - type: choice
+        q: 14 周结束时，最该做的是
+        options:
+          - 马上开始下一门课
+          - 盘点能力雷达，定下下一个 8 周方向
+          - 换个框架重写
+          - 休息一个月
+        answer: 1
+        explain: 有方向再投入，避免漫游。

@@ -1,0 +1,229 @@
+quizzes:
+  - day: W03D01
+    items:
+      - type: choice
+        q: RAG 解决的核心问题是
+        options:
+          - 让模型推理更快
+          - 让模型能用到训练数据里没有的知识
+          - 降低显存占用
+          - 替代微调
+        answer: 1
+        explain: RAG 补知识，不提升推理能力。
+      - type: judge
+        q: 只要接入向量数据库，模型就不会再产生幻觉
+        answer: false
+        explain: 检索错了、资料里没有、模型不忠实，都会继续产生幻觉。
+
+  - day: W03D02
+    items:
+      - type: choice
+        q: 扫描版 PDF 用 Tika 直接抽取，通常会得到
+        options:
+          - 完整文字
+          - 空文本或乱码，因为它是图片
+          - 表格结构
+          - 自动 OCR 结果
+        answer: 1
+        explain: 扫描件是图像，需要 OCR 才能拿到文字。
+      - type: judge
+        q: 解析时记录文件名、页码等元数据，对后面做引用溯源有用
+        answer: true
+        explain: 引用要能指回原文位置，元数据是必要条件。
+
+  - day: W03D03
+    items:
+      - type: choice
+        q: 切片（chunk）太长，最直接的后果是
+        options:
+          - 检索更准
+          - 噪声变多、上下文预算被挤占
+          - 向量维度变高
+          - embedding 免费
+        answer: 1
+        explain: 块越长，语义越杂，命中的相关性越差。
+      - type: choice
+        q: 切片之间设置重叠（overlap）的目的是
+        options:
+          - 增加存储量
+          - 避免一句话被切断后语义丢失
+          - 让检索更快
+          - 压缩 token
+        answer: 1
+        explain: 重叠保证跨边界的句子至少在一个块里完整出现。
+
+  - day: W03D04
+    items:
+      - type: choice
+        q: 判断两段文本语义相近，最常用的是
+        options:
+          - 比较字符长度
+          - 计算向量余弦相似度
+          - 统计标点数量
+          - 看是否包含同样的人名
+        answer: 1
+        explain: embedding 把语义映射到向量空间，用余弦或点积比较。
+      - type: judge
+        q: 同一个 embedding 模型生成的向量，才能直接比较相似度
+        answer: true
+        explain: 不同模型维度与空间定义不同，混用结果没有意义。
+
+  - day: W03D05
+    items:
+      - type: choice
+        q: pgvector 里建 HNSW 索引，主要换来什么
+        options:
+          - 更准的向量
+          - 更快的近邻查询，代价是内存和构建时间
+          - 自动分片
+          - 事务隔离
+        answer: 1
+        explain: 近似最近邻索引用精度换速度，参数要按数据量调。
+      - type: judge
+        q: 向量列的维度可以随便设，之后随时能改
+        answer: false
+        explain: 维度由 embedding 模型决定，改维度等于重建表和数据。
+
+  - day: W03D06
+    items:
+      - type: choice
+        q: 用 VectorStore 的 similaritySearch 时，元数据过滤的作用是
+        options:
+          - 提升模型智商
+          - 把检索范围限定在某个来源或时间段
+          - 减少 token
+          - 自动翻译
+        answer: 1
+        explain: 先按条件缩小候选集，再算相似度，能显著降噪。
+      - type: judge
+        q: 默认 topK 越大越好，反正模型会自己挑
+        answer: false
+        explain: topK 过大会塞入噪声，挤占上下文，还可能降低准确率。
+
+  - day: W03D07
+    items:
+      - type: choice
+        q: 检索结果不准时，第一步应该看
+        options:
+          - 换更贵的模型
+          - 检索出来的片段本身对不对
+          - 前端样式
+          - 数据库版本
+        answer: 1
+        explain: 先确认召回，再谈生成。
+      - type: short
+        q: 举一个“检索不到”的例子，并说明你会怎么改
+        answer: 现象是问题里的词和文档用词不一致；改法包括查询改写、加关键词检索或补充同义词
+        explain: 关键是把现象和手段对上。
+
+  - day: W04D01
+    items:
+      - type: choice
+        q: 混合检索里加入关键词（BM25）检索，主要弥补向量检索的什么短板
+        options:
+          - 语义近义
+          - 专有名词、编号、精确匹配
+          - 多语言
+          - 长文本
+        answer: 1
+        explain: 向量对精确字符串不敏感，关键词正好补上。
+      - type: judge
+        q: 混合检索就是把两路结果简单拼在一起
+        answer: false
+        explain: 需要融合排序（如 RRF）或加权，否则列表顺序没有意义。
+
+  - day: W04D02
+    items:
+      - type: choice
+        q: Rerank 的典型代价是
+        options:
+          - 存储翻倍
+          - 多一次模型推理，延迟和成本上升
+          - 向量维度变高
+          - 需要重训 embedding
+        answer: 1
+        explain: 交叉编码器精度高但慢，通常只对 topN 做重排。
+      - type: judge
+        q: 重排之后 top1 一定比原来更相关
+        answer: false
+        explain: 重排模型也有偏好，需要用评测集验证净收益。
+
+  - day: W04D03
+    items:
+      - type: choice
+        q: 把用户的口语问题改写成多个查询，主要解决
+        options:
+          - 模型训练不足
+          - 原始问法与文档措辞不匹配
+          - 向量维度太低
+          - 数据库慢
+        answer: 1
+        explain: 多查询扩大召回面，代价是调用次数和噪声。
+      - type: judge
+        q: 查询改写可以无条件提升效果
+        answer: false
+        explain: 改写可能扭曲意图，需要用评测确认。
+
+  - day: W04D04
+    items:
+      - type: choice
+        q: 把检索片段按相似度从高到低直接拼进 Prompt，可能的问题是
+        options:
+          - 模型看不懂
+          - 关键信息被埋在中间，模型更容易忽略
+          - token 变少
+          - 引用丢失
+        answer: 1
+        explain: 长上下文里存在位置偏好，重要片段要靠前并标注。
+      - type: judge
+        q: 给片段编号并在答案里标注来源，能降低幻觉的可信度
+        answer: true
+        explain: 有引用就能核对，用户也能判断可信度。
+
+  - day: W04D05
+    items:
+      - type: choice
+        q: 资料里没有答案时，正确的产品行为是
+        options:
+          - 编一个最像的答案
+          - 明确说查不到，并给出可查的方向
+          - 返回空字符串
+          - 无限重试
+        answer: 1
+        explain: 拒答是能力，不是缺陷。
+      - type: judge
+        q: 只要 Prompt 里写了“不要编造”，模型就一定不会编
+        answer: false
+        explain: 约束能降低概率，不能消除；还要靠检索质量和校验兜底。
+
+  - day: W04D06
+    items:
+      - type: choice
+        q: 把失败案例分三类（检索不到、检索到没用、生成不忠实），好处是
+        options:
+          - 显得专业
+          - 每类对应不同的修复手段，避免瞎调
+          - 减少日志
+          - 提高并发
+        answer: 1
+        explain: 归因决定改哪一层。
+      - type: short
+        q: “检索到了但模型没用上”，你会先查什么
+        answer: 看片段是否被截断、排序是否靠后、Prompt 是否明确要求引用；也可能是片段与问题只是字面相似
+        explain: 从上下文组装和排序入手，而不是换模型。
+
+  - day: W04D07
+    items:
+      - type: judge
+        q: 每周复盘只记录“完成了什么”就够了
+        answer: false
+        explain: 更要记录卡在哪一步、下周砍掉什么。
+      - type: choice
+        q: 这一周最该产出的是
+        options:
+          - 更多笔记
+          - 一份能复现的检索 Demo 和 badcase 列表
+          - 新的技术栈
+          - 更长的代码
+        answer: 1
+        explain: 可复现的产物加失败清单，才方便下周改进。

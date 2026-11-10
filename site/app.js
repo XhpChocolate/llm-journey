@@ -12,6 +12,7 @@
     )
   );
   const RES = PLAN.resources;
+  const QUIZ = PLAN.quizzes || {};
   const IDX = new Map(DAYS.map((d, i) => [d.id, i]));
   const TYPE_LABEL = { doc: "文档", video: "视频", code: "代码", tool: "工具" };
   const WEEK_CN = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
@@ -34,7 +35,7 @@
 
   /* ---------------- 状态 ---------------- */
   function blank() {
-    return { v: 1, start: ymd(new Date()), days: {}, questions: [], reviews: {} };
+    return { v: 1, start: ymd(new Date()), days: {}, questions: [], reviews: {}, quizSeed: {} };
   }
   let state = blank();
   try {
@@ -131,6 +132,92 @@
   }
   const metaOf = (r) => [r.author, r.published].filter(Boolean).join(" · ");
 
+  /* ---------------- 今日小测 ---------------- */
+  const revealed = {};   // 简答题「已看答案」的临时标记，不入库
+
+  function quizOf(id) { return QUIZ[id] || []; }
+  function quizState(id) {
+    const ds = dayState(id);
+    ds.quiz = ds.quiz || {};
+    return ds.quiz;
+  }
+
+  const QUIZ_DRAW = 2;   // 每次抽几题
+
+  // 按 天 id 和 seed 做确定性洗牌：同一个 seed 刷新后抽到同一组
+  function drawQuiz(dayId, items) {
+    if (items.length <= QUIZ_DRAW) return items.map((it, k) => ({ it, k }));
+    let h = ((state.quizSeed?.[dayId] || 0) * 7919 + 17) % 2147483647;
+    for (const ch of dayId) h = (h * 131 + ch.charCodeAt(0)) % 2147483647;
+    const idx = items.map((_, i) => i);
+    for (let i = idx.length - 1; i > 0; i--) {
+      h = (h * 1103515245 + 12345) % 2147483648;
+      const j = h % (i + 1);
+      [idx[i], idx[j]] = [idx[j], idx[i]];
+    }
+    return idx.slice(0, QUIZ_DRAW).sort((a, b) => a - b).map((k) => ({ it: items[k], k }));
+  }
+
+  function quizItem(it, k, id, res, pick) {
+    const tag = it.type === "choice" ? "单选" : it.type === "judge" ? "判断" : "简答";
+    let body = "";
+    if (it.type === "choice") {
+      body = `<div class="qi__opts">${it.options
+        .map((o, j) => {
+          const cls = res ? (j === it.answer ? "is-right" : pick === String(j) ? "is-pick-wrong" : "is-dim") : "";
+          return `<button class="opt ${cls}" type="button" data-k="${k}" data-opt="${j}"${res ? " disabled" : ""}>
+            <span class="opt__k">${String.fromCharCode(65 + j)}</span>${esc(o)}</button>`;
+        })
+        .join("")}</div>`;
+    } else if (it.type === "judge") {
+      const picked = (v) => (res && pick === String(v) ? " is-pick-wrong" : "");
+      body = `<div class="qi__opts qi__opts--row">
+        <button class="opt${res && it.answer === true ? " is-right" : picked(true)}" type="button" data-k="${k}" data-judge="true"${res ? " disabled" : ""}>对</button>
+        <button class="opt${res && it.answer === false ? " is-right" : picked(false)}" type="button" data-k="${k}" data-judge="false"${res ? " disabled" : ""}>错</button>
+      </div>`;
+    } else {
+      const show = res || revealed[id + k];
+      body = `<textarea rows="3" data-draft="${id + ":" + k}" placeholder="先自己写一句，再看参考答案">${esc(dayState(id).quizDraft?.[k] || "")}</textarea>
+        <div class="qi__row">
+          <button class="btn btn--secondary btn--sm" type="button" data-reveal="${k}">${show ? "收起答案" : "看参考答案"}</button>
+          ${show ? `<button class="btn btn--quiet btn--sm" type="button" data-self="right" data-k="${k}">答对了</button>
+          <button class="btn btn--quiet btn--sm" type="button" data-self="partial" data-k="${k}">部分对</button>
+          <button class="btn btn--quiet btn--sm" type="button" data-self="wrong" data-k="${k}">没答上</button>` : ""}
+        </div>`;
+    }
+    const fb = res
+      ? `<div class="qi__fb ${res === "right" ? "is-ok" : res === "partial" ? "is-mid" : "is-bad"}">
+          <p class="qi__ans">${it.type === "short" ? "参考答案：" + esc(it.answer) : it.type === "judge" ? "正确答案：" + (it.answer ? "对" : "错") : "正确答案：" + String.fromCharCode(65 + it.answer) + ". " + esc(it.options[it.answer])}${res !== "right" && pick !== undefined && it.type !== "short" ? `<span class="qi__pick">你选了：${it.type === "judge" ? (pick === "true" ? "对" : "错") : String.fromCharCode(65 + Number(pick))}</span>` : ""}</p>
+          <p class="qi__ex">${esc(it.explain)}</p>
+        </div>`
+      : "";
+    return `<li class="qi${res ? " is-answered" : ""}">
+      <p class="qi__type">${tag}</p>
+      <p class="qi__q">${esc(it.q)}</p>
+      ${body}${fb}
+    </li>`;
+  }
+
+  function renderQuiz() {
+    const i = Math.min(currentIdx(), DAYS.length - 1);
+    const d = DAYS[i];
+    const items = quizOf(d.id);
+    const st = quizState(d.id);
+    const drawn = drawQuiz(d.id, items);
+    const done = drawn.filter((x) => st[x.k]).length;
+    const right = drawn.filter((x) => st[x.k] === "right").length;
+    $("quizCard").hidden = items.length === 0;
+    $("quizScore").textContent = items.length
+      ? `${done} / ${drawn.length} 已答 · 对 ${right}` + (items.length > drawn.length ? ` · 题库 ${items.length} 题` : "")
+      : "";
+    $("quizShuffle").hidden = items.length <= drawn.length;
+    $("quizGate").textContent =
+      items.length && done < drawn.length ? `还有 ${drawn.length - done} 道小测没做，答错不影响打卡` : "";
+    $("quizList").innerHTML = items.length
+      ? drawn.map(({ it, k }) => quizItem(it, k, d.id, st[k], st["p" + k])).join("")
+      : `<li class="empty">这一关没有配题。</li>`;
+  }
+
   /* ---------------- 今日 ---------------- */
   function renderToday() {
     const s = stats();
@@ -162,6 +249,7 @@
     $("tAsk").textContent = d.notesPrompt ? "今日自问：" + d.notesPrompt : "";
     $("undoBtn").hidden = !statusOf(d.id);
 
+
     const noteEl = $("tNote");
     if (document.activeElement !== noteEl) noteEl.value = ds.notes || "";
 
@@ -182,6 +270,8 @@
       </button></li>`);
     }
     $("tNext").innerHTML = next.join("") || `<li class="empty">这是最后一天。</li>`;
+
+    renderQuiz();
   }
 
   /* ---------------- 计划 ---------------- */
@@ -373,6 +463,53 @@
       })
       .join("");
 
+    let answered = 0, rightN = 0, partialN = 0;
+    DAYS.forEach((d) => {
+      const q = state.days[d.id]?.quiz || {};
+      Object.keys(q).forEach((k) => {
+        if (!/^\d+$/.test(k)) return;
+        answered++;
+        if (q[k] === "right") rightN++;
+        else if (q[k] === "partial") partialN++;
+      });
+    });
+    $("quizSummary").textContent = answered
+      ? `已答 ${answered} 题 · 答对 ${rightN} · 部分对 ${partialN} · 正确率 ${Math.round(((rightN + partialN * 0.5) / answered) * 100)}%`
+      : "还没有答题记录。";
+
+    // 错题本：答错或自评部分对的题
+    const wrongs = [];
+    DAYS.forEach((d) => {
+      const q = state.days[d.id]?.quiz || {};
+      Object.keys(q).forEach((k) => {
+        if (!/^\d+$/.test(k)) return;
+        if (q[k] !== "wrong" && q[k] !== "partial") return;
+        const it = (QUIZ[d.id] || [])[Number(k)];
+        if (it) wrongs.push({ day: d, it, v: q[k], pick: q["p" + k] });
+      });
+    });
+    $("wrongSummary").textContent = wrongs.length
+      ? `共 ${wrongs.length} 题待复习，点「回看」跳回那一天。`
+      : "还没有错题。答错或自评「部分对」的题会收到这里。";
+    $("wrongList").innerHTML = wrongs.length
+      ? wrongs
+          .map((w) => {
+            const ans = w.it.type === "judge" ? (w.it.answer ? "对" : "错")
+              : w.it.type === "choice" ? String.fromCharCode(65 + w.it.answer) + ". " + esc(w.it.options[w.it.answer])
+              : esc(w.it.answer);
+            const mine = w.it.type === "judge" ? (w.pick === "true" ? "对" : w.pick === "false" ? "错" : "—")
+              : w.it.type === "choice" ? (w.pick !== undefined ? String.fromCharCode(65 + Number(w.pick)) : "—")
+              : "自评";
+            return `<li class="wrong-row">
+              <p class="wrong-row__q"><span class="wrong-row__day">第 ${w.day.day} 天</span>${esc(w.it.q)}</p>
+              <p class="wrong-row__m">你选了 ${mine} · 正确答案 ${ans}</p>
+              <p class="wrong-row__e">${esc(w.it.explain)}</p>
+              <button class="btn btn--quiet btn--sm" type="button" data-open-day="${w.day.id}">回看这一天</button>
+            </li>`;
+          })
+          .join("")
+      : "";
+
     const doneDays = DAYS.filter((d) => statusOf(d.id) === "done").reverse();
     $("doneList").innerHTML = doneDays.length
       ? doneDays
@@ -408,6 +545,13 @@
       <h3>产出物</h3><p>${esc(d.deliverable)}</p>
       ${refs.length ? `<h3>资源</h3><ul>${refs.map((r) => `<li><a class="dlg__res" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-ext title="${esc(r.url)}">${esc(r.title)} ↗</a> · ${metaOf(r)}${r.after ? `<br><span style="color:#9aa39a;font-size:13px">看完要能回答：${esc(r.after)}</span>` : ""}</li>`).join("")}</ul>` : ""}
       ${d.notesPrompt ? `<h3>今日自问</h3><p>${esc(d.notesPrompt)}</p>` : ""}
+      ${quizOf(id).length ? `<h3>当天小测</h3><ul class="dlg-quiz">${quizOf(id).map((it, k) => {
+        const q = ds.quiz?.[k];
+        const label = q === "right" ? "答对" : q === "partial" ? "部分对" : q === "wrong" ? "答错" : "未答";
+        const cls = q === "right" ? "is-ok" : q === "partial" ? "is-mid" : q === "wrong" ? "is-bad" : "";
+        const ans = it.type === "judge" ? (it.answer ? "对" : "错") : it.type === "choice" ? String.fromCharCode(65 + it.answer) + ". " + esc(it.options[it.answer]) : esc(it.answer);
+        return `<li class="${cls}"><p class="dlg-quiz__q">${esc(it.q)}</p><p class="dlg-quiz__a">${label} · 正确答案 ${ans}</p></li>`;
+      }).join("")}</ul>` : ""}
       ${st === "done" ? `<h3>复习笔记</h3>
         <label class="sr-only" for="dlgNote">复习笔记</label>
         <textarea id="dlgNote" data-day="${id}" rows="4" placeholder="回看时补一句：这条现在怎么理解、当时哪里想错了">${esc(ds.review || "")}</textarea>
@@ -571,6 +715,56 @@
       toast(`已撤销第 ${DAYS[prev].day} 天，重新回到这一关`);
     });
 
+    $("quizShuffle").addEventListener("click", () => {
+      const d = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+      state.quizSeed = state.quizSeed || {};
+      state.quizSeed[d.id] = (state.quizSeed[d.id] || 0) + 1;
+      save();
+      renderQuiz();
+    });
+
+    $("quizList").addEventListener("click", (e) => {
+      const d = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+      const items = quizOf(d.id);
+      const st = quizState(d.id);
+
+      const opt = e.target.closest("[data-opt]");
+      if (opt) {
+        const k = Number(opt.dataset.k);
+        st[k] = Number(opt.dataset.opt) === items[k].answer ? "right" : "wrong";
+        st["p" + k] = String(opt.dataset.opt);
+        save(); renderQuiz(); return;
+      }
+      const jb = e.target.closest("[data-judge]");
+      if (jb) {
+        const k = Number(jb.dataset.k);
+        st[k] = (jb.dataset.judge === "true") === items[k].answer ? "right" : "wrong";
+        st["p" + k] = jb.dataset.judge;
+        save(); renderQuiz(); return;
+      }
+      const rv = e.target.closest("[data-reveal]");
+      if (rv) {
+        const key = d.id + rv.dataset.reveal;
+        revealed[key] = !revealed[key];
+        renderQuiz(); return;
+      }
+      const self = e.target.closest("[data-self]");
+      if (self) {
+        st[Number(self.dataset.k)] = self.dataset.self;
+        save(); renderQuiz(); return;
+      }
+    });
+
+    $("quizList").addEventListener("input", (e) => {
+      const ta = e.target.closest("[data-draft]");
+      if (!ta) return;
+      const [id, k] = ta.dataset.draft.split(":");
+      const ds = dayState(id);
+      ds.quizDraft = ds.quizDraft || {};
+      ds.quizDraft[k] = ta.value;
+      save();
+    });
+
     $("tqForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const input = $("tqInput");
@@ -630,6 +824,11 @@
       const day = e.target.closest("[data-day]");
       if (day) {
         openDay(day.dataset.day);
+        return;
+      }
+      const openDayBtn = e.target.closest("[data-open-day]");
+      if (openDayBtn) {
+        openDay(openDayBtn.dataset.openDay);
         return;
       }
       const set = e.target.closest("[data-set]");

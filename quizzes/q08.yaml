@@ -1,0 +1,267 @@
+# 扩充题池：第 1-4 周每天再加 1 题（与 q01-q02 累加，抽题时随机取 2 题）
+quizzes:
+  - day: W01D01
+    items:
+      - type: judge
+        q: 学习计划应该先定每天的固定时段，而不是靠“有空就学”
+        answer: true
+        explain: 固定时段减少决策成本，靠意志力很难持续。
+
+  - day: W01D02
+    items:
+      - type: choice
+        q: 启动 Spring Boot 应用时端口被占用，最先应该看
+        options:
+          - 重装 JDK
+          - 启动日志里的端口冲突报错
+          - 数据库连接
+          - 前端代理
+        answer: 1
+        explain: 日志第一行就写了哪个端口被谁占用。
+
+  - day: W01D03
+    items:
+      - type: judge
+        q: 本地开发用的 application-local.yml 应该放进 .gitignore
+        answer: true
+        explain: 本地配置常含密钥和个人路径，不该提交。
+
+  - day: W01D04
+    items:
+      - type: choice
+        q: WebClient 调用返回 4xx 时，默认行为是
+        options:
+          - 静默返回空
+          - 抛 WebClientResponseException
+          - 自动重试三次
+          - 打印后继续
+        answer: 1
+        explain: 默认按错误处理，可在 retrieve 上自定义。
+
+  - day: W01D05
+    items:
+      - type: judge
+        q: 请求 DTO 里字段缺失时，应该能给出明确的默认值或校验错误
+        answer: true
+        explain: 边界输入要显式处理，而不是让空指针漏到业务层。
+
+  - day: W01D06
+    items:
+      - type: choice
+        q: 统一错误响应体里最不该缺少的字段是
+        options:
+          - 堆栈
+          - 错误码与可读消息
+          - 服务器 IP
+          - 数据库名
+        answer: 1
+        explain: 堆栈只进日志；返回给调用方的是错误码与消息。
+
+  - day: W01D07
+    items:
+      - type: judge
+        q: 给已有代码补测试之前，先让它可测（抽依赖）比硬写更省时间
+        answer: true
+        explain: 依赖写死就没法隔离测试。
+
+  - day: W02D01
+    items:
+      - type: choice
+        q: 直接把 API Key 放在请求头里发出去，密钥应该来自
+        options:
+          - 代码常量
+          - 环境变量或配置中心
+          - 前端页面
+          - 日志文件
+        answer: 1
+        explain: 密钥从外部注入，不进代码库。
+
+  - day: W02D02
+    items:
+      - type: judge
+        q: SSE 每个数据块都应该是合法 JSON，前端要能处理半行
+        answer: false
+        explain: 分块边界可能在任意位置，需要按行缓冲再解析。
+
+  - day: W02D03
+    items:
+      - type: choice
+        q: 把模型从 A 换成 B，最不应该改的是
+        options:
+          - 模型配置
+          - 业务代码里的调用链
+          - API Key
+          - base URL
+        answer: 1
+        explain: 换模型不该牵动业务逻辑，说明抽象到位。
+
+  - day: W02D04
+    items:
+      - type: judge
+        q: 同一个 Prompt 连续跑两次结果不同，说明 Prompt 有 bug
+        answer: false
+        explain: 采样本身有随机性，要用多次或定温评估。
+
+  - day: W02D05
+    items:
+      - type: choice
+        q: 让模型输出 JSON 时，最稳的做法是
+        options:
+          - 只说“请输出 JSON”
+          - 给出 schema 或示例，并在服务端校验
+          - 让用户手动检查
+          - 用正则兜底
+        answer: 1
+        explain: 约束加校验，双保险。
+
+  - day: W02D06
+    items:
+      - type: judge
+        q: 工具调用的参数由模型生成，所以不需要再做类型校验
+        answer: false
+        explain: 模型会传错类型和越界值，服务端必须校验。
+
+  - day: W02D07
+    items:
+      - type: choice
+        q: M1 演示时被问到“模型服务挂了怎么办”，合格的回答是
+        options:
+          - 不会挂
+          - 有超时、重试、降级和明确错误提示
+          - 重启试试
+          - 换模型
+        answer: 1
+        explain: 能说清失败路径才算工程化。
+
+  - day: W03D01
+    items:
+      - type: judge
+        q: RAG 的知识更新成本比重新训练模型低得多
+        answer: true
+        explain: 改文档即可生效，这是 RAG 的主要优势。
+
+  - day: W03D02
+    items:
+      - type: choice
+        q: 解析 Word 文档时，表格内容最容易被丢掉，因为
+        options:
+          - 表格是图片
+          - 纯文本抽取只保留段落流
+          - 编码不对
+          - 没有权限
+        answer: 1
+        explain: 表格结构需要单独处理或转成 Markdown。
+
+  - day: W03D03
+    items:
+      - type: judge
+        q: 块大小应该按文档类型固定，绝不能按内容调整
+        answer: false
+        explain: 技术文档、对话、代码适合的切法不同。
+
+  - day: W03D04
+    items:
+      - type: choice
+        q: 两句话语义相近但字面完全不同，靠什么检索最可能命中
+        options:
+          - 关键词精确匹配
+          - 向量语义检索
+          - 按长度排序
+          - 按时间排序
+        answer: 1
+        explain: 这正是 embedding 的价值。
+
+  - day: W03D05
+    items:
+      - type: judge
+        q: 向量库里的数据量很大时，暴力扫描会明显变慢，需要近似索引
+        answer: true
+        explain: 全量扫描是 O(n)，生产规模撑不住。
+
+  - day: W03D06
+    items:
+      - type: choice
+        q: 用框架的 VectorStore 时，最该确认的是
+        options:
+          - 类名好不好记
+          - 默认 topK、相似度阈值和过滤条件是否符合预期
+          - 有没有示例
+          - 版本号
+        answer: 1
+        explain: 默认值不对，效果会莫名其妙地差。
+
+  - day: W03D07
+    items:
+      - type: judge
+        q: 检索 Demo 只要能返回结果就算完成
+        answer: false
+        explain: 还要能看出片段来自哪、是否真的相关。
+
+  - day: W04D01
+    items:
+      - type: choice
+        q: 混合检索的两路结果融合，常用且简单的是
+        options:
+          - 直接拼接
+          - RRF（按排名倒数加权）
+          - 取交集
+          - 取并集后随机
+        answer: 1
+        explain: RRF 不用调分数尺度，工程上好用。
+
+  - day: W04D02
+    items:
+      - type: judge
+        q: 重排只应作用在召回的前 N 条上，而不是全库
+        answer: true
+        explain: 全库重排成本不可接受。
+
+  - day: W04D03
+    items:
+      - type: choice
+        q: 多查询改写后，结果合并时最需要处理的是
+        options:
+          - 去重与排序
+          - 翻译
+          - 压缩
+          - 加密
+        answer: 0
+        explain: 同一片段可能被多次召回，需要去重后统一排序。
+
+  - day: W04D04
+    items:
+      - type: judge
+        q: 上下文里片段越多，答案质量一定越好
+        answer: false
+        explain: 噪声和位置效应会让效果变差。
+
+  - day: W04D05
+    items:
+      - type: choice
+        q: 引用编号和实际片段对不上，属于
+        options:
+          - 小问题
+          - 严重的可信度问题，等于伪造来源
+          - 排版问题
+          - 性能问题
+        answer: 1
+        explain: 引用必须可核对，否则不如不标。
+
+  - day: W04D06
+    items:
+      - type: judge
+        q: 失败归因时，“模型不行”是最没用的结论
+        answer: true
+        explain: 它不指向任何可执行的修复动作。
+
+  - day: W04D07
+    items:
+      - type: choice
+        q: 这一周结束，最值得保留的资产是
+        options:
+          - 更多截图
+          - 混合检索与重排的对比数据
+          - 新的框架
+          - 更长的 Prompt
+        answer: 1
+        explain: 有对比数据，才知道优化是否真的有效。
