@@ -1,0 +1,17 @@
+{
+  "name": "学习台 · 14 周大模型应用开发",
+  "short_name": "学习台",
+  "description": "98 天逐日计划、295 道小测、错题本与进度统计，数据只存在本机。",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f1f10",
+  "theme_color": "#0f1f10",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

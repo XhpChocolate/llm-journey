@@ -133,6 +133,29 @@
   const metaOf = (r) => [r.author, r.published].filter(Boolean).join(" · ");
 
   /* ---------------- 今日小测 ---------------- */
+  const redoing = new Set();   // 「错题本」里正在重做的题，key = dayId:k
+
+  function redoBody(w) {
+    const it = w.it;
+    const id = w.day.id, k = w.k;
+    if (it.type === "choice") {
+      return `<div class="qi__opts">${it.options
+        .map((o, j) => `<button class="opt" type="button" data-redo-opt="${id}" data-k="${k}" data-opt="${j}"><span class="opt__k">${String.fromCharCode(65 + j)}</span>${esc(o)}</button>`)
+        .join("")}</div>`;
+    }
+    if (it.type === "judge") {
+      return `<div class="qi__opts qi__opts--row">
+        <button class="opt" type="button" data-redo-opt="${id}" data-k="${k}" data-judge="true">对</button>
+        <button class="opt" type="button" data-redo-opt="${id}" data-k="${k}" data-judge="false">错</button>
+      </div>`;
+    }
+    return `<p class="qi__ans">参考答案：${esc(it.answer)}</p>
+      <div class="qi__row">
+        <button class="btn btn--quiet btn--sm" type="button" data-redo-self="right" data-k="${k}" data-dayid="${id}">答对了</button>
+        <button class="btn btn--quiet btn--sm" type="button" data-redo-self="partial" data-k="${k}" data-dayid="${id}">部分对</button>
+        <button class="btn btn--quiet btn--sm" type="button" data-redo-self="wrong" data-k="${k}" data-dayid="${id}">没答上</button>
+      </div>`;
+  }
   const revealed = {};   // 简答题「已看答案」的临时标记，不入库
 
   function quizOf(id) { return QUIZ[id] || []; }
@@ -216,6 +239,65 @@
     $("quizList").innerHTML = items.length
       ? drawn.map(({ it, k }) => quizItem(it, k, d.id, st[k], st["p" + k])).join("")
       : `<li class="empty">这一关没有配题。</li>`;
+  }
+
+  /* ---------------- 随机刷题 ---------------- */
+  let drillPhase = "all";
+  let drillItems = [];
+
+  const phaseOf = (dayId) => {
+    const d = DAYS[IDX.get(dayId)];
+    return d ? d.phase : "";
+  };
+
+  function drawDrill(n = 5) {
+    const pool = [];
+    DAYS.forEach((d) => {
+      if (drillPhase !== "all" && d.phase !== drillPhase) return;
+      (QUIZ[d.id] || []).forEach((it, k) => pool.push({ dayId: d.id, k, it }));
+    });
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    drillItems = pool.slice(0, Math.min(n, pool.length));
+  }
+
+  function renderDrill() {
+    const prac = state.practice || (state.practice = {});
+    const answered = drillItems.filter((x) => prac[x.dayId + ":" + x.k]);
+    const right = answered.filter((x) => prac[x.dayId + ":" + x.k] === "right").length;
+    $("drillScore").textContent = drillItems.length
+      ? `${answered.length} / ${drillItems.length} 已答 · 对 ${right}`
+      : "";
+    $("drillList").innerHTML = drillItems.length
+      ? drillItems
+          .map(({ dayId, k, it }) => {
+            const res = prac[dayId + ":" + k];
+            const opts =
+              it.type === "choice"
+                ? `<div class="qi__opts">${it.options
+                    .map((o, j) => {
+                      const cls = res ? (j === it.answer ? "is-right" : "is-dim") : "";
+                      return `<button class="opt ${cls}" type="button" data-drill-opt="${dayId}" data-k="${k}" data-opt="${j}"${res ? " disabled" : ""}><span class="opt__k">${String.fromCharCode(65 + j)}</span>${esc(o)}</button>`;
+                    })
+                    .join("")}</div>`
+                : it.type === "judge"
+                  ? `<div class="qi__opts qi__opts--row">
+                      <button class="opt${res && it.answer === true ? " is-right" : ""}" type="button" data-drill-opt="${dayId}" data-k="${k}" data-judge="true"${res ? " disabled" : ""}>对</button>
+                      <button class="opt${res && it.answer === false ? " is-right" : ""}" type="button" data-drill-opt="${dayId}" data-k="${k}" data-judge="false"${res ? " disabled" : ""}>错</button>
+                    </div>`
+                  : `<p class="qi__ans">参考答案：${esc(it.answer)}</p>`;
+            const fb = res
+              ? `<div class="qi__fb ${res === "right" ? "is-ok" : "is-bad"}"><p class="qi__ex">${esc(it.explain)}</p></div>`
+              : "";
+            return `<li class="qi${res ? " is-answered" : ""}">
+              <p class="qi__type">第 ${DAYS[IDX.get(dayId)].day} 天 · ${it.type === "choice" ? "单选" : it.type === "judge" ? "判断" : "简答"}</p>
+              <p class="qi__q">${esc(it.q)}</p>${opts}${fb}
+            </li>`;
+          })
+          .join("")
+      : `<li class="empty">这个阶段暂时没有题。</li>`;
   }
 
   /* ---------------- 今日 ---------------- */
@@ -485,7 +567,7 @@
         if (!/^\d+$/.test(k)) return;
         if (q[k] !== "wrong" && q[k] !== "partial") return;
         const it = (QUIZ[d.id] || [])[Number(k)];
-        if (it) wrongs.push({ day: d, it, v: q[k], pick: q["p" + k] });
+        if (it) wrongs.push({ day: d, it, k: Number(k), v: q[k], pick: q["p" + k] });
       });
     });
     $("wrongSummary").textContent = wrongs.length
@@ -500,11 +582,18 @@
             const mine = w.it.type === "judge" ? (w.pick === "true" ? "对" : w.pick === "false" ? "错" : "—")
               : w.it.type === "choice" ? (w.pick !== undefined ? String.fromCharCode(65 + Number(w.pick)) : "—")
               : "自评";
-            return `<li class="wrong-row">
+            const key = w.day.id + ":" + w.k;
+            const isRedo = redoing.has(key);
+            return `<li class="wrong-row${isRedo ? " is-redo" : ""}">
               <p class="wrong-row__q"><span class="wrong-row__day">第 ${w.day.day} 天</span>${esc(w.it.q)}</p>
-              <p class="wrong-row__m">你选了 ${mine} · 正确答案 ${ans}</p>
-              <p class="wrong-row__e">${esc(w.it.explain)}</p>
-              <button class="btn btn--quiet btn--sm" type="button" data-open-day="${w.day.id}">回看这一天</button>
+              ${isRedo ? redoBody(w) : `<p class="wrong-row__m">你选了 ${mine} · 正确答案 ${ans}</p>
+              <p class="wrong-row__e">${esc(w.it.explain)}</p>`}
+              <div class="qi__row">
+                ${isRedo
+                  ? `<button class="btn btn--quiet btn--sm" type="button" data-redo-cancel="${key}">取消</button>`
+                  : `<button class="btn btn--secondary btn--sm" type="button" data-redo="${key}">重做这题</button>
+                     <button class="btn btn--quiet btn--sm" type="button" data-open-day="${w.day.id}">回看这一天</button>`}
+              </div>
             </li>`;
           })
           .join("")
@@ -713,6 +802,85 @@
       save();
       renderToday();
       toast(`已撤销第 ${DAYS[prev].day} 天，重新回到这一关`);
+    });
+
+    $("drillOpen").addEventListener("click", () => {
+      drawDrill(5);
+      renderDrill();
+      const dlg = $("drillDlg");
+      if (typeof dlg.showModal === "function") dlg.showModal();
+      else dlg.setAttribute("open", "");
+    });
+    $("drillClose").addEventListener("click", () => $("drillDlg").close());
+    $("drillStart").addEventListener("click", () => {
+      drawDrill(5);
+      renderDrill();
+    });
+    $("drillPhase").addEventListener("click", (e) => {
+      const chip = e.target.closest(".chip");
+      if (!chip) return;
+      drillPhase = chip.dataset.phase;
+      [...$("drillPhase").children].forEach((c) => c.classList.toggle("is-on", c === chip));
+      drawDrill(5);
+      renderDrill();
+    });
+    $("drillList").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-drill-opt]");
+      if (!btn) return;
+      const dayId = btn.dataset.drillOpt;
+      const k = Number(btn.dataset.k);
+      const item = (QUIZ[dayId] || [])[k];
+      if (!item) return;
+      const correct = btn.dataset.opt !== undefined
+        ? Number(btn.dataset.opt) === item.answer
+        : (btn.dataset.judge === "true") === item.answer;
+      state.practice = state.practice || {};
+      state.practice[dayId + ":" + k] = correct ? "right" : "wrong";
+      save();
+      renderDrill();
+    });
+
+    // 错题本：进入/退出重做、重做判分
+    $("wrongList").addEventListener("click", (e) => {
+      const go = e.target.closest("[data-redo]");
+      if (go) {
+        redoing.add(go.dataset.redo);
+        renderProgress();
+        return;
+      }
+      const cancel = e.target.closest("[data-redo-cancel]");
+      if (cancel) {
+        redoing.delete(cancel.dataset.redoCancel);
+        renderProgress();
+        return;
+      }
+      const opt = e.target.closest("[data-redo-opt]");
+      if (opt) {
+        const id = opt.dataset.redoOpt, k = Number(opt.dataset.k);
+        const item = (QUIZ[id] || [])[k];
+        if (!item) return;
+        const st = quizState(id);
+        const correct = opt.dataset.opt !== undefined
+          ? Number(opt.dataset.opt) === item.answer
+          : (opt.dataset.judge === "true") === item.answer;
+        st[k] = correct ? "right" : "wrong";
+        st["p" + k] = opt.dataset.opt !== undefined ? String(opt.dataset.opt) : opt.dataset.judge;
+        redoing.delete(id + ":" + k);
+        save();
+        renderProgress();
+        toast(correct ? "答对了，已移出错题本" : "还是不对，看一遍解析再试");
+        return;
+      }
+      const self = e.target.closest("[data-redo-self]");
+      if (self) {
+        const id = self.dataset.dayid, k = Number(self.dataset.k);
+        const st = quizState(id);
+        st[k] = self.dataset.redoSelf;
+        redoing.delete(id + ":" + k);
+        save();
+        renderProgress();
+        toast(self.dataset.redoSelf === "right" ? "标记为已掌握" : "继续留在错题本");
+      }
     });
 
     $("quizShuffle").addEventListener("click", () => {

@@ -520,3 +520,10 @@ body.has-envbar main { padding-top: calc(var(--nav-h) + 52px); }
 .dlg-quiz li.is-bad { border-left-color: color-mix(in oklab, #fff 45%, transparent); }
 .dlg-quiz__q { margin: 0 0 2px; font-size: 14px; line-height: 1.5; }
 .dlg-quiz__a { margin: 0; font-size: 12px; color: var(--dim); font-family: var(--font-mono); }
+
+.wrong-row.is-redo { border-left: 2px solid var(--lime); padding-left: 14px; }
+.wrong-row.is-redo .qi__opts { margin-bottom: 4px; }
+
+.dlg--drill { width: min(760px, calc(100vw - 32px)); }
+.dlg--drill .chips { margin-bottom: 4px; }
+.dlg--drill .quiz { margin-top: 20px; }

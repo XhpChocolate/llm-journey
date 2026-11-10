@@ -11,6 +11,8 @@
 <meta property="og:image" content="share.svg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <meta name="theme-color" content="#0f1f10">
 <meta name="site-kind" content="software">
 <meta name="page-type" content="software">
@@ -257,6 +259,14 @@
     </section>
 
     <section class="card">
+      <h3 class="card__h">随机刷题</h3>
+      <p class="lead">按阶段从题库里抽 5 题，不计入当天小测成绩。</p>
+      <div class="btn-row">
+        <button class="btn btn--primary" id="drillOpen" type="button">开始刷题</button>
+      </div>
+    </section>
+
+    <section class="card">
       <h3 class="card__h">错题本</h3>
       <p class="lead" id="wrongSummary">还没有错题。答错或自评「部分对」的题会收到这里。</p>
       <ul class="wrong-list" id="wrongList"></ul>
@@ -326,10 +336,42 @@
   </div>
 </dialog>
 
+<dialog class="dlg dlg--drill" id="drillDlg" aria-labelledby="drillTitle">
+  <div class="dlg__head">
+    <p class="kicker">随机刷题</p>
+    <h2 id="drillTitle">从题库抽 5 题</h2>
+    <button class="dlg__x" id="drillClose" type="button" aria-label="关闭">关闭</button>
+  </div>
+  <div class="dlg__body">
+    <div class="chips" id="drillPhase" role="group" aria-label="按阶段">
+      <button class="chip is-on" type="button" data-phase="all">全部阶段</button>
+      <button class="chip" type="button" data-phase="A">A 打底</button>
+      <button class="chip" type="button" data-phase="B">B RAG</button>
+      <button class="chip" type="button" data-phase="C">C Agent</button>
+      <button class="chip" type="button" data-phase="D">D 可观测与安全</button>
+      <button class="chip" type="button" data-phase="E">E MCP 与作品</button>
+      <button class="chip" type="button" data-phase="F">F 缓冲与求职</button>
+    </div>
+    <div class="btn-row" style="margin-top:16px">
+      <button class="btn btn--primary" id="drillStart" type="button">抽 5 题</button>
+      <span class="quiz-score" id="drillScore"></span>
+    </div>
+    <ol class="quiz" id="drillList"></ol>
+  </div>
+</dialog>
+
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="data/plan.js"></script>
 <script src="app.js"></script>
+<script>
+  // PWA：只有 http(s) 才能注册 Service Worker，file:// 双击打开时跳过
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("sw.js").catch(() => {});
+    });
+  }
+</script>
 </body>
 </html>
