@@ -1,0 +1,125 @@
+# 轻量任务卡：第 7-10 周（只绑材料）
+briefs:
+  - day: W07D01
+    tasks:
+      - i: 0
+        refs: [r-sai-memory]
+        focus: 看 ChatMemory 与窗口策略
+  - day: W07D02
+    tasks:
+      - i: 0
+        refs: [r-anthropic-agents]
+        focus: 看 workflow 与 agent 的对比那节
+  - day: W07D03
+    tasks:
+      - i: 0
+        refs: [r-owasp-llm]
+        focus: 看 Excessive Agency 一类
+  - day: W07D04
+    tasks:
+      - i: 0
+        refs: [r-otel-genai]
+        focus: 看 LLM span 属性
+  - day: W07D05
+    tasks:
+      - i: 0
+        refs: [r-sai-rag]
+        focus: 看引用与拒答的做法
+  - day: W07D06
+    tasks:
+      - i: 0
+        refs: [v-kvcache-promptcache]
+        focus: 8 分钟，讲缓存命中
+
+  - day: W08D01
+    tasks:
+      - i: 0
+        refs: [v-threadpool]
+        focus: 看线程池参数配合
+  - day: W08D02
+    tasks:
+      - i: 0
+        refs: [r-resilience4j]
+        focus: 看 CircuitBreaker 状态机
+  - day: W08D03
+    tasks:
+      - i: 0
+        refs: [v-ng-prompt]
+        focus: 看版本管理思路
+  - day: W08D04
+    tasks:
+      - i: 0
+        refs: [v-ragas]
+        focus: 看自动化评测脚本
+  - day: W08D05
+    tasks:
+      - i: 0
+        refs: [v-docker-40min]
+        focus: 只看 Dockerfile 与 compose
+  - day: W08D06
+    tasks:
+      - i: 0
+        refs: [v-hm-rag-agent-project]
+        focus: 只看目录结构与 README
+
+  - day: W09D01
+    tasks:
+      - i: 0
+        refs: [v-otel-itlaoqi]
+        focus: 看结构化日志那节
+  - day: W09D02
+    tasks:
+      - i: 0
+        refs: [v-otel-springboot, r-spring-boot-actuator]
+        focus: 看指标暴露与 Actuator 端点
+  - day: W09D03
+    tasks:
+      - i: 0
+        refs: [v-otel-itlaoqi, r-otel-genai]
+        focus: 看 trace 三段划分
+  - day: W09D04
+    tasks:
+      - i: 0
+        refs: [v-otel-springboot]
+        focus: 看接入示例
+  - day: W09D05
+    tasks:
+      - i: 0
+        refs: [v-otel-itlaoqi]
+        focus: 排障演练前再看一遍链路部分
+  - day: W09D06
+    tasks:
+      - i: 0
+        refs: [v-kvcache-promptcache]
+        focus: 成本相关的部分
+
+  - day: W10D01
+    tasks:
+      - i: 0
+        refs: [v-llm-security, r-owasp-llm]
+        focus: 看 Top10 里与你项目最相关的三类
+  - day: W10D02
+    tasks:
+      - i: 0
+        refs: [v-llm-security]
+        focus: 看注入攻击的演示部分
+  - day: W10D03
+    tasks:
+      - i: 0
+        refs: [v-llm-security]
+        focus: 看护栏与校验的做法
+  - day: W10D04
+    tasks:
+      - i: 0
+        refs: [v-fc-vs-mcp]
+        focus: 看工具权限与执行边界的讨论
+  - day: W10D05
+    tasks:
+      - i: 0
+        refs: [r-owasp-llm]
+        focus: 看数据泄露与隐私相关条目
+  - day: W10D06
+    tasks:
+      - i: 0
+        refs: [r-owasp-llm]
+        focus: 对照自查表逐条过

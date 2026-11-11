@@ -1647,6 +1647,13 @@
     "r-sai-memory"
    ],
    "focus": "看会话记忆与长期记忆的区别"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "r-sai-memory"
+   ],
+   "focus": "看 ChatMemory 与窗口策略"
   }
  ],
  "W07D02": [
@@ -1657,6 +1664,13 @@
     "v-agent-principles"
    ],
    "focus": "看 Plan-and-Execute 那段"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "r-anthropic-agents"
+   ],
+   "focus": "看 workflow 与 agent 的对比那节"
   }
  ],
  "W07D03": [
@@ -1666,6 +1680,13 @@
     "r-owasp-llm"
    ],
    "focus": "看 Excessive Agency 那一类"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "r-owasp-llm"
+   ],
+   "focus": "看 Excessive Agency 一类"
   }
  ],
  "W07D04": [
@@ -1675,6 +1696,13 @@
     "r-otel-genai"
    ],
    "focus": "看 LLM span 属性约定"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "r-otel-genai"
+   ],
+   "focus": "看 LLM span 属性"
   }
  ],
  "W07D05": [
@@ -1685,9 +1713,23 @@
     "v-prompt-agent-mcp-10min"
    ],
    "focus": "看引用与拒答的做法"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "r-sai-rag"
+   ],
+   "focus": "看引用与拒答的做法"
   }
  ],
  "W07D06": [
+  {
+   "i": 0,
+   "refs": [
+    "v-kvcache-promptcache"
+   ],
+   "focus": "8 分钟，讲缓存命中"
+  },
   {
    "i": 0,
    "refs": [
@@ -1703,9 +1745,23 @@
     "v-threadpool"
    ],
    "focus": "看线程池参数配合那节"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "v-threadpool"
+   ],
+   "focus": "看线程池参数配合"
   }
  ],
  "W08D02": [
+  {
+   "i": 0,
+   "refs": [
+    "r-resilience4j"
+   ],
+   "focus": "看 CircuitBreaker 状态机"
+  },
   {
    "i": 0,
    "refs": [
@@ -1721,6 +1777,13 @@
     "v-ng-prompt"
    ],
    "focus": "看版本管理的思路"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "v-ng-prompt"
+   ],
+   "focus": "看版本管理思路"
   }
  ],
  "W08D04": [
@@ -1730,6 +1793,13 @@
     "v-ragas"
    ],
    "focus": "评测脚本如何自动化"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "v-ragas"
+   ],
+   "focus": "看自动化评测脚本"
   }
  ],
  "W08D05": [
@@ -1739,6 +1809,13 @@
     "v-docker-40min"
    ],
    "focus": "只看 Dockerfile 与 compose 两节"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "v-docker-40min"
+   ],
+   "focus": "只看 Dockerfile 与 compose"
   }
  ],
  "W08D06": [
@@ -1748,6 +1825,345 @@
     "v-hm-rag-agent-project"
    ],
    "focus": "只看 README 与目录结构"
+  },
+  {
+   "i": 0,
+   "refs": [
+    "v-hm-rag-agent-project"
+   ],
+   "focus": "只看目录结构与 README"
+  }
+ ],
+ "W09D01": [
+  {
+   "i": 0,
+   "refs": [
+    "v-otel-itlaoqi"
+   ],
+   "focus": "看结构化日志那节"
+  }
+ ],
+ "W09D02": [
+  {
+   "i": 0,
+   "refs": [
+    "v-otel-springboot",
+    "r-spring-boot-actuator"
+   ],
+   "focus": "看指标暴露与 Actuator 端点"
+  }
+ ],
+ "W09D03": [
+  {
+   "i": 0,
+   "refs": [
+    "v-otel-itlaoqi",
+    "r-otel-genai"
+   ],
+   "focus": "看 trace 三段划分"
+  }
+ ],
+ "W09D04": [
+  {
+   "i": 0,
+   "refs": [
+    "v-otel-springboot"
+   ],
+   "focus": "看接入示例"
+  }
+ ],
+ "W09D05": [
+  {
+   "i": 0,
+   "refs": [
+    "v-otel-itlaoqi"
+   ],
+   "focus": "排障演练前再看一遍链路部分"
+  }
+ ],
+ "W09D06": [
+  {
+   "i": 0,
+   "refs": [
+    "v-kvcache-promptcache"
+   ],
+   "focus": "成本相关的部分"
+  }
+ ],
+ "W10D01": [
+  {
+   "i": 0,
+   "refs": [
+    "v-llm-security",
+    "r-owasp-llm"
+   ],
+   "focus": "看 Top10 里与你项目最相关的三类"
+  }
+ ],
+ "W10D02": [
+  {
+   "i": 0,
+   "refs": [
+    "v-llm-security"
+   ],
+   "focus": "看注入攻击的演示部分"
+  }
+ ],
+ "W10D03": [
+  {
+   "i": 0,
+   "refs": [
+    "v-llm-security"
+   ],
+   "focus": "看护栏与校验的做法"
+  }
+ ],
+ "W10D04": [
+  {
+   "i": 0,
+   "refs": [
+    "v-fc-vs-mcp"
+   ],
+   "focus": "看工具权限与执行边界的讨论"
+  }
+ ],
+ "W10D05": [
+  {
+   "i": 0,
+   "refs": [
+    "r-owasp-llm"
+   ],
+   "focus": "看数据泄露与隐私相关条目"
+  }
+ ],
+ "W10D06": [
+  {
+   "i": 0,
+   "refs": [
+    "r-owasp-llm"
+   ],
+   "focus": "对照自查表逐条过"
+  }
+ ],
+ "W11D01": [
+  {
+   "i": 0,
+   "refs": [
+    "v-mcp-ultimate",
+    "r-mcp-spec-zh"
+   ],
+   "focus": "先看 27 分钟原理，再读中文规范"
+  }
+ ],
+ "W11D02": [
+  {
+   "i": 0,
+   "refs": [
+    "v-sgg-mcp",
+    "r-mcp-tutorial-zh"
+   ],
+   "focus": "跟着写最小 Server，别只看"
+  }
+ ],
+ "W11D03": [
+  {
+   "i": 0,
+   "refs": [
+    "v-sgg-mcp"
+   ],
+   "focus": "看 Spring AI 集成那几集"
+  }
+ ],
+ "W11D04": [
+  {
+   "i": 0,
+   "refs": [
+    "v-sgg-mcp",
+    "r-sai-mcp"
+   ],
+   "focus": "看 Client 端如何发现工具"
+  }
+ ],
+ "W11D05": [
+  {
+   "i": 0,
+   "refs": [
+    "r-mcp-spec-zh"
+   ],
+   "focus": "看鉴权与传输那节"
+  }
+ ],
+ "W11D06": [
+  {
+   "i": 0,
+   "refs": [
+    "v-mcp-vs-fc",
+    "v-fc-vs-mcp"
+   ],
+   "focus": "两个视频对照看，形成自己的结论"
+  }
+ ],
+ "W12D01": [
+  {
+   "i": 0,
+   "refs": [
+    "v-hm-rag-agent-project"
+   ],
+   "focus": "参考别人的 README 结构"
+  }
+ ],
+ "W12D02": [
+  {
+   "i": 0,
+   "refs": [
+    "v-hm-rag-agent-project"
+   ],
+   "focus": "看分层与包结构"
+  }
+ ],
+ "W12D03": [
+  {
+   "i": 0,
+   "refs": [
+    "v-ragas",
+    "r-ragas"
+   ],
+   "focus": "评测脚本与 CI"
+  }
+ ],
+ "W12D04": [
+  {
+   "i": 0,
+   "refs": [
+    "v-hm-rag-agent-project"
+   ],
+   "focus": "看别人的演示方式"
+  }
+ ],
+ "W12D05": [
+  {
+   "i": 0,
+   "refs": [
+    "v-prompt-agent-mcp-10min"
+   ],
+   "focus": "用 10 分钟梳理自己的技术地图"
+  }
+ ],
+ "W12D06": [
+  {
+   "i": 0,
+   "refs": [
+    "r-ragas",
+    "r-owasp-llm"
+   ],
+   "focus": "按评测与安全两个方向准备追问"
+  }
+ ],
+ "W13D01": [
+  {
+   "i": 0,
+   "refs": [
+    "r-lc4j-root"
+   ],
+   "focus": "先看框架总览，判断哪块没学会"
+  }
+ ],
+ "W13D02": [
+  {
+   "i": 0,
+   "refs": [
+    "v-otel-yangming"
+   ],
+   "focus": "补观测链路那段"
+  }
+ ],
+ "W13D03": [
+  {
+   "i": 0,
+   "refs": [
+    "v-hm-springai-deepseek"
+   ],
+   "focus": "对照别人的工程化写法"
+  }
+ ],
+ "W13D04": [
+  {
+   "i": 0,
+   "refs": [
+    "v-lc4j-yupi"
+   ],
+   "focus": "跟写一遍工具调用 + RAG"
+  },
+  {
+   "i": 2,
+   "refs": [
+    "v-lc4j-sgg-medical"
+   ],
+   "focus": "只看项目结构，不必全看"
+  }
+ ],
+ "W13D05": [
+  {
+   "i": 0,
+   "refs": [
+    "v-hm-springai-deepseek"
+   ],
+   "focus": "挑一个薄弱章节补"
+  }
+ ],
+ "W13D06": [
+  {
+   "i": 0,
+   "refs": [
+    "v-lc4j-heima"
+   ],
+   "focus": "看 RAG 章节的工程实现"
+  }
+ ],
+ "W14D01": [
+  {
+   "i": 0,
+   "refs": [
+    "v-virtual-thread",
+    "r-jep444-zh"
+   ],
+   "focus": "先看 33 分钟视频，再看中文讲解"
+  }
+ ],
+ "W14D02": [
+  {
+   "i": 0,
+   "refs": [
+    "v-kvcache-promptcache"
+   ],
+   "focus": "成本与缓存那部分"
+  }
+ ],
+ "W14D03": [
+  {
+   "i": 0,
+   "refs": [
+    "v-llm-agent-skill"
+   ],
+   "focus": "看 LLM 到 Agent 的能力边界"
+  }
+ ],
+ "W14D04": [
+  {
+   "i": 0,
+   "refs": [
+    "v-rag-eval-interview"
+   ],
+   "focus": "12 分钟，看 badcase 如何变成用例"
+  }
+ ],
+ "W14D05": [
+  {
+   "i": 0,
+   "refs": [
+    "v-docker-sgg"
+   ],
+   "focus": "只看部署与编排那几节"
   }
  ]
 }

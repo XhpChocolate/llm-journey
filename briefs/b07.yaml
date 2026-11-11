@@ -1,0 +1,123 @@
+# 轻量任务卡：第 11-14 周（只绑材料）
+briefs:
+  - day: W11D01
+    tasks:
+      - i: 0
+        refs: [v-mcp-ultimate, r-mcp-spec-zh]
+        focus: 先看 27 分钟原理，再读中文规范
+  - day: W11D02
+    tasks:
+      - i: 0
+        refs: [v-sgg-mcp, r-mcp-tutorial-zh]
+        focus: 跟着写最小 Server，别只看
+  - day: W11D03
+    tasks:
+      - i: 0
+        refs: [v-sgg-mcp]
+        focus: 看 Spring AI 集成那几集
+  - day: W11D04
+    tasks:
+      - i: 0
+        refs: [v-sgg-mcp, r-sai-mcp]
+        focus: 看 Client 端如何发现工具
+  - day: W11D05
+    tasks:
+      - i: 0
+        refs: [r-mcp-spec-zh]
+        focus: 看鉴权与传输那节
+  - day: W11D06
+    tasks:
+      - i: 0
+        refs: [v-mcp-vs-fc, v-fc-vs-mcp]
+        focus: 两个视频对照看，形成自己的结论
+
+  - day: W12D01
+    tasks:
+      - i: 0
+        refs: [v-hm-rag-agent-project]
+        focus: 参考别人的 README 结构
+  - day: W12D02
+    tasks:
+      - i: 0
+        refs: [v-hm-rag-agent-project]
+        focus: 看分层与包结构
+  - day: W12D03
+    tasks:
+      - i: 0
+        refs: [v-ragas, r-ragas]
+        focus: 评测脚本与 CI
+  - day: W12D04
+    tasks:
+      - i: 0
+        refs: [v-hm-rag-agent-project]
+        focus: 看别人的演示方式
+  - day: W12D05
+    tasks:
+      - i: 0
+        refs: [v-prompt-agent-mcp-10min]
+        focus: 用 10 分钟梳理自己的技术地图
+  - day: W12D06
+    tasks:
+      - i: 0
+        refs: [r-ragas, r-owasp-llm]
+        focus: 按评测与安全两个方向准备追问
+
+  - day: W13D01
+    tasks:
+      - i: 0
+        refs: [r-lc4j-root]
+        focus: 先看框架总览，判断哪块没学会
+  - day: W13D02
+    tasks:
+      - i: 0
+        refs: [v-otel-yangming]
+        focus: 补观测链路那段
+  - day: W13D03
+    tasks:
+      - i: 0
+        refs: [v-hm-springai-deepseek]
+        focus: 对照别人的工程化写法
+  - day: W13D04
+    tasks:
+      - i: 0
+        refs: [v-lc4j-yupi]
+        focus: 跟写一遍工具调用 + RAG
+      - i: 2
+        refs: [v-lc4j-sgg-medical]
+        focus: 只看项目结构，不必全看
+  - day: W13D05
+    tasks:
+      - i: 0
+        refs: [v-hm-springai-deepseek]
+        focus: 挑一个薄弱章节补
+  - day: W13D06
+    tasks:
+      - i: 0
+        refs: [v-lc4j-heima]
+        focus: 看 RAG 章节的工程实现
+
+  - day: W14D01
+    tasks:
+      - i: 0
+        refs: [v-virtual-thread, r-jep444-zh]
+        focus: 先看 33 分钟视频，再看中文讲解
+  - day: W14D02
+    tasks:
+      - i: 0
+        refs: [v-kvcache-promptcache]
+        focus: 成本与缓存那部分
+  - day: W14D03
+    tasks:
+      - i: 0
+        refs: [v-llm-agent-skill]
+        focus: 看 LLM 到 Agent 的能力边界
+  - day: W14D04
+    tasks:
+      - i: 0
+        refs: [v-rag-eval-interview]
+        focus: 12 分钟，看 badcase 如何变成用例
+  - day: W14D05
+    tasks:
+      - i: 0
+        refs: [v-docker-sgg]
+        focus: 只看部署与编排那几节

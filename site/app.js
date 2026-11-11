@@ -123,7 +123,7 @@
     return `<li class="res">
       <a class="res__link" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-ext title="${esc(r.url)}">
         <span class="res__body">
-          <span class="res__type">${TYPE_LABEL[r.type] || "资源"} · ${r.lang === "en" ? "英文" : "中文"} · ${fmtMin(r.minutes)}</span>
+          <span class="res__type">${TYPE_LABEL[r.type] || "资源"} · ${r.lang === "en" ? "英文" : "中文"} · ${durOf(r)}</span>
           <span class="res__t">${esc(r.title)}</span>
           ${meta ? `<span class="res__meta">${meta}</span>` : ""}
         </span>
@@ -132,6 +132,9 @@
     </li>`;
   }
   const metaOf = (r) => [r.author, r.published].filter(Boolean).join(" · ");
+  // 超过 3 小时的课提示分段，避免「42.8 小时」直接劝退
+  const durOf = (r) =>
+    r.minutes > 180 ? `全 ${(r.minutes / 60).toFixed(1)}h，建议分段看` : fmtMin(r.minutes);
 
   /* ---------------- 今日小测 ---------------- */
   const redoing = new Set();   // 「错题本」里正在重做的题，key = dayId:k
@@ -328,7 +331,7 @@
           <a class="mat__link" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-ext title="${esc(r.url)}">
             <span class="mat__type">${TYPE_LABEL[r.type] || "资源"}</span>
             <span class="mat__t">${esc(r.title)}</span>
-            <span class="mat__m">${fmtMin(r.minutes)}${r.author ? " · " + esc(r.author) : ""} ↗</span>
+            <span class="mat__m">${durOf(r)}${r.author ? " · " + esc(r.author) : ""} ↗</span>
           </a></li>`).join("")}</ul>` : ""}
         <h3>当天目标</h3><p>${esc(d.goal)}</p>
         <h3>产出物</h3><p>${esc(d.deliverable)}</p>
