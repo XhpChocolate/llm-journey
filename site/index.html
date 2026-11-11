@@ -101,6 +101,19 @@
       </section>
 
       <aside class="side">
+        <section class="card timer-card">
+          <div class="timer-head">
+            <h3 class="card__h">学习计时</h3>
+            <span class="timer-state" id="timerState">未开始</span>
+          </div>
+          <p class="timer-clock" id="timerClock">00:00:00</p>
+          <div class="btn-row timer-actions">
+            <button class="btn btn--primary" id="timerToggle" type="button">开始学习</button>
+            <button class="btn btn--quiet btn--sm" id="timerReset" type="button" hidden>清零重计</button>
+          </div>
+          <p class="hint" id="timerHint">切走这个页面会自动暂停，回来点“继续”才计时。</p>
+        </section>
+
         <section class="card">
           <h3 class="card__h">今日笔记</h3>
           <label class="lbl" for="tNote">学了什么 / 卡在哪 / 明天第一步</label>
@@ -256,6 +269,17 @@
       <h3 class="card__h">已通过的课</h3>
       <p class="lead">随时回看，补一条复习笔记。</p>
       <ul class="done-list" id="doneList"></ul>
+    </section>
+
+    <section class="card">
+      <h3 class="card__h">学习时长</h3>
+      <div class="timer-stats">
+        <div class="stat"><span class="stat__v" id="timeToday">0m</span><span class="stat__k">今天</span></div>
+        <div class="stat"><span class="stat__v" id="timeWeek">0m</span><span class="stat__k">本周</span></div>
+        <div class="stat"><span class="stat__v" id="timeTotal">0h</span><span class="stat__k">累计</span></div>
+        <div class="stat"><span class="stat__v" id="timeAvg">0m</span><span class="stat__k">平均每天</span></div>
+      </div>
+      <p class="hint" id="timeCompare"></p>
     </section>
 
     <section class="card">

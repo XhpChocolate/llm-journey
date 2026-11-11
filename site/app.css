@@ -527,3 +527,24 @@ body.has-envbar main { padding-top: calc(var(--nav-h) + 52px); }
 .dlg--drill { width: min(760px, calc(100vw - 32px)); }
 .dlg--drill .chips { margin-bottom: 4px; }
 .dlg--drill .quiz { margin-top: 20px; }
+
+/* ---------- 学习计时 ---------- */
+.timer-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.timer-state { font-family: var(--font-mono); font-size: 11px; color: var(--dim); letter-spacing: .06em; }
+.timer-state.is-running { color: var(--lime); }
+.timer-state.is-running::before {
+  content: ""; display: inline-block; width: 6px; height: 6px; margin-right: 6px;
+  border-radius: 50%; background: var(--lime); vertical-align: 1px;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .25 } }
+.timer-card .timer-clock {
+  font-family: var(--font-mono); font-size: clamp(32px, 3.2vw, 42px); line-height: 1.15;
+  letter-spacing: -.02em; margin: 10px 0 4px; font-weight: 500;
+}
+.timer-actions { margin-top: 12px; }
+.timer-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin: 8px 0 12px; }
+@media (max-width: 639px) {
+  .timer-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .timer-clock { font-size: 34px; }
+}

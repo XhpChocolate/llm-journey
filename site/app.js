@@ -300,6 +300,103 @@
       : `<li class="empty">这个阶段暂时没有题。</li>`;
   }
 
+  /* ---------------- 学习计时 ----------------
+     只记录「有效学习时间」：
+     - 必须手动点开始
+     - 页面不可见 / 窗口失焦 / 5 分钟无操作 → 自动暂停，回来要手动继续
+     - 用 performance.now() 计时，避免系统改时间影响
+     - 每 5 秒把累计值落盘，刷新后不会丢，但不会补算关闭期间的时间 */
+  const IDLE_LIMIT = 5 * 60 * 1000;   // 5 分钟无操作自动暂停
+  let timer = { running: false, startedAt: 0, baseMs: 0, tickId: null, lastSave: 0, lastInput: 0 };
+  let autoPausedReason = "";
+
+  const timerOf = (id) => {
+    const ds = dayState(id);
+    ds.time = ds.time || { ms: 0, sessions: 0, running: false, totalAtFinish: null };
+    return ds.time;
+  };
+  const nowMs = () => (performance && performance.now ? performance.now() : Date.now());
+
+  function timerElapsed() {
+    if (!timer.running) return timer.baseMs;
+    return timer.baseMs + (nowMs() - timer.startedAt);
+  }
+  const fmtClock = (ms) => {
+    const t = Math.max(0, Math.floor(ms / 1000));
+    const hh = String(Math.floor(t / 3600)).padStart(2, "0");
+    const mm = String(Math.floor((t % 3600) / 60)).padStart(2, "0");
+    const ss = String(t % 60).padStart(2, "0");
+    return `${hh}:${mm}:${ss}`;
+  };
+  const fmtDur = (ms) => {
+    if (!ms) return "0m";
+    if (ms < 60000) return `${Math.round(ms / 1000)}s`;
+    const m = Math.round(ms / 60000);
+    if (m < 60) return `${m}m`;
+    return `${(m / 60).toFixed(m % 60 ? 1 : 0)}h`;
+  };
+
+  function startTimer() {
+    const d = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+    const t = timerOf(d.id);
+    if (timer.running) return;
+    timer.running = true;
+    timer.baseMs = t.ms;
+    timer.startedAt = nowMs();
+    timer.lastInput = Date.now();
+    t.running = true;
+    t.sessions = (t.sessions || 0) + 1;
+    autoPausedReason = "";
+    timer.tickId = setInterval(() => {
+      const el = timerElapsed();
+      $("timerClock").textContent = fmtClock(el);
+      const now = Date.now();
+      if (now - timer.lastInput > IDLE_LIMIT) {
+        pauseTimer("idle");
+        return;
+      }
+      if (now - timer.lastSave > 5000) {
+        t.ms = el;
+        timer.lastSave = now;
+        save();
+      }
+    }, 1000);
+    renderTimer();
+  }
+
+  function pauseTimer(reason) {
+    if (!timer.running) return;
+    const d = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+    const t = timerOf(d.id);
+    t.ms = Math.max(t.ms, timerElapsed());
+    t.running = false;
+    timer.running = false;
+    timer.baseMs = t.ms;
+    clearInterval(timer.tickId);
+    timer.tickId = null;
+    if (reason === "hidden") autoPausedReason = "切走页面，已自动暂停";
+    else if (reason === "blur") autoPausedReason = "窗口失去焦点，已自动暂停";
+    else if (reason === "idle") autoPausedReason = "5 分钟没操作，已自动暂停";
+    else autoPausedReason = "";
+    save();
+    renderTimer();
+    if (reason) toast(autoPausedReason);
+  }
+
+  function renderTimer() {
+    const d = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+    const t = timerOf(d.id);
+    const el = timer.running ? timerElapsed() : t.ms;
+    $("timerClock").textContent = fmtClock(el);
+    $("timerState").textContent = timer.running ? "计时中" : t.ms > 0 ? "已暂停" : "未开始";
+    $("timerState").className = "timer-state" + (timer.running ? " is-running" : "");
+    $("timerToggle").textContent = timer.running ? "暂停" : t.ms > 0 ? "继续" : "开始学习";
+    $("timerReset").hidden = t.ms === 0 && !timer.running;
+    $("timerHint").textContent = timer.running
+      ? "正在记录。切走页面会自动暂停。"
+      : autoPausedReason || (t.ms > 0 ? "已暂停，休息好再继续。" : "切走这个页面会自动暂停，回来点“继续”才计时。");
+  }
+
   /* ---------------- 今日 ---------------- */
   function renderToday() {
     const s = stats();
@@ -354,6 +451,7 @@
     $("tNext").innerHTML = next.join("") || `<li class="empty">这是最后一天。</li>`;
 
     renderQuiz();
+    renderTimer();
   }
 
   /* ---------------- 计划 ---------------- */
@@ -555,6 +653,29 @@
         else if (q[k] === "partial") partialN++;
       });
     });
+    // 学习时长统计
+    const curD = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+    const sumOf = (list) => list.reduce((n, d) => n + (state.days[d.id]?.time?.ms || 0), 0);
+    // 今天：当前这一关 + 今天完成过的那些天（完成后当前关会前进）
+    const todayStr = ymd(new Date());
+    const todayMs = DAYS.reduce((n, d) => {
+      const ds = state.days[d.id];
+      if (!ds) return n;
+      if (d.id === curD.id || ds.doneAt === todayStr) return n + (ds.time?.ms || 0);
+      return n;
+    }, 0);
+    const weekMs = sumOf(DAYS.filter((d) => d.week === curD.week));
+    const totalMs = sumOf(DAYS);
+    const doneN = DAYS.filter((d) => statusOf(d.id) === "done").length;
+    $("timeToday").textContent = fmtDur(todayMs);
+    $("timeWeek").textContent = fmtDur(weekMs);
+    $("timeTotal").textContent = fmtDur(totalMs);
+    $("timeAvg").textContent = doneN ? fmtDur(totalMs / doneN) : "—";
+    const planMin = curD.minutes;
+    $("timeCompare").textContent = todayMs
+      ? `今天计划 ${Math.round(planMin / 60 * 10) / 10} 小时，实际学了 ${(todayMs / 3600000).toFixed(1)} 小时。`
+      : `今天还没有开始计时。这一关计划 ${Math.round(planMin / 60 * 10) / 10} 小时。`;
+
     $("quizSummary").textContent = answered
       ? `已答 ${answered} 题 · 答对 ${rightN} · 部分对 ${partialN} · 正确率 ${Math.round(((rightN + partialN * 0.5) / answered) * 100)}%`
       : "还没有答题记录。";
@@ -769,13 +890,17 @@
       }
       const d = DAYS[i];
       const ds = dayState(d.id);
+      pauseTimer();
+      const spent = timerOf(d.id).ms;
       ds.status = "done";
       ds.doneAt = ymd(new Date());
-      ds.minutes = ds.minutes ?? d.minutes;
+      ds.time = timerOf(d.id);
+      ds.time.totalAtFinish = spent;
       save();
       renderToday();
       const left = DAYS.length - stats().done;
-      toast(left ? `第 ${d.day} 天完成，解锁第 ${d.day + 1} 天` : "98 天全部完成，可以开始做作品集了");
+      const spentTxt = spent > 0 ? `，今天学了 ${fmtDur(spent)}` : "";
+      toast(left ? `第 ${d.day} 天完成${spentTxt}，解锁第 ${d.day + 1} 天` : `98 天全部完成${spentTxt}`);
     });
 
     // 顺延：不标记完成，日期自然推到明天（解锁规则保证不会跳天）
@@ -802,6 +927,41 @@
       save();
       renderToday();
       toast(`已撤销第 ${DAYS[prev].day} 天，重新回到这一关`);
+    });
+
+    $("timerToggle").addEventListener("click", () => {
+      if (timer.running) pauseTimer();
+      else startTimer();
+    });
+    $("timerReset").addEventListener("click", () => {
+      const d = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+      if (!confirm("清零今天的计时？已经记录的时间会删掉。")) return;
+      pauseTimer();
+      const t = timerOf(d.id);
+      t.ms = 0; t.sessions = 0; t.totalAtFinish = null;
+      timer.baseMs = 0;
+      save();
+      renderTimer();
+      toast("今天的计时已清零");
+    });
+
+    // 自动暂停：切走页面、窗口失焦、长时间无操作
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden && timer.running) pauseTimer("hidden");
+    });
+    window.addEventListener("blur", () => {
+      if (timer.running) pauseTimer("blur");
+    });
+    ["mousemove", "keydown", "scroll", "touchstart", "click"].forEach((ev) =>
+      window.addEventListener(ev, () => { timer.lastInput = Date.now(); }, { passive: true })
+    );
+    window.addEventListener("beforeunload", () => {
+      if (!timer.running) return;
+      const d = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+      const t = timerOf(d.id);
+      t.ms = Math.max(t.ms, timerElapsed());
+      t.running = false;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
     });
 
     $("drillOpen").addEventListener("click", () => {
