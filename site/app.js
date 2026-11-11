@@ -13,6 +13,7 @@
   );
   const RES = PLAN.resources;
   const QUIZ = PLAN.quizzes || {};
+  const BRIEFS = PLAN.briefs || {};
   const IDX = new Map(DAYS.map((d, i) => [d.id, i]));
   const TYPE_LABEL = { doc: "文档", video: "视频", code: "代码", tool: "工具" };
   const WEEK_CN = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
@@ -300,6 +301,38 @@
       : `<li class="empty">这个阶段暂时没有题。</li>`;
   }
 
+  /* ---------------- 任务卡 ---------------- */
+  function briefOf(dayId, k) {
+    return (BRIEFS[dayId] || []).find((b) => b.i === k);
+  }
+
+  function openBrief(dayId, k) {
+    const d = DAYS[IDX.get(dayId)];
+    const task = (d.tasks || [])[k] || "";
+    const b = briefOf(dayId, k);
+    $("briefKicker").textContent = `第 ${d.week} 周 · 第 ${d.day} 天 · 第 ${k + 1} 个任务`;
+    $("briefTitle").textContent = task;
+    if (!b) {
+      const refs = (d.refs || []).map((id) => RES[id]).filter(Boolean);
+      $("briefBody").innerHTML = `
+        <p class="hint">这一天还没有写详细任务卡（目前覆盖第 1 周）。下面是当天目标和资源，可以自己拆步骤。</p>
+        <h3>当天目标</h3><p>${esc(d.goal)}</p>
+        <h3>产出物</h3><p>${esc(d.deliverable)}</p>
+        ${refs.length ? `<h3>当天资源</h3><ul>${refs.map((r) => `<li><a class="dlg__res" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-ext>${esc(r.title)} ↗</a> · ${r.minutes} 分钟</li>`).join("")}</ul>` : ""}`;
+    } else {
+      $("briefBody").innerHTML = `
+        <h3>为什么做</h3><p>${esc(b.why)}</p>
+        ${(b.learn || []).length ? `<h3>先看什么</h3><ul>${b.learn.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+        <h3>动手步骤</h3><ol class="brief-steps">${(b.steps || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
+        <h3>练什么</h3><p>${esc(b.practice)}</p>
+        <h3>怎么算过</h3><ul class="brief-check">${(b.check || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+        ${b.pitfall ? `<h3>常见坑</h3><p class="brief-pit">${esc(b.pitfall)}</p>` : ""}`;
+    }
+    const dlg = $("briefDlg");
+    if (typeof dlg.showModal === "function") dlg.showModal();
+    else dlg.setAttribute("open", "");
+  }
+
   /* ---------------- 学习计时 ----------------
      只记录「有效学习时间」：
      - 必须手动点开始
@@ -422,7 +455,10 @@
     $("tTasks").innerHTML = tasks
       .map((t, k) => {
         const on = checked[k] || statusOf(d.id) === "done";
-        return `<li><label class="task"><input type="checkbox" data-task="${k}"${on ? " checked" : ""}><span class="task__t">${esc(t)}</span></label></li>`;
+        return `<li class="task-row">
+          <label class="task"><input type="checkbox" data-task="${k}"${on ? " checked" : ""}><span class="task__t">${esc(t)}</span></label>
+          <button class="task__more" type="button" data-brief="${k}">怎么学</button>
+        </li>`;
       })
       .join("");
     $("tAsk").textContent = d.notesPrompt ? "今日自问：" + d.notesPrompt : "";
@@ -927,6 +963,18 @@
       save();
       renderToday();
       toast(`已撤销第 ${DAYS[prev].day} 天，重新回到这一关`);
+    });
+
+    $("tTasks").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-brief]");
+      if (!btn) return;
+      e.preventDefault();
+      const d = DAYS[Math.min(currentIdx(), DAYS.length - 1)];
+      openBrief(d.id, Number(btn.dataset.brief));
+    });
+    $("briefClose").addEventListener("click", () => $("briefDlg").close());
+    $("briefDlg").addEventListener("click", (e) => {
+      if (e.target === $("briefDlg")) $("briefDlg").close();
     });
 
     $("timerToggle").addEventListener("click", () => {

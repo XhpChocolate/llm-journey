@@ -261,6 +261,52 @@ def write_quizzes(quizzes):
 
 
 # --------------------------------------------------------------------------
+# 任务卡：briefs/*.yaml -> dist/briefs.json
+# --------------------------------------------------------------------------
+def load_briefs(weeks):
+    day_tasks = {d["id"]: d["tasks"] for w in weeks for d in w["days"]}
+    briefs, errors = {}, []
+    files = sorted((ROOT / "briefs").glob("b*.yaml")) if (ROOT / "briefs").exists() else []
+    for f in files:
+        try:
+            data = load_yaml(f)
+        except Exception as exc:  # noqa: BLE001
+            errors.append(f"{f.name}: 解析失败 {exc}")
+            continue
+        for block in data.get("briefs") or []:
+            day = block.get("day")
+            if day not in day_tasks:
+                errors.append(f"{f.name}: 未知的 day {day}")
+                continue
+            items = block.get("tasks") or []
+            briefs.setdefault(day, [])
+            for it in items:
+                i = it.get("i")
+                tag = f"{day}#{i}"
+                if not isinstance(i, int) or not (0 <= i < len(day_tasks[day])):
+                    errors.append(f"{tag}: 任务下标越界（当天有 {len(day_tasks[day])} 个任务）")
+                    continue
+                for key in ("why", "practice", "pitfall"):
+                    if not it.get(key):
+                        errors.append(f"{tag}: 缺少 {key}")
+                if len(it.get("steps") or []) < 2:
+                    errors.append(f"{tag}: steps 至少 2 步")
+                if not (it.get("check") or []):
+                    errors.append(f"{tag}: 缺少验收标准 check")
+                briefs[day].append(dict(it))
+            briefs[day].sort(key=lambda x: x.get("i", 0))
+
+    covered = sum(len(v) for v in briefs.values())
+    return briefs, errors, covered
+
+
+def write_briefs(briefs):
+    (DIST / "briefs.json").write_text(
+        json.dumps(briefs, ensure_ascii=False, indent=1), encoding="utf-8"
+    )
+
+
+# --------------------------------------------------------------------------
 # plan.md
 # --------------------------------------------------------------------------
 def write_markdown(weeks, resources):
@@ -686,6 +732,14 @@ def main():
         return 1
     write_quizzes(quizzes)
 
+    briefs, b_errors, b_covered = load_briefs(weeks)
+    if b_errors:
+        print("任务卡校验失败：")
+        for e in b_errors:
+            print("  -", e)
+        return 1
+    write_briefs(briefs)
+
     write_markdown(weeks, resources)
     write_csv(weeks, resources)
     write_json(weeks, resources)
@@ -703,6 +757,8 @@ def main():
         print("未引用的资源:", ", ".join(unused))
     total_q = sum(len(v) for v in quizzes.values())
     pools = sorted(len(v) for v in quizzes.values())
+    total_tasks = sum(len(d["tasks"]) for w in weeks for d in w["days"])
+    print(f"任务卡: {b_covered} / {total_tasks} 个任务（{len(briefs)} 天）")
     print(f"题库: {len(quizzes)} 天 / {total_q} 题（每天 {pools[0]}–{pools[-1]} 题）" + (f"（缺 {len(q_missing)} 天：{', '.join(q_missing[:5])}…）" if q_missing else ""))
     print("生成:", out.relative_to(ROOT))
     return 0

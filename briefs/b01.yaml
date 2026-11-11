@@ -1,0 +1,305 @@
+# 任务卡：把「一句话任务」拆成可执行单元
+# 字段：i 任务下标 / why 为什么做 / learn 先看什么 / steps 动手步骤 / practice 练什么 / check 怎么算过 / pitfall 常见坑
+briefs:
+  - day: W01D01
+    tasks:
+      - i: 0
+        why: 工具链是后面 14 周的地基，装错版本会在第 3 周突然爆出来。
+        learn:
+          - 看 r-maven 的前两节（约 20 分钟），知道 Maven 管依赖和构建
+        steps:
+          - 装 JDK 21，终端执行 java -version，确认输出 21
+          - 装 Maven，执行 mvn -v，确认能看到 Java version 21
+          - IDEA 里把 Project SDK 设为 21
+        practice: 在空目录执行 mvn -v 和 java -version，把两行输出贴进笔记
+        check:
+          - java -version 显示 21
+          - mvn -v 里的 Java version 也是 21
+        pitfall: 多个 JDK 并存时，终端和 IDEA 可能指向不同版本，两边都要确认。
+
+      - i: 1
+        why: 后面每天都有代码产出，需要一个地方放，也顺便练 Git 习惯。
+        learn:
+          - 只需知道 git init、add、commit、push 四个命令
+        steps:
+          - GitHub 建仓库 llm-journey（private 或 public 都行）
+          - 本地 mkdir llm-journey 后 git init
+          - 写一个 README.md，提交并推送
+        practice: 完成一次首提交，能看到 commit 记录
+        check:
+          - 本地 git log 有 1 条提交
+          - 远端仓库能看到 README
+        pitfall: 没配 user.name 和 user.email 时 commit 会直接失败。
+
+      - i: 2
+        why: 终点不清，学两周就会怀疑自己在干什么，然后放弃。
+        learn: []
+        steps:
+          - 打开一个空白文档，写三行——做什么、给谁用、怎么算成功
+          - 成功的标准要可验证，例如能回答 20 个评测集里的 16 个
+        practice: 把这三行贴进 README 开头
+        check:
+          - 三行都能被外人看懂
+          - 成功标准里有数字或可演示的动作
+        pitfall: 写成「掌握大模型开发」这种无法验证的话，等于没写。
+
+      - i: 3
+        why: 靠意志力撑不过 14 周，靠固定时段可以。
+        learn: []
+        steps:
+          - 在日历里建一个每天重复的 2 小时日程
+          - 选定一天作为缓冲日（建议周日）
+        practice: 日历里能看到这一周的安排
+        check:
+          - 至少 5 天有固定时段
+          - 有 1 天明确写着缓冲
+        pitfall: 排 7 天满勤通常第三周就崩，留一天缓冲更可持续。
+
+  - day: W01D02
+    tasks:
+      - i: 0
+        why: 后面所有练习都往这个工程里加，先有一个能跑的空壳。
+        learn:
+          - 看 r-baeldung-start 里「起步依赖」和「运行应用」两节（约 25 分钟）
+        steps:
+          - 打开 start.spring.io，Project 选 Maven，Language Java
+          - Dependencies 加 Spring Web 和 Validation
+          - 生成下载，用 IDEA 打开，等 Maven 依赖下载完
+          - 找到 xxxApplication 类，直接 Run
+        practice: 启动后访问 http://localhost:8080，确认不是 404 页面
+        check:
+          - 控制台出现 Started ... in ... seconds
+          - 端口 8080 能连上
+        pitfall: 端口被占用会报 Port 8080 was already in use，改 server.port 或结束占用进程。
+
+      - i: 1
+        why: 先跑通「请求进来、JSON 出去」，这是后面所有接口的最小模型。
+        learn:
+          - 在生成的工程里找到 controller 包，照着写第一个类
+        steps:
+          - 新建 HelloController，加 @RestController
+          - 写 @GetMapping("/hello") 方法，返回 Map 或 record
+          - 用 curl 或浏览器访问验证
+          - 在 application.yml 里把 server.port 改成 8081，重启再验证
+        practice: 让 /hello 返回 {"ok":true}，并记录改端口前后的访问地址
+        check:
+          - 浏览器能看到 JSON
+          - 端口改了之后新地址能访问、旧地址不通
+        pitfall: 返回对象没有 getter 时可能序列化成空对象，用 record 或 Map 最省事。
+
+      - i: 2
+        why: 日志是以后排障的唯一证据，先学会读它。
+        learn: []
+        steps:
+          - 找到启动日志里的 Tomcat started on port 那一行
+          - 记录三行有用信息：端口、启动耗时、激活的 profile
+        practice: 把这三行贴进今日笔记
+        check:
+          - 能指出端口在哪一行
+          - 知道 profile 那一行长什么样
+        pitfall: 日志滚屏太快时，用 IDEA 的搜索或重定向到文件。
+
+  - day: W01D03
+    tasks:
+      - i: 0
+        why: 配置写死在代码里，换环境就要改代码，这是最常见的坏味道。
+        learn:
+          - 看 r-spring-config-props 的「外部化配置」一节（约 30 分钟）
+        steps:
+          - 在 application.yml 写 app.name 和 app.max-retry
+          - 新建 AppProperties 类，加 @ConfigurationProperties(prefix="app")
+          - 在 controller 里注入它并返回字段
+        practice: 修改 yml 里的值，重启后接口返回值跟着变
+        check:
+          - 改配置不需要动 Java 代码
+          - 注入的字段和 yml 一致
+        pitfall: 忘了加 @EnableConfigurationProperties 或 @Component 时注入会是 null。
+
+      - i: 1
+        why: dev 和 prod 的数据库、日志级别不同，profile 是标准做法。
+        learn:
+          - 看同一篇文档的「Profile」小节
+        steps:
+          - 建 application-dev.yml 和 application-prod.yml
+          - 用 spring.profiles.active 切换，分别在两个文件里写不同的 app.name
+        practice: 启动时加 --spring.profiles.active=prod，确认读到 prod 的值
+        check:
+          - 切换 profile 后接口返回不同的值
+          - 启动日志里显示激活的 profile
+        pitfall: yml 里重复定义同一个 key 时，后加载的 profile 文件才生效。
+
+      - i: 2
+        why: 密钥进 Git 就等于泄露，删了也还在历史里。
+        learn: []
+        steps:
+          - 把密钥从 yml 挪到环境变量，代码里用 ${DEEPSEEK_API_KEY}
+          - 建 application-local.yml 放本地值，加进 .gitignore
+          - 提交后到 GitHub 确认文件没被推上去
+        practice: 用 git status 确认 local 文件被忽略
+        check:
+          - 仓库里搜不到真实密钥
+          - 环境变量注入后应用能读到
+        pitfall: 已经提交过的密钥要视为泄露，换新密钥而不是只删文件。
+
+  - day: W01D04
+    tasks:
+      - i: 0
+        why: 调外部接口是后面调大模型的基础，先把这个动作练熟。
+        learn:
+          - 看 r-webclient 的「WebClient 创建与 retrieve」一节（约 30 分钟）
+        steps:
+          - 配一个 WebClient Bean，设置 baseUrl
+          - 调一个公开 API（例如 httpbin 或公开天气接口）
+          - 把响应打印出来，观察状态码和 body
+        practice: 写一个 /proxy 接口，把外部 API 的结果原样返回
+        check:
+          - 能拿到 200 和响应体
+          - 打印出了状态码
+        pitfall: 忘了 block() 时 Mono 不会执行，看起来什么都没发生。
+
+      - i: 1
+        why: 没有超时的 HTTP 调用会把线程耗光，一次故障拖垮整个服务。
+        learn: []
+        steps:
+          - 设置连接超时 2 秒、读超时 5 秒
+          - 故意请求一个不存在的路径，构造 404
+          - 用 httpbin 的 /delay/10 构造超时
+        practice: 两种失败都复现一次，记录异常类型
+        check:
+          - 404 和超时都能抛出来
+          - 日志里能看到是哪种失败
+        pitfall: WebClient 的 error 处理要显式 onStatus，否则 4xx 会被当正常响应。
+
+      - i: 2
+        why: 外部失败要变成你自己的错误码，前端才知道怎么处理。
+        learn: []
+        steps:
+          - 捕获 WebClientResponseException 和超时异常
+          - 转成统一结构 code/message/traceId
+        practice: 让 /proxy 在外部失败时返回 502 和你的错误码
+        check:
+          - 外部 404 时你的接口不返回 500
+          - 错误体里有错误码
+        pitfall: 把原始异常堆栈直接返回给前端，既泄露信息又难用。
+
+  - day: W01D05
+    tasks:
+      - i: 0
+        why: 用 record 定义 DTO，代码短、不可变、序列化行为可预期。
+        learn:
+          - 看 r-jackson 的 README 里 ObjectMapper 配置示例（20 分钟）
+        steps:
+          - 定义 ChatRequest、ChatResponse、ErrorResponse 三个 record
+          - 在 controller 里用它们作为入参和返回值
+        practice: 用 curl 发一个 JSON 请求，确认能反序列化
+        check:
+          - 三个 record 都能正常序列化
+          - 字段名和 JSON 一致
+        pitfall: record 没有无参构造，某些老框架会报错，Spring 6 之后没问题。
+
+      - i: 1
+        why: 真实调用方会漏字段、传错类型，不处理就是 500。
+        learn: []
+        steps:
+          - 发一个缺少必填字段的请求，观察报错
+          - 发一个类型不符的请求（数字传成字符串）
+          - 给请求 DTO 加校验注解，让错误变成 400 而不是 500
+        practice: 两种坏请求都能得到可读的错误提示
+        check:
+          - 缺字段返回 400 且有提示
+          - 日志里没有未处理异常
+        pitfall: 只加注解不加 @Valid 时校验不会生效。
+
+      - i: 2
+        why: 全局配置一次，后面所有接口行为一致。
+        learn: []
+        steps:
+          - 配置 jackson 的 property-naming-strategy 和 fail-on-unknown-properties
+          - 验证未知字段不再报错
+        practice: 发一个带多余字段的请求，确认能正常处理
+        check:
+          - 多余字段被忽略
+          - 命名策略生效
+        pitfall: 改全局配置会影响所有接口，改完要回归一遍已有接口。
+
+  - day: W01D06
+    tasks:
+      - i: 0
+        why: 前端只认一种错误结构，否则每个接口都要单独处理。
+        learn:
+          - 看 r-baeldung-exception 的 @ControllerAdvice 示例（30 分钟）
+        steps:
+          - 定义 ErrorResponse(code, message, traceId)
+          - 写 GlobalExceptionHandler，处理业务异常、参数异常、兜底 Exception
+          - 让 404 和 500 都走同一结构
+        practice: 人为抛一个异常，确认返回统一结构
+        check:
+          - 三类异常返回同一结构
+          - 错误码能区分原因
+        pitfall: 兜底 Exception 会吞掉堆栈，记得同时打日志。
+
+      - i: 1
+        why: 结构化日志才能被检索和聚合，纯文本只能人眼扫。
+        learn: []
+        steps:
+          - 关键路径加 info 日志，带上方法名和耗时
+          - 配置日志格式，至少包含时间、级别、traceId、消息
+        practice: 调一次接口，从日志里还原这次请求
+        check:
+          - 日志里能看出请求开始和结束
+          - 有耗时数字
+        pitfall: 在循环里打 info 会让日志爆量，循环用 debug。
+
+      - i: 2
+        why: 一个 traceId 能把一次请求跨多个类、多个服务的日志串起来。
+        learn: []
+        steps:
+          - 写一个 OncePerRequestFilter，生成 traceId 放进 MDC
+          - 响应头带上 X-Trace-Id
+          - 日志 pattern 里加 %X{traceId}
+        practice: 请求一次，用响应头的 traceId 去日志里搜，能搜到全部相关行
+        check:
+          - 响应头有 traceId
+          - 该 traceId 在日志里出现多次
+        pitfall: 异步线程里 MDC 会丢，需要手动传递。
+
+  - day: W01D07
+    tasks:
+      - i: 0
+        why: 你改代码时，测试是唯一能告诉你「没弄坏」的东西。
+        learn:
+          - 看 r-junit 的断言和生命周期两节（35 分钟）
+        steps:
+          - 给 /hello 写正常路径测试
+          - 给 /proxy 写超时和外部 404 两个测试
+          - 用 MockMvc 或直接调用 service
+        practice: 三个测试全部通过
+        check:
+          - mvn test 全绿
+          - 失败时能看到具体断言
+        pitfall: 测试里连真实外部 API 会又慢又不稳，用 mock。
+
+      - i: 1
+        why: 外部依赖必须隔离，否则测试不可重复。
+        learn:
+          - 看 r-mockito 官网首页的示例（20 分钟）
+        steps:
+          - 用 @Mock 造一个假的 WebClient 调用结果
+          - 用 when/thenReturn 控制返回，用 thenThrow 模拟失败
+        practice: 让同一段代码在两种 mock 下走不同分支
+        check:
+          - 不联网也能跑测试
+          - 两种分支都被覆盖
+        pitfall: mock 了不该 mock 的静态方法会很痛苦，优先抽接口。
+
+      - i: 2
+        why: 不复盘的周等于白过，下周还会踩同样的坑。
+        learn: []
+        steps:
+          - 统计本周完成率
+          - 写三条：完成了什么、卡在哪、下周砍掉什么
+        practice: 在「复盘」页填完第 1 周
+        check:
+          - 三条都具体到事件
+          - 有一条是「砍掉」而不是「增加」
+        pitfall: 只写完成了什么，下周不会有任何改变。
