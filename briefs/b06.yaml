@@ -1,66 +1,223 @@
-# 轻量任务卡：第 7-10 周（只绑材料）
+# 第 7-8 周：完整卡；第 9-10 周：轻量卡
 briefs:
   - day: W07D01
     tasks:
       - i: 0
+        why: 记忆分层不清，会把聊天记录和用户偏好混成一锅。
         refs: [r-sai-memory]
         focus: 看 ChatMemory 与窗口策略
+        steps:
+          - 实现会话记忆，对比窗口 10 与 30 的差异
+          - 单独存一份用户偏好（3-5 个字段）
+          - 写笔记：哪些信息该记、哪些必须忘
+        practice: 两种记忆同时工作
+        check:
+          - 会话内记得住
+          - 跨会话记得偏好
+        pitfall: 把全部历史写进长期记忆，越用越乱且无法删除。
+
   - day: W07D02
     tasks:
       - i: 0
+        why: 两种规划范式各有代价，面试和设计都要能说清。
         refs: [r-anthropic-agents]
         focus: 看 workflow 与 agent 的对比那节
+        steps:
+          - 实现 ReAct 循环（限最大步数）
+          - 实现先出计划再执行（允许中途改计划）
+          - 同一任务对比步数与成功率
+        practice: 两版都有可运行实现
+        check:
+          - 循环能终止
+          - 计划可修改
+        pitfall: 计划生成后从不更新，执行到一半就失效。
+
   - day: W07D03
     tasks:
       - i: 0
+        why: 能调工具之后，权限就是系统的安全边界。
         refs: [r-owasp-llm]
         focus: 看 Excessive Agency 一类
+        steps:
+          - 给工具加入参校验与白名单
+          - 危险动作（退款/删除）要求二次确认
+          - 用 3 个畸形参数攻击自己
+        practice: 攻击全部被拦住
+        check:
+          - 越权被拒
+          - 有审计日志
+        pitfall: 只靠 Prompt 约束权限，模型被诱导就失效。
+
   - day: W07D04
     tasks:
       - i: 0
+        why: 没有分步记录，出错只能猜。
         refs: [r-otel-genai]
-        focus: 看 LLM span 属性
+        focus: 看 LLM span 属性约定
+        steps:
+          - 每步记录输入、输出、耗时、状态
+          - 人为制造一次失败，只靠日志定位
+          - 写成三步排查 SOP
+        practice: 一次完整定位演练
+        check:
+          - 能定位到具体步骤
+          - SOP 别人能照着用
+        pitfall: 只记最终答案，中间过程全丢。
+
   - day: W07D05
     tasks:
       - i: 0
-        refs: [r-sai-rag]
+        why: 幻觉消灭不了，只能收敛到可接受。
+        refs: [r-sai-rag, v-prompt-agent-mcp-10min]
         focus: 看引用与拒答的做法
+        steps:
+          - 事实类问题先查工具或检索
+          - 答案带引用编号
+          - 低置信度直接拒答
+        practice: 用 5 个无依据问题验证
+        check:
+          - 引用可核对
+          - 该拒就拒
+        pitfall: 把拒答率压到 0，等于把幻觉送出去。
+
   - day: W07D06
     tasks:
       - i: 0
+        why: 不知道钱花在哪，优化就是盲调。
         refs: [v-kvcache-promptcache]
         focus: 8 分钟，讲缓存命中
+        steps:
+          - 统计每次请求 token、费用、耗时
+          - 试一次模型路由：简单问题走小模型
+          - 试缓存命中率
+        practice: 一张成本分布小表
+        check:
+          - 有细分数据
+          - 有降本尝试与效果
+        pitfall: 只算成功请求，忽略重试与失败的开销。
+
+  - day: W07D07
+    tasks:
+      - i: 0
+        why: 自评能定位最弱的一环，比感觉可靠。
+        refs: []
+        steps:
+          - 按超时/重试/权限/日志/成本各打 1-5 分
+          - 标出最弱项并写一条改进
+        practice: 一张自评表
+        check:
+          - 五项都有分
+          - 最弱项有动作
+        pitfall: 全部打高分，自评就失去意义。
 
   - day: W08D01
     tasks:
       - i: 0
+        why: 并发不是把线程开大，而是把压力控住。
         refs: [v-threadpool]
-        focus: 看线程池参数配合
+        focus: 看线程池参数怎么配合
+        steps:
+          - 用信号量限制并发模型请求数
+          - 压测 20 并发，记录 P95 与错误率
+          - 加排队与拒绝策略
+        practice: 一份压测数据
+        check:
+          - 限流生效
+          - 有 P95 数字
+        pitfall: 只调大线程数不设限，直接把下游打挂。
+
   - day: W08D02
     tasks:
       - i: 0
+        why: 下游挂了，你的服务不能跟着挂。
         refs: [r-resilience4j]
         focus: 看 CircuitBreaker 状态机
+        steps:
+          - 配失败率阈值与半开探测
+          - 实现降级：缓存答案或友好提示
+          - 人为关掉模型服务验证
+        practice: 验证记录
+        check:
+          - 熔断生效
+          - 降级文案可用
+        pitfall: 降级后仍然无限重试，等于没降级。
+
   - day: W08D03
     tasks:
       - i: 0
+        why: Prompt 是核心逻辑，必须能回滚与对比。
         refs: [v-ng-prompt]
         focus: 看版本管理思路
+        steps:
+          - 抽到外部模板，加版本号
+          - 建变更记录：改了什么、为什么、指标变化
+          - 支持按版本切换
+        practice: 能切回上一版
+        check:
+          - 版本可切换
+          - 有变更记录
+        pitfall: 没有版本，效果变差时无法定位是哪次改动。
+
   - day: W08D04
     tasks:
       - i: 0
+        why: 效果回归要像编译失败一样被拦住。
         refs: [v-ragas]
         focus: 看自动化评测脚本
+        steps:
+          - 评测脚本接 CI
+          - 设阈值，低于基线就失败
+          - 故意改坏 Prompt 验证能拦住
+        practice: CI 能跑并失败一次
+        check:
+          - CI 触发正常
+          - 阈值生效
+        pitfall: 阈值随意调低，CI 变成摆设。
+
   - day: W08D05
     tasks:
       - i: 0
+        why: 别人 clone 后一条命令能起来，才算交付。
         refs: [v-docker-40min]
         focus: 只看 Dockerfile 与 compose
+        steps:
+          - 写多阶段构建的 Dockerfile
+          - compose 起 app + pgvector，配健康检查
+          - 干净环境验证启动
+        practice: 一条命令起服务
+        check:
+          - 启动成功
+          - 健康检查通过
+        pitfall: 容器里写死密钥与本地路径。
+
   - day: W08D06
     tasks:
       - i: 0
+        why: 能演示失败路径，才说明系统可靠。
         refs: [v-hm-rag-agent-project]
         focus: 只看目录结构与 README
+        steps:
+          - 准备三条演示线：成功、失败兜底、越权被拦
+          - 找人照 README 跑一遍并记录卡点
+        practice: 他人验证记录
+        check:
+          - 三条都能演示
+          - 有人独立跑通
+        pitfall: 只演示成功路径，问题被藏起来。
+
+  - day: W08D07
+    tasks:
+      - i: 0
+        why: 复盘的产出是风险清单，不是感想。
+        refs: []
+        steps:
+          - 列「不敢上线的 5 个理由」
+          - 按影响与发生概率排序
+        practice: 一份排序后的清单
+        check:
+          - 五条都具体
+          - 有排序依据
+        pitfall: 写成「还不够好」这种模糊理由。
 
   - day: W09D01
     tasks:
@@ -86,12 +243,12 @@ briefs:
     tasks:
       - i: 0
         refs: [v-otel-itlaoqi]
-        focus: 排障演练前再看一遍链路部分
+        focus: 演练前再看一遍链路部分
   - day: W09D06
     tasks:
       - i: 0
         refs: [v-kvcache-promptcache]
-        focus: 成本相关的部分
+        focus: 成本相关部分
 
   - day: W10D01
     tasks:
@@ -112,7 +269,7 @@ briefs:
     tasks:
       - i: 0
         refs: [v-fc-vs-mcp]
-        focus: 看工具权限与执行边界的讨论
+        focus: 看工具权限与执行边界
   - day: W10D05
     tasks:
       - i: 0
