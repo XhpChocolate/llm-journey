@@ -1,0 +1,275 @@
+# 任务卡：第 3 周（RAG 数据链路）
+briefs:
+  - day: W03D01
+    tasks:
+      - i: 0
+        why: 先画图再动手，否则会写成「向量库 + 拼接」的假 RAG。
+        refs: [r-sai-rag, v-rag-workflow]
+        focus: 视频只看前 10 分钟讲全流程的部分
+        steps:
+          - 画出四段：解析入库、检索、组装、生成
+          - 标出每一段的输入输出
+        practice: 一张能讲给别人听的架构图
+        check:
+          - 四段齐全
+          - 每段有输入输出
+        pitfall: 把 RAG 画成「chat + 搜索框」，说明还没理解知识供给。
+
+      - i: 1
+        why: 不知道自己为什么要 RAG，就会盲目堆参数。
+        refs: []
+        steps:
+          - 写下模型不知道什么（你的私有文档）
+          - 写下谁会用、一周问几次
+        practice: 一页问题定义
+        check:
+          - 有具体文档类型
+          - 有使用频率估计
+        pitfall: 写成「做一个万能问答」等于没定义。
+
+      - i: 2
+        why: 知道边界才不会硬套技术。
+        refs: []
+        steps:
+          - 列 3 个不适合 RAG 的场景（如实时行情、纯计算）
+          - 每个写一句为什么
+        practice: 得到边界清单
+        check:
+          - 三条都合理
+          - 能说出替代方案
+        pitfall: 只写「数据太少」这种模糊理由。
+
+  - day: W03D02
+    tasks:
+      - i: 0
+        why: 解析质量直接决定检索上限，脏数据后面救不回来。
+        refs: [r-tika]
+        focus: 看 Tika 的 AutoDetectParser 示例
+        steps:
+          - 用 Tika 解析一个 PDF 和一个 DOCX
+          - 打印文本长度与页数
+        practice: 两种格式都能抽出文本
+        check:
+          - 文本非空
+          - 能说出页数
+        pitfall: 扫描版 PDF 抽出来是空字符串，需要 OCR。
+
+      - i: 1
+        why: 没有元数据就没法做引用溯源。
+        refs: []
+        steps:
+          - 抽取文件名、页码、章节标题
+          - 存成结构化的 metadata
+        practice: 每个片段都带来源信息
+        check:
+          - 至少有文件名和页码
+          - 能根据片段反查原文位置
+        pitfall: 只存文件名，多页文档无法定位。
+
+      - i: 2
+        why: 真实文档一定有坏的，异常处理要提前写。
+        refs: []
+        steps:
+          - 准备一个损坏或加密的 PDF
+          - 捕获异常并记录文件名
+        practice: 坏文件不会中断整个批处理
+        check:
+          - 异常被捕获
+          - 日志里能看到是哪个文件
+        pitfall: 一个坏文件让整批解析失败，是常见事故。
+
+  - day: W03D03
+    tasks:
+      - i: 0
+        why: 切片策略决定召回质量的上下限。
+        refs: [r-sai-rag]
+        focus: 看「ETL Pipeline」里的切分部分
+        steps:
+          - 实现固定长度切片（含重叠）
+          - 实现按标题切片
+        practice: 两种策略各切一份文档
+        check:
+          - 片段数与平均长度有记录
+          - 重叠生效
+        pitfall: 重叠设太大，检索结果会大量重复。
+
+      - i: 1
+        why: 不对比就不知道哪种适合你的文档。
+        refs: []
+        steps:
+          - 用同一份文档跑两种策略
+          - 对比片段数、平均长度、切断句子的比例
+        practice: 选一种并写理由
+        check:
+          - 有量化对比
+          - 理由基于数据
+        pitfall: 只看片段数不看可读性。
+
+      - i: 2
+        why: 元数据决定后面能不能过滤和引用。
+        refs: []
+        steps:
+          - 给每个片段加 source、section、seq 三个字段
+          - 重新入库，确认字段写进去了
+        practice: 任意抽一条片段能说出它来自哪一节
+        check:
+          - 三个字段都有
+          - 序号连续
+        pitfall: 序号在重跑时重置，导致去重失效。
+
+  - day: W03D04
+    tasks:
+      - i: 0
+        why: 把黑箱拆开，才不会把「相似」当玄学。
+        refs: [r-sai-embedding]
+        focus: 看 Embedding API 的返回结构
+        steps:
+          - 调 embeddings 接口拿两条文本的向量
+          - 打印维度与范数
+        practice: 拿到两组向量
+        check:
+          - 维度符合预期
+          - 数值不是全 0
+        pitfall: 不同模型维度不同，混用会导致查询永远不准。
+
+      - i: 1
+        why: 手算一次余弦，比看十篇博客都清楚。
+        refs: []
+        steps:
+          - 用点积除以模长算两条文本相似度
+          - 找一对近义句和一对无关句对比
+        practice: 相似度数值有区分度
+        check:
+          - 近义句分数更高
+          - 数值可复现
+        pitfall: 忘记归一化时，长文本分数天然偏高。
+
+      - i: 2
+        why: 成本和延迟都是从这里开始累积的。
+        refs: []
+        steps:
+          - 记录一次 embedding 调用的 token 与费用
+          - 估算 1 万条片段的成本
+        practice: 给出一个成本数字
+        check:
+          - 有单价与总量
+          - 能说出批量上限
+        pitfall: 逐条调用而不是批量，成本和耗时都翻倍。
+
+  - day: W03D05
+    tasks:
+      - i: 0
+        why: 用自己的库跑一次，才知道向量检索长什么样。
+        refs: [r-pgvector, r-pgvector-docker]
+        focus: 看 docker run 命令与建表语句
+        steps:
+          - docker 起 pgvector，建 vector 列的表
+          - 插入 20 条带向量的片段
+        practice: 表里能看到 20 行
+        check:
+          - 扩展已启用
+          - 数据插入成功
+        pitfall: 忘了 CREATE EXTENSION vector，建表会报类型不存在。
+
+      - i: 1
+        why: SQL 是最透明的检索实现，方便对照框架。
+        refs: [r-pgvector]
+        focus: 看最近邻查询的运算符
+        steps:
+          - 写一条 ORDER BY 向量距离 LIMIT 3 的查询
+          - 加上元数据过滤条件
+        practice: 能按相似度返回 3 条
+        check:
+          - 结果按距离排序
+          - 过滤生效
+        pitfall: 距离运算符选错（<-> 与 <=>）排序会反。
+
+      - i: 2
+        why: 数据量上来后，暴力扫描会拖垮查询。
+        refs: [r-pgvector]
+        focus: 看 HNSW 索引那一节
+        steps:
+          - 建 HNSW 索引，记录构建耗时
+          - 对比建索引前后的查询耗时
+        practice: 有一组前后对比数据
+        check:
+          - 索引创建成功
+          - 查询变快或有明确结论
+        pitfall: 小数据量看不出差异，别急着下结论。
+
+  - day: W03D06
+    tasks:
+      - i: 0
+        why: 框架封装了 SQL，但默认值往往不适合你的场景。
+        refs: [r-sai-vectordb, r-sai-pgvector]
+        focus: 看配置项与 similaritySearch 签名
+        steps:
+          - 配置 PGVector 的 VectorStore Bean
+          - 写入切片并检索
+        practice: 用代码检索出 top3
+        check:
+          - 写入成功
+          - 检索结果与 SQL 一致
+        pitfall: 默认维度与你的 embedding 不一致会直接报错。
+
+      - i: 1
+        why: 过滤条件能显著降噪，但要先确认它真的生效。
+        refs: []
+        steps:
+          - 加一个元数据过滤（如只看某一章节）
+          - 验证过滤后的结果范围
+        practice: 过滤前后结果对比
+        check:
+          - 过滤生效
+          - 没有越界结果
+        pitfall: 过滤字段没建索引时，性能会断崖式下降。
+
+      - i: 2
+        why: 对照 SQL 才能确认框架没有偷偷改语义。
+        refs: []
+        steps:
+          - 同一查询分别用框架和 SQL 跑
+          - 对比 top3 是否一致
+        practice: 两条路径结果一致
+        check:
+          - 排序一致
+          - 分数差异可解释
+        pitfall: 框架默认 topK 与你的假设不同，结论会错。
+
+  - day: W03D07
+    tasks:
+      - i: 0
+        why: 能演示的检索才说明链路真的通了。
+        refs: []
+        steps:
+          - 写 /search 接口，返回 top3 与来源
+          - 用 5 个真实问题试
+        practice: 5 条结果都能看到出处
+        check:
+          - 接口可用
+          - 每条有来源
+        pitfall: 只返回片段不返回来源，用户无法核对。
+
+      - i: 1
+        why: 失败案例比成功案例更能指导下一步。
+        refs: []
+        steps:
+          - 记录 5 条查不准的案例
+          - 每条写一句猜测原因
+        practice: 得到 badcase 列表
+        check:
+          - 五条都具体
+          - 有初步归因
+        pitfall: 写「效果不好」这种无信息的结论。
+
+      - i: 2
+        why: 每周收口才不会欠账滚雪球。
+        refs: []
+        steps:
+          - 写本周完成率与最大卡点
+          - 更新疑点清单
+        practice: 复盘有结论
+        check:
+          - 有数据
+          - 有下周动作
+        pitfall: 只写感受不写事实。

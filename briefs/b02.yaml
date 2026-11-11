@@ -1,0 +1,283 @@
+# 任务卡：第 2-3 周
+briefs:
+  - day: W02D01
+    tasks:
+      - i: 0
+        why: 不套框架先手写一次，才知道 Spring AI 到底替你做了什么。
+        refs: [r-deepseek-chat]
+        focus: 只看「创建对话补全」的请求体示例
+        steps:
+          - 用 WebClient POST 到 /chat/completions，Header 带 Authorization
+          - 请求体写 model、messages、temperature 三项就够
+          - 打印完整响应 JSON，不要只打印 content
+        practice: 跑通一次问答，把响应贴进笔记
+        check:
+          - 拿到 200 和 choices[0].message.content
+          - 能看到 usage 字段
+        pitfall: 请求体字段名写错（例如 message 单数）会返回 400，先看响应体里的错误信息。
+
+      - i: 1
+        why: 不知道一次调用花多少钱，就没法做成本控制。
+        refs: [r-deepseek-docs]
+        focus: 查「计费」那一节
+        steps:
+          - 记录 usage.prompt_tokens、completion_tokens、total_tokens
+          - 用单价算出这一次调用花了多少
+          - 连续问 3 次，看 token 随对话变长怎么涨
+        practice: 做一张三行的小表，写上 token 与费用
+        check:
+          - 三次调用都有 token 记录
+          - 能说出为什么第二次更贵
+        pitfall: 把 图片或长文本塞进去时 token 会暴涨，先量再优化。
+
+      - i: 2
+        why: role 的语义错了，模型行为会莫名其妙。
+        refs: []
+        steps:
+          - 分别用 system、user、assistant 各发一次，观察差异
+          - 写三行笔记说明每个 role 的作用
+        practice: 把 system 去掉再问一次，对比答案风格
+        check:
+          - 能说清 system 与 user 的区别
+          - 记录了去掉 system 后的变化
+        pitfall: 把历史 assistant 消息写错顺序，模型会接着错误上下文继续说。
+
+  - day: W02D02
+    tasks:
+      - i: 0
+        why: 流式是聊天体验的分水岭，先亲眼看到分块到达。
+        refs: [r-deepseek-chat]
+        focus: 看 stream 参数说明
+        steps:
+          - 请求体加 stream true，用 curl -N 观察
+          - 记录第一个 data 块到达的时间
+        practice: 把首字延迟和总耗时都记下来
+        check:
+          - 能看到多个 data 块
+          - 有首字延迟数字
+        pitfall: 用普通 curl 不加 -N 会等全部结束才显示，看起来像没流式。
+
+      - i: 1
+        why: 后端要能把流转发给浏览器，还要能中途取消。
+        refs: [r-deepseek-chat]
+        steps:
+          - 用 SseEmitter 返回流，设置超时
+          - 客户端断开时取消上游请求
+          - 用浏览器或 curl 验证逐字出现
+        practice: 流式过程中刷新页面，确认后端停止生成
+        check:
+          - 前端逐字出现
+          - 断开后日志里有取消记录
+        pitfall: 不处理断开会让上游一直生成，白烧 token。
+
+      - i: 2
+        why: 首字延迟才是体感，总耗时只是账单。
+        refs: []
+        steps:
+          - 记录三次请求的 TTFT 和总耗时
+          - 对比流式与非流式的体感差异
+        practice: 写一句话结论，说明什么时候该用流式
+        check:
+          - 有 TTFT 数据
+          - 结论能指导选型
+        pitfall: 只优化总耗时，用户依然觉得「卡」。
+
+  - day: W02D03
+    tasks:
+      - i: 0
+        why: 从手写到框架，要能说清框架省了哪一层。
+        refs: [r-sai-chatclient, v-yupi-springai]
+        focus: 看 pom 依赖与 application.yml 配置那两节
+        steps:
+          - 加 Spring AI 依赖，配置 api-key 与 model
+          - 先跑通一个最简单的 ChatClient 调用
+        practice: 用框架重写 D1 的接口
+        check:
+          - 依赖能下载成功
+          - 能返回正常回答
+        pitfall: 版本与 Spring Boot 不匹配时启动会报 NoSuchMethod，先对齐版本。
+
+      - i: 1
+        why: 流式接口是最容易出问题的地方，要在框架层也跑通。
+        refs: [r-sai-chatclient]
+        focus: 看 streaming 那一节
+        steps:
+          - 用 ChatClient 的流式 API 重写 /chat/stream
+          - 对比手写版的响应格式
+        practice: 两个版本都能逐字输出
+        check:
+          - 流式正常
+          - 异常时不会静默失败
+        pitfall: 流式里抛异常不会走统一异常处理，要单独捕获。
+
+      - i: 2
+        why: 写对比表是把「用过」变成「理解」的最快方式。
+        refs: []
+        steps:
+          - 列三行：请求组装、流式解析、工具调用
+          - 每行写手写版与框架版各自要做什么
+        practice: 完成一张两列对比表
+        check:
+          - 三项都有对比
+          - 能指出框架的边界在哪
+        pitfall: 只写「框架更方便」等于没写，要写具体省了哪段代码。
+
+  - day: W02D04
+    tasks:
+      - i: 0
+        why: Prompt 是唯一你能完全控制的变量，先会写结构。
+        refs: [r-anthropic-prompt, r-prompting-guide]
+        focus: 看「角色设定」与「示例」两节
+        steps:
+          - 写 system 定角色与输出格式
+          - 写 user 只放本次输入
+          - 加一条明确的字数限制
+        practice: 对比有/无 system 的输出差异
+        check:
+          - system 与 user 职责清晰
+          - 输出符合字数要求
+        pitfall: 把要求全塞进 user、system 留空，模型会摇摆。
+
+      - i: 1
+        why: 不控制变量就没法判断哪句话起了作用。
+        refs: []
+        steps:
+          - 固定其他条件，只改一项：加/不加 few-shot
+          - 再只改 temperature 0 与 0.8
+          - 每组跑 3 次，记录输出差异
+        practice: 得到一张 5 行的对照表
+        check:
+          - 每行只有一个变量
+          - 能指出哪个因素影响最大
+        pitfall: 一次改两个变量，结论无法归因。
+
+      - i: 2
+        why: 记录差异才能形成可复用的经验。
+        refs: []
+        steps:
+          - 把对照结果整理成一页笔记
+          - 写下你以后默认会用的三条规则
+        practice: 笔记里至少有一条是「不要这么做」
+        check:
+          - 有可执行规则
+          - 规则来自实验而不是感觉
+        pitfall: 只记录成功案例，失败经验更有价值。
+
+  - day: W02D05
+    tasks:
+      - i: 0
+        why: 输出要能被代码消费，JSON 是唯一可靠的方式。
+        refs: [r-sai-structured]
+        focus: 看 BeanOutputConverter 示例
+        steps:
+          - 定义 record，用 BeanOutputConverter 生成格式约束
+          - 在 Prompt 里带上格式说明
+          - 解析成对象并打印
+        practice: 让模型返回一个含 3 个字段的对象
+        check:
+          - 解析成功
+          - 字段类型正确
+        pitfall: record 字段名与 JSON 不一致时会解析成 null。
+
+      - i: 1
+        why: 真实模型一定会偶尔返回非法 JSON，必须提前处理。
+        refs: []
+        steps:
+          - 人为要求模型输出「不要 JSON」，观察报错
+          - 加一次重试，仍失败则返回兜底值
+        practice: 记录失败时的原始输出
+        check:
+          - 失败不会让接口 500
+          - 日志里有原始输出
+        pitfall: 解析失败直接抛异常，前端会看到 500 而不是可读错误。
+
+      - i: 2
+        why: 校验是最后一道闸，别指望模型永远守规矩。
+        refs: []
+        steps:
+          - 对关键字段加非空与范围校验
+          - 校验失败时返回明确错误码
+        practice: 构造一个字段越界的输出，确认被拦住
+        check:
+          - 越界能拦住
+          - 错误信息可读
+        pitfall: 只校验类型不校验业务范围，等于没校验。
+
+  - day: W02D06
+    tasks:
+      - i: 0
+        why: 手写一次往返，才知道工具调用不是魔法。
+        refs: [r-openai-fc, r-sai-tools]
+        focus: 看 tools 定义与 tool_calls 返回结构
+        steps:
+          - 定义 tools 数组（name、description、parameters）
+          - 发请求，拿到 tool_calls
+          - 本地执行后把结果作为 role tool 的消息再发一次
+        practice: 完成一次完整往返
+        check:
+          - 能收到 tool_calls
+          - 第二次请求能基于结果回答
+        pitfall: 忘记把工具结果回填，模型会一直要求调用。
+
+      - i: 1
+        why: 注解版才是日常写法，但要懂它生成了什么。
+        refs: [r-sai-tools]
+        steps:
+          - 用 @Tool 注解注册同一个工具
+          - 对比注解生成的 schema 与手写版差异
+        practice: 两种方式都能被模型正确调用
+        check:
+          - 注解版可用
+          - 能说出注解帮你做了什么
+        pitfall: 方法名太笼统（如 query）模型会选错，描述要具体。
+
+      - i: 2
+        why: 一次工具调用是两次模型请求，成本会翻倍。
+        refs: []
+        steps:
+          - 记录一次带工具的请求经过了几次模型调用
+          - 画出往返图
+        practice: 图上标出每次请求的 token 数
+        check:
+          - 次数正确
+          - 能估算一次工具调用的额外成本
+        pitfall: 多轮工具调用会线性放大成本，要有最大步数。
+
+  - day: W02D07
+    tasks:
+      - i: 0
+        why: M1 的验收标准是「异常路径不崩」，不是功能多。
+        refs: [r-resilience4j]
+        focus: 看 Retry 与 TimeLimiter 两节
+        steps:
+          - 给模型调用加超时与重试（指数退避）
+          - 统一异常结构，保证 4xx/5xx 都有错误码
+        practice: 断网、超时、非法输出三种情况各测一次
+        check:
+          - 三种情况都不返回 500 裸异常
+          - 重试次数符合配置
+        pitfall: 把不可重试的 4xx 也重试，会放大错误。
+
+      - i: 1
+        why: 自测清单能防止「演示时才发现没做」。
+        refs: []
+        steps:
+          - 列 8 条：流式、超时、重试、异常、日志、traceId、单测、配置
+          - 逐条打勾或写未完成原因
+        practice: 清单全部有结论
+        check:
+          - 没有空着的项
+          - 未完成的写了原因
+        pitfall: 只勾自己确定做了的，回避没做的。
+
+      - i: 2
+        why: 总结一次才知道下个阶段该补什么。
+        refs: []
+        steps:
+          - 写做到什么、欠什么、下周改什么
+          - 把「欠什么」转成具体任务
+        practice: 得到三条可执行结论
+        check:
+          - 每条都能落到动作
+          - 有一条是砍掉某个做法
+        pitfall: 总结写成流水账，下周不会有变化。
