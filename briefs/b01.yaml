@@ -4,6 +4,8 @@ briefs:
   - day: W01D01
     tasks:
       - i: 0
+        refs: [r-maven]
+        focus: 看前两节即可，别通读
         why: 工具链是后面 14 周的地基，装错版本会在第 3 周突然爆出来。
         learn:
           - 看 r-maven 的前两节（约 20 分钟），知道 Maven 管依赖和构建
@@ -58,6 +60,8 @@ briefs:
   - day: W01D02
     tasks:
       - i: 0
+        refs: [r-baeldung-start, v-springboot3-sgg]
+        focus: 只看「生成工程」和「运行」两节；视频挑前 3 集，约 40 分钟
         why: 后面所有练习都往这个工程里加，先有一个能跑的空壳。
         learn:
           - 看 r-baeldung-start 里「起步依赖」和「运行应用」两节（约 25 分钟）
@@ -73,6 +77,8 @@ briefs:
         pitfall: 端口被占用会报 Port 8080 was already in use，改 server.port 或结束占用进程。
 
       - i: 1
+        refs: [r-spring-boot-docs]
+        focus: 搜 @RestController 那一节
         why: 先跑通「请求进来、JSON 出去」，这是后面所有接口的最小模型。
         learn:
           - 在生成的工程里找到 controller 包，照着写第一个类
@@ -102,6 +108,8 @@ briefs:
   - day: W01D03
     tasks:
       - i: 0
+        refs: [r-spring-config-props]
+        focus: 看「外部化配置」与「@ConfigurationProperties」两节
         why: 配置写死在代码里，换环境就要改代码，这是最常见的坏味道。
         learn:
           - 看 r-spring-config-props 的「外部化配置」一节（约 30 分钟）
@@ -116,6 +124,8 @@ briefs:
         pitfall: 忘了加 @EnableConfigurationProperties 或 @Component 时注入会是 null。
 
       - i: 1
+        refs: [r-spring-props]
+        focus: 查 profile 相关配置项
         why: dev 和 prod 的数据库、日志级别不同，profile 是标准做法。
         learn:
           - 看同一篇文档的「Profile」小节
@@ -144,6 +154,8 @@ briefs:
   - day: W01D04
     tasks:
       - i: 0
+        refs: [r-webclient]
+        focus: 看创建与 retrieve 一节
         why: 调外部接口是后面调大模型的基础，先把这个动作练熟。
         learn:
           - 看 r-webclient 的「WebClient 创建与 retrieve」一节（约 30 分钟）
@@ -158,6 +170,8 @@ briefs:
         pitfall: 忘了 block() 时 Mono 不会执行，看起来什么都没发生。
 
       - i: 1
+        refs: [r-webclient]
+        focus: 看超时与异常处理一节
         why: 没有超时的 HTTP 调用会把线程耗光，一次故障拖垮整个服务。
         learn: []
         steps:
@@ -185,6 +199,8 @@ briefs:
   - day: W01D05
     tasks:
       - i: 0
+        refs: [r-jackson]
+        focus: 看 ObjectMapper 配置示例
         why: 用 record 定义 DTO，代码短、不可变、序列化行为可预期。
         learn:
           - 看 r-jackson 的 README 里 ObjectMapper 配置示例（20 分钟）
@@ -198,6 +214,8 @@ briefs:
         pitfall: record 没有无参构造，某些老框架会报错，Spring 6 之后没问题。
 
       - i: 1
+        refs: [r-jackson]
+        focus: 看反序列化与未知字段处理
         why: 真实调用方会漏字段、传错类型，不处理就是 500。
         learn: []
         steps:
@@ -225,6 +243,8 @@ briefs:
   - day: W01D06
     tasks:
       - i: 0
+        refs: [r-baeldung-exception]
+        focus: 看 @ControllerAdvice 示例
         why: 前端只认一种错误结构，否则每个接口都要单独处理。
         learn:
           - 看 r-baeldung-exception 的 @ControllerAdvice 示例（30 分钟）
@@ -266,6 +286,8 @@ briefs:
   - day: W01D07
     tasks:
       - i: 0
+        refs: [r-junit]
+        focus: 看断言与生命周期两节
         why: 你改代码时，测试是唯一能告诉你「没弄坏」的东西。
         learn:
           - 看 r-junit 的断言和生命周期两节（35 分钟）
@@ -280,6 +302,8 @@ briefs:
         pitfall: 测试里连真实外部 API 会又慢又不稳，用 mock。
 
       - i: 1
+        refs: [r-mockito]
+        focus: 看首页示例即可
         why: 外部依赖必须隔离，否则测试不可重复。
         learn:
           - 看 r-mockito 官网首页的示例（20 分钟）

@@ -89,7 +89,10 @@
 
     <div class="today-grid">
       <section class="card card--work">
-        <h3 class="card__h">今天要做</h3>
+        <div class="card-head">
+          <h3 class="card__h">今天要做</h3>
+          <button class="linkish" id="dayResBtn" type="button">本关全部材料</button>
+        </div>
         <ul class="tasks" id="tTasks"></ul>
         <p class="ask" id="tAsk"></p>
         <div class="btn-row">
@@ -131,11 +134,6 @@
         </section>
       </aside>
     </div>
-
-    <section class="card res-card">
-      <h3 class="card__h">今天看这些</h3>
-      <ul class="res-list" id="tRes"></ul>
-    </section>
 
     <section class="card quiz-card" id="quizCard">
       <div class="quiz-head">

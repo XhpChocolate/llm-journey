@@ -320,9 +320,21 @@
         <h3>产出物</h3><p>${esc(d.deliverable)}</p>
         ${refs.length ? `<h3>当天资源</h3><ul>${refs.map((r) => `<li><a class="dlg__res" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-ext>${esc(r.title)} ↗</a> · ${r.minutes} 分钟</li>`).join("")}</ul>` : ""}`;
     } else {
+      const refs = (b.refs || []).length
+        ? b.refs.map((id) => RES[id]).filter(Boolean)
+        : (d.refs || []).map((id) => RES[id]).filter(Boolean);
+      const mats = refs.length
+        ? `<h3>学习材料${b.focus ? `<span class="brief-focus">${esc(b.focus)}</span>` : ""}</h3>
+           <ul class="mats">${refs.map((r) => `<li class="mat">
+             <a class="mat__link" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-ext title="${esc(r.url)}">
+               <span class="mat__type">${TYPE_LABEL[r.type] || "资源"}</span>
+               <span class="mat__t">${esc(r.title)}</span>
+               <span class="mat__m">${fmtMin(r.minutes)}${r.author ? " · " + esc(r.author) : ""} ↗</span>
+             </a></li>`).join("")}</ul>`
+        : `<p class="hint">这个任务没有指定材料，按步骤直接做。</p>`;
       $("briefBody").innerHTML = `
         <h3>为什么做</h3><p>${esc(b.why)}</p>
-        ${(b.learn || []).length ? `<h3>先看什么</h3><ul>${b.learn.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+        ${mats}
         <h3>动手步骤</h3><ol class="brief-steps">${(b.steps || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ol>
         <h3>练什么</h3><p>${esc(b.practice)}</p>
         <h3>怎么算过</h3><ul class="brief-check">${(b.check || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
@@ -467,12 +479,6 @@
 
     const noteEl = $("tNote");
     if (document.activeElement !== noteEl) noteEl.value = ds.notes || "";
-
-    const refs = (d.refs || []).map((id) => RES[id]).filter(Boolean);
-    refs.sort((a, b) => (b.must ? 1 : 0) - (a.must ? 1 : 0));
-    $("tRes").innerHTML = refs.length
-      ? refs.map((r) => resItem(r)).join("")
-      : `<li class="empty">今天没有指定资源，专注写代码。</li>`;
 
     const next = [];
     for (let k = 1; k <= 3 && i + k < DAYS.length; k++) {
@@ -963,6 +969,10 @@
       save();
       renderToday();
       toast(`已撤销第 ${DAYS[prev].day} 天，重新回到这一关`);
+    });
+
+    $("dayResBtn").addEventListener("click", () => {
+      openDay(DAYS[Math.min(currentIdx(), DAYS.length - 1)].id);
     });
 
     $("tTasks").addEventListener("click", (e) => {

@@ -202,6 +202,7 @@ def load_data():
 # 题库：quizzes/*.yaml -> dist/quizzes.json
 # --------------------------------------------------------------------------
 VALID_TYPES = {"choice", "judge", "short"}
+RESOURCE_IDS = [set()]
 
 
 def load_quizzes(weeks):
@@ -263,7 +264,8 @@ def write_quizzes(quizzes):
 # --------------------------------------------------------------------------
 # 任务卡：briefs/*.yaml -> dist/briefs.json
 # --------------------------------------------------------------------------
-def load_briefs(weeks):
+def load_briefs(weeks, resources):
+    RESOURCE_IDS[0] = set(resources)
     day_tasks = {d["id"]: d["tasks"] for w in weeks for d in w["days"]}
     briefs, errors = {}, []
     files = sorted((ROOT / "briefs").glob("b*.yaml")) if (ROOT / "briefs").exists() else []
@@ -286,6 +288,9 @@ def load_briefs(weeks):
                 if not isinstance(i, int) or not (0 <= i < len(day_tasks[day])):
                     errors.append(f"{tag}: 任务下标越界（当天有 {len(day_tasks[day])} 个任务）")
                     continue
+                for ref in it.get("refs") or []:
+                    if ref not in RESOURCE_IDS[0]:
+                        errors.append(f"{tag}: 引用了不存在的资源 {ref}")
                 for key in ("why", "practice", "pitfall"):
                     if not it.get(key):
                         errors.append(f"{tag}: 缺少 {key}")
@@ -732,7 +737,7 @@ def main():
         return 1
     write_quizzes(quizzes)
 
-    briefs, b_errors, b_covered = load_briefs(weeks)
+    briefs, b_errors, b_covered = load_briefs(weeks, resources)
     if b_errors:
         print("任务卡校验失败：")
         for e in b_errors:

@@ -568,3 +568,31 @@ body.has-envbar main { padding-top: calc(var(--nav-h) + 52px); }
 .brief-check li { position: relative; padding-left: 22px; line-height: 1.7; }
 .brief-check li::before { content: "□"; position: absolute; left: 0; color: var(--lime); }
 .brief-pit { border-left: 2px solid color-mix(in oklab, #fff 30%, transparent); padding-left: 12px; color: var(--dim); }
+
+/* ---------- 任务卡内的材料 ---------- */
+.card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.linkish {
+  background: none; border: 0; padding: 0 0 2px; cursor: pointer;
+  color: var(--dim); font: 500 12px/1.2 var(--font-text);
+  border-bottom: 1px solid color-mix(in oklab, #fff 20%, transparent);
+}
+.linkish:hover { color: var(--lime); border-bottom-color: var(--lime); }
+
+.brief-focus {
+  display: inline-block; margin-left: 10px; font-size: 12px; font-weight: 400;
+  color: var(--lime); letter-spacing: 0;
+}
+.mats { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.mat__link {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 4px 10px;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 6px;
+  text-decoration: none; color: #fff; min-height: 44px;
+  transition: border-color .16s ease, background-color .16s ease;
+}
+.mat__link:hover { border-color: var(--lime); background: color-mix(in oklab, #c6f19d 6%, transparent); }
+.mat__type {
+  grid-row: 1 / span 2; align-self: center;
+  font-family: var(--font-mono); font-size: 11px; color: var(--dim);
+}
+.mat__t { font-size: 15px; line-height: 1.4; }
+.mat__m { font-size: 12px; color: var(--dim); font-family: var(--font-mono); }
