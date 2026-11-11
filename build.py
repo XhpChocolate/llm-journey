@@ -291,13 +291,19 @@ def load_briefs(weeks, resources):
                 for ref in it.get("refs") or []:
                     if ref not in RESOURCE_IDS[0]:
                         errors.append(f"{tag}: 引用了不存在的资源 {ref}")
-                for key in ("why", "practice", "pitfall"):
-                    if not it.get(key):
-                        errors.append(f"{tag}: 缺少 {key}")
-                if len(it.get("steps") or []) < 2:
-                    errors.append(f"{tag}: steps 至少 2 步")
-                if not (it.get("check") or []):
-                    errors.append(f"{tag}: 缺少验收标准 check")
+                light = not it.get("steps")
+                if light:
+                    # 轻量卡：只绑材料，不写完整步骤
+                    if not (it.get("refs") or []):
+                        errors.append(f"{tag}: 轻量卡必须至少有一个 refs")
+                else:
+                    for key in ("why", "practice", "pitfall"):
+                        if not it.get(key):
+                            errors.append(f"{tag}: 缺少 {key}")
+                    if len(it.get("steps") or []) < 2:
+                        errors.append(f"{tag}: steps 至少 2 步")
+                    if not (it.get("check") or []):
+                        errors.append(f"{tag}: 缺少验收标准 check")
                 briefs[day].append(dict(it))
             briefs[day].sort(key=lambda x: x.get("i", 0))
 
@@ -763,7 +769,8 @@ def main():
     total_q = sum(len(v) for v in quizzes.values())
     pools = sorted(len(v) for v in quizzes.values())
     total_tasks = sum(len(d["tasks"]) for w in weeks for d in w["days"])
-    print(f"任务卡: {b_covered} / {total_tasks} 个任务（{len(briefs)} 天）")
+    full = sum(1 for v in briefs.values() for b in v if b.get("steps"))
+    print(f"任务卡: {b_covered} / {total_tasks} 个任务（完整 {full} / 轻量 {b_covered - full}，覆盖 {len(briefs)} 天）")
     print(f"题库: {len(quizzes)} 天 / {total_q} 题（每天 {pools[0]}–{pools[-1]} 题）" + (f"（缺 {len(q_missing)} 天：{', '.join(q_missing[:5])}…）" if q_missing else ""))
     print("生成:", out.relative_to(ROOT))
     return 0

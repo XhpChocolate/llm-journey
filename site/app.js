@@ -319,6 +319,20 @@
         <h3>当天目标</h3><p>${esc(d.goal)}</p>
         <h3>产出物</h3><p>${esc(d.deliverable)}</p>
         ${refs.length ? `<h3>当天资源</h3><ul>${refs.map((r) => `<li><a class="dlg__res" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-ext>${esc(r.title)} ↗</a> · ${r.minutes} 分钟</li>`).join("")}</ul>` : ""}`;
+    } else if (!b.steps) {
+      // 轻量卡：只给材料，步骤由当天产出物约束
+      const refs = (b.refs || []).map((id) => RES[id]).filter(Boolean);
+      $("briefBody").innerHTML = `
+        <h3>学习材料${b.focus ? `<span class="brief-focus">${esc(b.focus)}</span>` : ""}</h3>
+        ${refs.length ? `<ul class="mats">${refs.map((r) => `<li class="mat">
+          <a class="mat__link" href="${esc(r.url)}" target="_blank" rel="noopener noreferrer" data-ext title="${esc(r.url)}">
+            <span class="mat__type">${TYPE_LABEL[r.type] || "资源"}</span>
+            <span class="mat__t">${esc(r.title)}</span>
+            <span class="mat__m">${fmtMin(r.minutes)}${r.author ? " · " + esc(r.author) : ""} ↗</span>
+          </a></li>`).join("")}</ul>` : ""}
+        <h3>当天目标</h3><p>${esc(d.goal)}</p>
+        <h3>产出物</h3><p>${esc(d.deliverable)}</p>
+        <p class="hint">这个任务还没有写详细步骤（目前第 1–4 周是完整卡），先按材料和产出物自己推进。</p>`;
     } else {
       const refs = (b.refs || []).length
         ? b.refs.map((id) => RES[id]).filter(Boolean)

@@ -1499,5 +1499,255 @@
    ],
    "pitfall": "假设写成愿望。"
   }
+ ],
+ "W05D01": [
+  {
+   "i": 0,
+   "refs": [
+    "r-ragas"
+   ],
+   "focus": "看 Metrics 一节，认四个指标就够"
+  },
+  {
+   "i": 1,
+   "refs": [
+    "v-rag-eval-interview"
+   ],
+   "focus": "12 分钟，当面试题听"
+  }
+ ],
+ "W05D02": [
+  {
+   "i": 0,
+   "refs": [
+    "r-ragas"
+   ],
+   "focus": "看评测集构造示例"
+  }
+ ],
+ "W05D03": [
+  {
+   "i": 0,
+   "refs": [
+    "v-ragas"
+   ],
+   "focus": "跟着敲一遍，别只看"
+  }
+ ],
+ "W05D04": [
+  {
+   "i": 0,
+   "refs": [
+    "r-ragas"
+   ],
+   "focus": "看对比实验的写法"
+  }
+ ],
+ "W05D05": [
+  {
+   "i": 0,
+   "refs": [
+    "r-anthropic-agents",
+    "v-agent-principles"
+   ],
+   "focus": "只看 workflow 与 agent 的区分那节"
+  }
+ ],
+ "W05D06": [
+  {
+   "i": 0,
+   "refs": [
+    "v-turing-rag-project"
+   ],
+   "focus": "只看项目结构，不必跟着写"
+  }
+ ],
+ "W05D07": [
+  {
+   "i": 0,
+   "refs": [
+    "r-ragas"
+   ],
+   "focus": "归档前先跑一次基线"
+  }
+ ],
+ "W06D01": [
+  {
+   "i": 0,
+   "refs": [
+    "r-anthropic-agents",
+    "v-agent-principles"
+   ],
+   "focus": "画循环图那节"
+  },
+  {
+   "i": 1,
+   "refs": [
+    "v-agent-principles"
+   ],
+   "focus": "看简化循环的实现"
+  }
+ ],
+ "W06D02": [
+  {
+   "i": 0,
+   "refs": [
+    "r-sai-tools"
+   ],
+   "focus": "看工具描述与参数 schema"
+  },
+  {
+   "i": 1,
+   "refs": [
+    "r-sai-tools"
+   ],
+   "focus": "看错误返回约定"
+  }
+ ],
+ "W06D03": [
+  {
+   "i": 0,
+   "refs": [
+    "r-sai-tools"
+   ],
+   "focus": "看 @Tool 的最小示例"
+  }
+ ],
+ "W06D04": [
+  {
+   "i": 0,
+   "refs": [
+    "v-fc-vs-mcp"
+   ],
+   "focus": "看工具选择与路由那部分"
+  }
+ ],
+ "W06D05": [
+  {
+   "i": 0,
+   "refs": [
+    "r-sai-memory"
+   ],
+   "focus": "看 ChatMemory 的几种策略"
+  }
+ ],
+ "W06D06": [
+  {
+   "i": 0,
+   "refs": [
+    "r-resilience4j"
+   ],
+   "focus": "看 Retry 与 TimeLimiter"
+  }
+ ],
+ "W07D01": [
+  {
+   "i": 0,
+   "refs": [
+    "r-sai-memory"
+   ],
+   "focus": "看会话记忆与长期记忆的区别"
+  }
+ ],
+ "W07D02": [
+  {
+   "i": 0,
+   "refs": [
+    "r-anthropic-agents",
+    "v-agent-principles"
+   ],
+   "focus": "看 Plan-and-Execute 那段"
+  }
+ ],
+ "W07D03": [
+  {
+   "i": 0,
+   "refs": [
+    "r-owasp-llm"
+   ],
+   "focus": "看 Excessive Agency 那一类"
+  }
+ ],
+ "W07D04": [
+  {
+   "i": 0,
+   "refs": [
+    "r-otel-genai"
+   ],
+   "focus": "看 LLM span 属性约定"
+  }
+ ],
+ "W07D05": [
+  {
+   "i": 0,
+   "refs": [
+    "r-sai-rag",
+    "v-prompt-agent-mcp-10min"
+   ],
+   "focus": "看引用与拒答的做法"
+  }
+ ],
+ "W07D06": [
+  {
+   "i": 0,
+   "refs": [
+    "v-kvcache-promptcache"
+   ],
+   "focus": "8 分钟，讲缓存命中"
+  }
+ ],
+ "W08D01": [
+  {
+   "i": 0,
+   "refs": [
+    "v-threadpool"
+   ],
+   "focus": "看线程池参数配合那节"
+  }
+ ],
+ "W08D02": [
+  {
+   "i": 0,
+   "refs": [
+    "r-resilience4j"
+   ],
+   "focus": "看 CircuitBreaker 状态机"
+  }
+ ],
+ "W08D03": [
+  {
+   "i": 0,
+   "refs": [
+    "v-ng-prompt"
+   ],
+   "focus": "看版本管理的思路"
+  }
+ ],
+ "W08D04": [
+  {
+   "i": 0,
+   "refs": [
+    "v-ragas"
+   ],
+   "focus": "评测脚本如何自动化"
+  }
+ ],
+ "W08D05": [
+  {
+   "i": 0,
+   "refs": [
+    "v-docker-40min"
+   ],
+   "focus": "只看 Dockerfile 与 compose 两节"
+  }
+ ],
+ "W08D06": [
+  {
+   "i": 0,
+   "refs": [
+    "v-hm-rag-agent-project"
+   ],
+   "focus": "只看 README 与目录结构"
+  }
  ]
 }

@@ -1,0 +1,138 @@
+# 轻量任务卡：第 5-6 周，只绑材料（详细步骤后续再写）
+briefs:
+  - day: W05D01
+    tasks:
+      - i: 0
+        refs: [r-ragas]
+        focus: 看 Metrics 一节，认四个指标就够
+      - i: 1
+        refs: [v-rag-eval-interview]
+        focus: 12 分钟，当面试题听
+
+  - day: W05D02
+    tasks:
+      - i: 0
+        refs: [r-ragas]
+        focus: 看评测集构造示例
+  - day: W05D03
+    tasks:
+      - i: 0
+        refs: [v-ragas]
+        focus: 跟着敲一遍，别只看
+  - day: W05D04
+    tasks:
+      - i: 0
+        refs: [r-ragas]
+        focus: 看对比实验的写法
+  - day: W05D05
+    tasks:
+      - i: 0
+        refs: [r-anthropic-agents, v-agent-principles]
+        focus: 只看 workflow 与 agent 的区分那节
+  - day: W05D06
+    tasks:
+      - i: 0
+        refs: [v-turing-rag-project]
+        focus: 只看项目结构，不必跟着写
+  - day: W05D07
+    tasks:
+      - i: 0
+        refs: [r-ragas]
+        focus: 归档前先跑一次基线
+
+  - day: W06D01
+    tasks:
+      - i: 0
+        refs: [r-anthropic-agents, v-agent-principles]
+        focus: 画循环图那节
+      - i: 1
+        refs: [v-agent-principles]
+        focus: 看简化循环的实现
+  - day: W06D02
+    tasks:
+      - i: 0
+        refs: [r-sai-tools]
+        focus: 看工具描述与参数 schema
+      - i: 1
+        refs: [r-sai-tools]
+        focus: 看错误返回约定
+  - day: W06D03
+    tasks:
+      - i: 0
+        refs: [r-sai-tools]
+        focus: 看 @Tool 的最小示例
+  - day: W06D04
+    tasks:
+      - i: 0
+        refs: [v-fc-vs-mcp]
+        focus: 看工具选择与路由那部分
+  - day: W06D05
+    tasks:
+      - i: 0
+        refs: [r-sai-memory]
+        focus: 看 ChatMemory 的几种策略
+  - day: W06D06
+    tasks:
+      - i: 0
+        refs: [r-resilience4j]
+        focus: 看 Retry 与 TimeLimiter
+  - day: W07D01
+    tasks:
+      - i: 0
+        refs: [r-sai-memory]
+        focus: 看会话记忆与长期记忆的区别
+  - day: W07D02
+    tasks:
+      - i: 0
+        refs: [r-anthropic-agents, v-agent-principles]
+        focus: 看 Plan-and-Execute 那段
+  - day: W07D03
+    tasks:
+      - i: 0
+        refs: [r-owasp-llm]
+        focus: 看 Excessive Agency 那一类
+  - day: W07D04
+    tasks:
+      - i: 0
+        refs: [r-otel-genai]
+        focus: 看 LLM span 属性约定
+  - day: W07D05
+    tasks:
+      - i: 0
+        refs: [r-sai-rag, v-prompt-agent-mcp-10min]
+        focus: 看引用与拒答的做法
+  - day: W07D06
+    tasks:
+      - i: 0
+        refs: [v-kvcache-promptcache]
+        focus: 8 分钟，讲缓存命中
+  - day: W08D01
+    tasks:
+      - i: 0
+        refs: [v-threadpool]
+        focus: 看线程池参数配合那节
+  - day: W08D02
+    tasks:
+      - i: 0
+        refs: [r-resilience4j]
+        focus: 看 CircuitBreaker 状态机
+  - day: W08D03
+    tasks:
+      - i: 0
+        refs: [v-ng-prompt]
+        focus: 看版本管理的思路
+  - day: W08D04
+    tasks:
+      - i: 0
+        refs: [v-ragas]
+        focus: 评测脚本如何自动化
+  - day: W08D05
+    tasks:
+      - i: 0
+        refs: [v-docker-40min]
+        focus: 只看 Dockerfile 与 compose 两节
+  - day: W08D06
+    tasks:
+      - i: 0
+        refs: [v-hm-rag-agent-project]
+        focus: 只看 README 与目录结构
