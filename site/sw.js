@@ -16,7 +16,16 @@ const SHELL = [
 ];
 
 self.addEventListener("install", (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
+  // 逐个缓存：某个文件抖动（超时/404）不会让整次安装失败
+  e.waitUntil(
+    caches.open(CACHE).then((c) =>
+      Promise.all(
+        SHELL.map((url) =>
+          c.add(url).catch(() => c.add(new Request(url, { cache: "reload" })).catch(() => null))
+        )
+      )
+    ).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", (e) => {

@@ -46,12 +46,25 @@
 进度页「随机刷题」按阶段（A 打底 / B RAG / C Agent / D 可观测与安全 / E MCP 与作品 / F 缓冲与求职）
 从题库抽 5 题，答完当场判分。练习记录单独存在 `state.practice`，**不污染**当天小测成绩。
 
-### PWA：装到手机主屏
+### 在线访问（手机 / 地铁）
+
+**地址：https://xhpchocolate.github.io/llm-journey/site/**
+
+装到主屏后**完全离线可用**（地铁没信号也能看任务、做题、打卡）：
+
+| 系统 | 步骤 |
+|---|---|
+| iPhone | Safari 打开网址 → 分享按钮 → 「添加到主屏幕」 |
+| Android | Chrome 打开网址 → 右上菜单 → 「安装应用」/「添加到主屏幕」 |
+
+首次打开会缓存全部资源（约 450 KB），之后断网照样用。数据存在本机，不会上传。
+换设备想带走进度：电脑上「导出数据」→ 手机上「导入」。
+
+也可以在局域网临时起服务（离家前装好即可离线用）：
 
 ```bash
 cd learning-workbench/site && python3 -m http.server 8000
-# 手机与电脑同一 WiFi，用手机打开 http://<电脑IP>:8000
-# Chrome / Safari 菜单里选「添加到主屏幕」
+# 手机与电脑同一 WiFi，打开 http://<电脑IP>:8000
 ```
 
 - `manifest.webmanifest`：独立窗口、深色主题、192/512 图标
